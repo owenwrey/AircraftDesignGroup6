@@ -144,4 +144,7 @@ plot(125, 0.65,"o")
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
 ylim([0,2.5])
+
 legend(["Cruise","Climb","Celing","Turn","Max Speed","Takeoff", "Landing", "Stall", "Point"])
+
+%% COMMENT %%
