@@ -3,8 +3,6 @@ clc
 close all
 %% Aircraft Setup
 
-%lauren wuz here
-
 %%%%%%%% Aerodynamic Parameters %%%%%%%%
 
 CD_0 = 0.008; % zero-lift drag coeficient
