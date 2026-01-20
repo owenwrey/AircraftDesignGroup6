@@ -2,7 +2,7 @@ clear
 clc
 close all
 %% Aircraft Setup
-dfg
+
 %lauren wuz here
 
 %%%%%%%% Aerodynamic Parameters %%%%%%%%
