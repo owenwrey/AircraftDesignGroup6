@@ -1,4 +1,4 @@
-clear
+clear % testing testing
 clc
 close all
 %% Aircraft Setup
