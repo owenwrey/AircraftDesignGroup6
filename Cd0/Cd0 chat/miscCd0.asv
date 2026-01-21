@@ -5,16 +5,18 @@ n = numel(alt_ft);
 Cd_misc = zeros(n,1); 
 
 for j = 1:n 
-    M = M_vec(j); 
+    M = M_vec()
+switch regime
+    case "subsonic"
+        Cd_misc = miscCd0Subsonic(M, params);
 
-    if M < 1 
-       Cd_misc(j) = miscCd0Subsonic(M, params);
+    case "supersonic"
+        Cd_misc = miscCd0Supersonic(M, params);
 
-    else
-       Cd_misc(j) = miscCd0Supersonic(M, params);
-    end 
-end 
-end 
+    otherwise
+        error("Unknown regime: %s", regime);
+end
+end
 
 
 %
