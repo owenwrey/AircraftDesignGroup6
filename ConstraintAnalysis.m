@@ -5,7 +5,7 @@ close all
 
 %%%%%%%% Aerodynamic Parameters %%%%%%%%
 
-CD_0 = 0.008; % zero-lift drag coeficient
+CD_0 = 0.015; % zero-lift drag coeficient
 k1 = 0; % drag polar constant 1
 k2 = .02; % drag polar constant 2
 CD_R = 0; % resultant drag coeficient
@@ -106,7 +106,7 @@ n = 1; % Load Factor
 beta = 1; % Weight Lapse
 Cl = 2.0/cosd(24); % Lift Coefficient
 k = 1.2; % Safety Factor
-v = 188*1.2*0.514444; % Velocity {m/s}
+v = 188*1.1*0.514444; % Velocity {m/s}
 [~,~,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 
 W2S_Landing = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
