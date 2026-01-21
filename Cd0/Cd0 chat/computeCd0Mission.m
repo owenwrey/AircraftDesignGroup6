@@ -7,7 +7,7 @@ Cd0_total = zeros(n,1);
 for j = 1:n
     M = M_vec(j);
 
-    if M <= 1
+    if M < 1
         Cd0_total(j) = cd0Subsonic(alt_ft(j), M, comp, params);
     else
         Cd0_total(j) = cd0Supersonic(alt_ft(j), M, comp, params);
