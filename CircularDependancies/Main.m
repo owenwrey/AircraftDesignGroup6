@@ -7,12 +7,19 @@ clc; clear; close all
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
 
-%-| Aircraft class |-------------------------------------------------------
+%% -| Aircraft Struct |----------------------------------------------------
 % All variable information related to the aircraft should be
-% stored/accesible in this class.
+% stored/accesible in this struct.
+aircraft = struct;
+
+%example component
 
 
-%--------------------------------------------------------------------------
+
+% -------------------------------------------------------------------------
+
+
+%% calculation loop
 
 exitFlag=false; 
 
