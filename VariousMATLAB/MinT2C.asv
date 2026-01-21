@@ -38,10 +38,10 @@ iend = 400;
 SFC_climb = 0.75;
 THROT = 1;
 
-Alt = linspace(0,maxAlt, iend)';   % altitude array
+Alt(istart:iend) = linspace(0,maxAlt, iend)';   % altitude array
 [T, a, P, rho] = atmosisa(Alt*ft2m);
 rho = rho*0.00194032; % to slug/ft^3
-thrustLapse = TLapse(Alt);
+thrustLapse = TLapse(Alt)';
 
 KTAS = linspace(200,1000,iend)';                % generate speed array
 
@@ -59,8 +59,6 @@ q_grid = 0.5 .* (rho') .* (V_grid.^2);          % generate q grids
 
 CL_grid = W0 ./ (q_grid .* S);                  % generate grids for CL and CD
 CD_grid = CD0 + K1 * CL_grid + K2 * CL_grid.^2;
-% code here assumes weight is constant throughout climb. Later model should
-% have time stepping and calculate fuel burn for more accurate modeling
 
 Drag_grid = q_grid .* S .* CD_grid;
 Thrust_grid = fullThrust .* thrustLapse';
@@ -183,49 +181,49 @@ t_profile = [0; cumsum(dt)];
 Alt_profile  = bestAlt;
 KTAS_profile = bestV / kts2fps;
 
-%% Plotting
-
-figure;
-plot(KTAS_profile, Alt_profile, 'b', 'LineWidth', 2);
-xlabel('KTAS');
-ylabel('Altitude (ft)');
-grid on; hold on;
-title('Minimum-Time Climb Schedule');
-
-He_bands = [ ...
-    EnHt_start; ...
-    EnHt_start + 0.25*(EnHt_end - EnHt_start); ...
-    EnHt_start + 0.50*(EnHt_end - EnHt_start); ...
-    EnHt_start + 0.75*(EnHt_end - EnHt_start); ...
-    EnHt_end ...
-];
-
-V_span = linspace(min(KTAS), max(KTAS), 500);
-V_fps_span = V_span*kts2fps;
-
-for k = 1:length(He_bands)
-    He_val = He_bands(k);
-
-    % altitude for each V on this energy-height line
-    Alt_band = He_val - (V_fps_span.^2)/(2*32.2);
-
-    % restrict to physical
-    valid = Alt_band >= 0;
-    V_valid = V_span(valid);
-    Alt_valid = Alt_band(valid);
-
-    plot(V_valid, Alt_valid, '--','Color',[0.4 0.4 0.4],'LineWidth',0.8);
-
-    % Label at rightmost side
-    if ~isempty(V_valid)
-        text(V_valid(end)+5, Alt_valid(end), ...
-             sprintf('H_e = %5.0f ft',He_val), ...
-             'Color',[0.3 0.3 0.3], 'FontSize',8);
-    end
-end
-
-hold off;
-
-% Print TTC
-fprintf('Total Time to Climb = %.2f minutes\n', TTC);
+% %% Plotting
+% 
+% figure;
+% plot(KTAS_profile, Alt_profile, 'b', 'LineWidth', 2);
+% xlabel('KTAS');
+% ylabel('Altitude (ft)');
+% grid on; hold on;
+% title('Minimum-Time Climb Schedule');
+% 
+% He_bands = [ ...
+%     EnHt_start; ...
+%     EnHt_start + 0.25*(EnHt_end - EnHt_start); ...
+%     EnHt_start + 0.50*(EnHt_end - EnHt_start); ...
+%     EnHt_start + 0.75*(EnHt_end - EnHt_start); ...
+%     EnHt_end ...
+% ];
+% 
+% V_span = linspace(min(KTAS), max(KTAS), 500);
+% V_fps_span = V_span*kts2fps;
+% 
+% for k = 1:length(He_bands)
+%     He_val = He_bands(k);
+% 
+%     % altitude for each V on this energy-height line
+%     Alt_band = He_val - (V_fps_span.^2)/(2*32.2);
+% 
+%     % restrict to physical
+%     valid = Alt_band >= 0;
+%     V_valid = V_span(valid);
+%     Alt_valid = Alt_band(valid);
+% 
+%     plot(V_valid, Alt_valid, '--','Color',[0.4 0.4 0.4],'LineWidth',0.8);
+% 
+%     % Label at rightmost side
+%     if ~isempty(V_valid)
+%         text(V_valid(end)+5, Alt_valid(end), ...
+%              sprintf('H_e = %5.0f ft',He_val), ...
+%              'Color',[0.3 0.3 0.3], 'FontSize',8);
+%     end
+% end
+% 
+% hold off;
+% 
+% % Print TTC
+% fprintf('Total Time to Climb = %.2f minutes\n', TTC);
 
