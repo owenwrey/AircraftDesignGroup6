@@ -2,6 +2,7 @@
 
 clc
 % clear
+cfg = getConfig();
 % segment names
 SegNames = {'SWT','TKO','CLIMB','CR OBD', 'LTR 1', 'COMBAT', 'WP FIRE', 'CR IBD', ...
 'DESC', 'LTR2', 'LTS'};
@@ -70,19 +71,22 @@ Alt_ft = 28000;
 TLapse(Alt_ft);
 
 
-W0 = 63738;
-FuelReq = 16440;
-tol = 2;
+W0 = cfg.W.TOguess;
+FuelReq = cfg.W.fuelReq;
+tol = cfg.weightTolerance;
 
 while tol >1
 
-W_S = 130; % takeoff wing loading (psf)
+W_S = cfg.wingLoading;
+Thrust = cfg.thrust;
+
+% unit conversions
 rho_SL = 0.0023769;
 mps2kts = 1.94384; % meters per sec to knots
 kts2fps = 1/0.59248; % knots to feet per sec
 NM2ft = 6067; % nautical miles to feet
 ft2m = 0.305; % feet to meters
-Thrust = 44000; % lb
+
 % segment information
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,8 +98,8 @@ Thrust = 44000; % lb
 % given
 
 for i = 2:npts(1,:)
-SFC_idle = 0.6; %lb/(lb.h)
-T_W_idle = 0.05;
+SFC_idle = cfg.SFC.idle; %lb/(lb.h)
+T_W_idle = cfg.thrustToWeight_idle;
 
 
 Tbl.Time(1:npts(1,:)) = linspace(0,3,npts(1,:)); % time (min)
@@ -150,7 +154,7 @@ end
 istart = npts(1,:)+1;
 iend = sum(npts(1:2));
 
-SFC_takeoff = 1.85;
+SFC_takeoff = cfg.SFC.takeoff;
 
 for  i = istart:iend
 
@@ -199,10 +203,10 @@ end
 
 istart3 = sum(npts(1:2))+1;
 iend3 = sum(npts(1:3));
-SFC_climb = 0.75;
+SFC_climb = cfg.SFC.climb;
 for  i = istart3:iend3
 
-Tbl.Alt(istart3:iend3) = linspace(0,25000,npts(3,:)); % altitude (ft)
+Tbl.Alt(istart3:iend3) = linspace(0,cfg.cruise.altitude,npts(3,:)); % altitude (ft)
 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
@@ -251,14 +255,14 @@ end
 % F18 E/F cruise speed
 % 25,000 ft
 % 850 nm
-SFC_cruise = 0.85; %estimate
+SFC_cruise = cfg.SFC.cruise; %estimate
 istart4 = sum(npts(1:3))+1;
 iend4 = sum(npts(1:4));
 
 for  i = istart4:iend4
 Tbl.Dist(istart4:iend4) = linspace((Tbl.Dist(istart4-1)),(Tbl.Dist(istart4-1)+850),npts(4,:)); % distance (NM)
 Tbl.dDist(i) = Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
-Tbl.Alt(i) = 25000; % Altitude (ft)
+Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
@@ -308,20 +312,20 @@ end
 
 istart5 = sum(npts(1:4))+1;
 iend5 = sum(npts(1:5));
-SFC_loiter = 0.75;
+SFC_loiter = cfg.SFC.loiter;
 
 for  i = istart5:iend5
-Tbl.Time(istart5:iend5) = linspace((Tbl.Time(istart5-1)),(Tbl.Time(istart5-1)+45),npts(5,:)); % distance (NM)
+Tbl.Time(istart5:iend5) = linspace((Tbl.Time(istart5-1)),(Tbl.Time(istart5-1)+cfg.loiter1.time.A2A),npts(5,:)); % distance (NM)
 Tbl.dTime(istart5) = 0; 
 Tbl.dTime(i) = Tbl.Time(i) - Tbl.Time(i-1); % delta distance (NM)
 Tbl.Dist(i) = Tbl.Dist(istart5 - 1);
 Tbl.dDist(i) = 0;
 
-Tbl.Alt(i) = 25000; % Altitude (ft)
+Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 487; % true airspeed (kt)
+Tbl.KTAS(i) = cfg.loiter1.speed.A2A; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
@@ -356,7 +360,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 6. combat
+%% 6. combat
 % 0 min duration
 % no distance credit
 % full afterburner
@@ -364,7 +368,7 @@ end
 % only occurs for M1
 % Mach 1.2
 
-SFC_combat = 0.85; % reevaluate
+SFC_combat = cfg.SFC.combat;
 istart6 = sum(npts(1:5))+1;
 iend6 = sum(npts(1:6));
 
@@ -375,7 +379,7 @@ Tbl.dTime(i) = Tbl.Time(i) - Tbl.Time(i-1); % delta distance (NM)
 Tbl.Dist(i) = Tbl.Dist(istart6 - 1);
 Tbl.dDist(i) = 0;
 
-Tbl.Alt(i) = 25000; % Altitude (ft)
+Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
@@ -415,10 +419,10 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 7. weapons fire/drop
+%% 7. weapons fire/drop
 %  2390 lb dropped
 % occurs only in M1
-SFC_weightdrop = 0.85;
+SFC_weightdrop = cfg.SFC.weightdrop;
 istart7 = sum(npts(1:6))+1;
 iend7 = sum(npts(1:7));
 
@@ -428,7 +432,7 @@ Tbl.dTime(i) = 0; % delta distance (NM)
 Tbl.Dist(i) = Tbl.Dist(istart7 - 1);
 Tbl.dDist(i) = 0;
 
-Tbl.Alt(i) = 25000; % Altitude (ft)
+Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
@@ -467,7 +471,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 8. cruise inbound
+%% 8. cruise inbound
 % 850 nm
 % 635 KTAS
 % 25,000 ft
@@ -476,13 +480,13 @@ istart8 = sum(npts(1:7))+1;
 iend8 = sum(npts(1:8));
 
 for  i = istart8:iend8
-Tbl.Dist(istart8:iend8) = linspace((Tbl.Dist(istart8-1)),(Tbl.Dist(istart8-1)+850),npts(8,:)); % distance (NM)
+Tbl.Dist(istart8:iend8) = linspace((Tbl.Dist(istart8-1)),(Tbl.Dist(istart8-1)+cfg.cruise.distance.in.A2A),npts(8,:)); % distance (NM)
 Tbl.dDist(i) = Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
-Tbl.Alt(i) = 25000; % Altitude (ft)
+Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 635; % true airspeed (kt)
+Tbl.KTAS(i) = cfg.cruise.speed.out.A2A; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
@@ -520,11 +524,11 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 9. descent
+%% 9. descent
 % 3,000 ft/min
 
 % finish at sea level\
-SFC_descent = 0.60;
+SFC_descent = cfg.SFC.descent;
 istart9 = sum(npts(1:8))+1;
 iend9 = sum(npts(1:9));
 for  i = istart9:iend9
@@ -574,7 +578,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 10. loiter at sea level
+%% 10. loiter at sea level
 % 20 min duration
 % 481 KTAS
 % no distance credit
@@ -628,12 +632,12 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 11. landing, taxi-in, shutdown
+%% 11. landing, taxi-in, shutdown
 % 3 min duration
 
 % (T/W)_idle = 0.05;
 % no distance credit
-SFC_shutdown = 0.6;
+SFC_shutdown = cfg.SFC.shutdown;
 istart11 = sum(npts(1:10))+1;
 iend11 = sum(npts(1:11));
 
@@ -700,10 +704,10 @@ disp(Tbl)
 A = 2.34;
 C = -0.13;
 EWF = A*W0^C;
-W_crew = 300;
-W_payload = 2390; % weight of weapons
+W_crew = cfg.W.crew;
+W_payload = cfg.W.PL.A2A; % weight of weapons
 OEW = EWF*W0;
-FuelAllow = 0.06*(Tbl.FuelBurn(iend11)); % 6% fuel allowance 
+FuelAllow = cfg.fuelBufferPercent*(Tbl.FuelBurn(iend11)); % 6% fuel allowance 
 FuelReq = FuelAllow + Tbl.FuelBurn(iend11); 
 FuelAvail = W0 - OEW - W_crew - W_payload;
 FuelExcess = FuelAvail - FuelReq;

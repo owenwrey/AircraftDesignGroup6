@@ -1,5 +1,6 @@
 clc
 % clear
+cfg = getConfig();
 % segment names
 SegNames = {'SWT','TKO','CLIMB','CR OBD', 'DESC 1', 'COMBAT', 'WP FIRE', 'CR IBD', ...
 'DESC 2', 'LTR2', 'LTS'};
