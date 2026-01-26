@@ -5,9 +5,9 @@ close all
 
 %%%%%%%% Aerodynamic Parameters %%%%%%%%
 
-CD_0 = 0.015; % zero-lift drag coeficient
+CD_0 = 0.02; % zero-lift drag coeficient
 k1 = 0; % drag polar constant 1
-k2 = .02; % drag polar constant 2
+k2 = .08; % drag polar constant 2
 CD_R = 0; % resultant drag coeficient
 
 TOP = 300; % Take Off Parameter
@@ -62,7 +62,7 @@ T2W_Ceiling = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 %%%%%%% Sustained Turn %%%%%%%%
 
 alt = 20000*0.3048; % Altitude {m}
-n = 5.346; % Load Factor
+n = 5.346; % Load Factor % 10 deg sustained turn
 M = 0.9; % Mach number
 [~,a,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 v = M.*a; % Velocity {m/s}
@@ -140,11 +140,12 @@ plot(W2S.*0.02088547,T2W_MaxSpeed,'LineStyle','-')
 plot(W2S.*0.02088547,T2W_Takeoff,'LineStyle','-')
 xl1=xline(W2S_Landing.*0.02088547,'-r');
 xl2=xline(W2S_Stall.*0.02088547,'-b');
-plot(125, 0.65,"o")
+plot(125, 1.3,"o")
+plot(125, 0.75,"x")
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
 ylim([0,2.5])
 
-legend(["Cruise","Climb","Celing","Turn","Max Speed","Takeoff", "Landing", "Stall", "Point"])
+legend(["Cruise","Climb","Celing","Turn","Max Speed","Takeoff", "Landing", "Stall", "Full Afterburner", "Military Power"])
 
 %% COMMENT %%
