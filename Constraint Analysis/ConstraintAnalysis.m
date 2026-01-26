@@ -5,7 +5,7 @@ close all
 
 %%%%%%%% Aerodynamic Parameters %%%%%%%%
 
-CD_0 = 0.015; % zero-lift drag coeficient
+CD_0 = 0.02; % zero-lift drag coeficient
 k1 = 0; % drag polar constant 1
 k2 = .02; % drag polar constant 2
 CD_R = 0; % resultant drag coeficient
@@ -92,7 +92,7 @@ T2W_MaxSpeed = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 %%%%%%% TakeOff %%%%%%%%
 
 alt = 0; % Altitude {m}
-[~,~,rho] = atmos(alt); % Air Density {kg/m^3}
+[~,~,rho] = atmosisa(alt); % Air Density {kg/m^3}
 Cl = 1.6/cosd(24);
 
 T2W_Takeoff = TakeoffConstraintAnalysis(TOP,rho/1.225,Cl,W2S);
@@ -140,7 +140,7 @@ plot(W2S.*0.02088547,T2W_MaxSpeed,'LineStyle','-')
 plot(W2S.*0.02088547,T2W_Takeoff,'LineStyle','-')
 xl1=xline(W2S_Landing.*0.02088547,'-r');
 xl2=xline(W2S_Stall.*0.02088547,'-b');
-plot(125, 0.65,"o")
+plot(125, 1.2,"o")
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
 ylim([0,2.5])
