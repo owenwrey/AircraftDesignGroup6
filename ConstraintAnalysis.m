@@ -5,7 +5,7 @@ close all
 
 %%%%%%%% Aerodynamic Parameters %%%%%%%%
 
-CD_0 = 0.015; % zero-lift drag coeficient
+CD_0 = 0.025; % zero-lift drag coeficient
 k1 = 0; % drag polar constant 1
 k2 = .02; % drag polar constant 2
 CD_R = 0; % resultant drag coeficient
