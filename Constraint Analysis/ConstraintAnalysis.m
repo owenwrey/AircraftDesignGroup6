@@ -7,7 +7,7 @@ close all
 
 CD_0 = 0.02; % zero-lift drag coeficient
 k1 = 0; % drag polar constant 1
-k2 = .08; % drag polar constant 2
+k2 = .2; % drag polar constant 2
 CD_R = 0; % resultant drag coeficient
 
 TOP = 300; % Take Off Parameter
@@ -49,7 +49,7 @@ T2W_Climb = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
 alt = 46250*0.3048; % Altitude {m}
 n = 1; % Load Factor
-M = 1.7; % Mach number
+M = 1.4; % Mach number
 [T,a,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 v = M.*a; % Velocity {m/s}
 ddt_h = 500*0.3048/60; % Climb Speed {m/s}
@@ -141,11 +141,10 @@ plot(W2S.*0.02088547,T2W_Takeoff,'LineStyle','-')
 xl1=xline(W2S_Landing.*0.02088547,'-r');
 xl2=xline(W2S_Stall.*0.02088547,'-b');
 plot(125, 1.3,"o")
-plot(125, 0.75,"x")
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
 ylim([0,2.5])
 
-legend(["Cruise","Climb","Celing","Turn","Max Speed","Takeoff", "Landing", "Stall", "Full Afterburner", "Military Power"])
+legend(["Cruise","Climb","Celing","Turn","Max Speed","Takeoff", "Landing", "Stall", "Point"])
 
 %% COMMENT %%
