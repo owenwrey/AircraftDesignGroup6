@@ -1,4 +1,4 @@
-function comp = buildComponents(k_default)
+function comp = buildComponents(k_default,M)
 % comp = buildComponents(k_default)
 
 % wing
@@ -10,7 +10,7 @@ comp(1).x_c  = 0.30;         % x/c location of max thickness
 comp(1).sweep_angle_deg = 24;    % degrees  (F/A-18 style LE sweep)
 comp(1).sweep_angle = deg2rad(comp(1).sweep_angle_deg);
 comp(1).ff = (1 + (0.6/comp(1).x_c)*comp(1).t_c + 100*(comp(1).t_c)^4) .* ...
-              (1.34*m.^0.18 .* cos(comp(1).sweep_angle).^0.28);
+              (1.34*M.^0.18 .* cos(comp(1).sweep_angle).^0.28);
 comp(1).q = 1.0;         % pg 425, the f18 has a midwing, so q = 1
 comp(1).k = k_default;
 
@@ -33,7 +33,7 @@ comp(3).x_c  = 0.30;
 comp(3).sweep_angle_deg = 30;    % realistic HT sweep for fighter
 comp(3).sweep_angle = deg2rad(comp(3).sweep_angle_deg);
 comp(3).ff = (1 + (0.6/comp(3).x_c)*comp(3).t_c + 100*(comp(3).t_c)^4) .* ...
-              (1.34*m.^0.18 .* cos(comp(3).sweep_angle).^0.28);
+              (1.34*M.^0.18 .* cos(comp(3).sweep_angle).^0.28);
 comp(3).q = 1.03;        % pg 429
 comp(3).k = k_default;
 
@@ -46,7 +46,7 @@ comp(4).x_c  = 0.30;
 comp(4).sweep_angle_deg = 35;
 comp(4).sweep_angle = deg2rad(comp(4).sweep_angle_deg);
 comp(4).ff = (1 + (0.6/comp(4).x_c)*comp(4).t_c + 100*(comp(4).t_c)^4) .* ...
-              (1.34*m.^0.18 .* cos(comp(4).sweep_angle).^0.28);
+              (1.34*M.^0.18 .* cos(comp(4).sweep_angle).^0.28);
 comp(4).q = 1.08;         % pg 429
 comp(4).k = k_default;
 
@@ -59,7 +59,7 @@ comp(5).x_c  = 0.30;
 comp(5).sweep_angle_deg = 35;
 comp(5).sweep_angle = deg2rad(comp(5).sweep_angle_deg);
 comp(5).ff = (1 + (0.6/comp(5).x_c)*comp(5).t_c + 100*(comp(5).t_c)^4) .* ...
-              (1.34*m.^0.18 .* cos(comp(5).sweep_angle).^0.28);
+              (1.34*M.^0.18 .* cos(comp(5).sweep_angle).^0.28);
 comp(5).q = 1.08;         % pg 429
 comp(5).k = k_default;
 
@@ -72,7 +72,7 @@ comp(6).x_c  = 0.30;
 comp(6).sweep_angle_deg = 5;
 comp(6).sweep_angle = deg2rad(comp(6).sweep_angle_deg);
 comp(6).ff = (1 + (0.6/comp(6).x_c)*comp(6).t_c + 100*(comp(6).t_c)^4) .* ...
-              (1.34*m.^0.18 .* cos(comp(6).sweep_angle).^0.28);
+              (1.34*M.^0.18 .* cos(comp(6).sweep_angle).^0.28);
 comp(6).q = 1.3;         % pg 429, wing strut has < drag than pylon
 comp(6).k = k_default;
 
@@ -85,7 +85,7 @@ comp(7).x_c  = 0.30;
 comp(7).sweep_angle_deg = 0;
 comp(7).sweep_angle = deg2rad(comp(7).sweep_angle_deg);
 comp(7).ff = (1 + (0.6/comp(7).x_c)*comp(7).t_c + 100*(comp(7).t_c)^4) .* ...
-              (1.34*m.^0.18 .* cos(comp(7).sweep_angle).^0.28);
+              (1.34*M.^0.18 .* cos(comp(7).sweep_angle).^0.28);
 comp(7).q = 1.4;         % pg 429
 comp(7).k = k_default;
 

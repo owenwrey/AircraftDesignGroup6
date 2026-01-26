@@ -1,4 +1,4 @@
-function Cd_misc_air_to_air = miscCd0Subsonicairtoair(M, params)
+function Cd_misc_air_to_air = miscCd0SubsonicAirtoAir(M, params)
 % Cd_misc = miscCd0Subsonic(M, params)
 
 % aim-120c    aim-9x      MK-83 JDAM

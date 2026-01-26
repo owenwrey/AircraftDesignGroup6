@@ -159,7 +159,7 @@ comp(8).q    = 1.5;      % pg 425 - nacelle mounted directly on wing
 comp(8).k    = k_default;
 
 
-%%  CD0  CALCULATION 
+%% -------- CD0 MATRIX CALCULATION (12 alt × 12 mach) --------
 
 cd0_total_subsonic = zeros(length(alt),1)
 for j = 1:length(alt)
@@ -213,8 +213,8 @@ for j = 1:length(alt)
         cd_l_p = 0.12 * cd0_sum;
 
         cd0_total_subsonic(j) = cd0_sum + CD_misc_M + cd_l_p
-        % cdl(j) = LEsuction(m(j),0.85,1.1); 
-        % cd(j) = cdl(j)+cd0_total_subsonic(j)
+        cdl(j) = LEsuction(m(j),0.85,1.1); 
+        cd(j) = cdl(j)+cd0_total_subsonic(j)
 
     end
 end

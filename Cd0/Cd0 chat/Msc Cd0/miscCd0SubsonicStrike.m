@@ -1,4 +1,4 @@
-function Cd_misc_air_to_air = miscCd0Subsonicairtoair(M, params)
+function Cd_misc_Strike = miscCd0SubsonicStrike(M, params)
 % Cd_misc = miscCd0Subsonic(M, params)
 
 % aim-120c    aim-9x      MK-83 JDAM
@@ -11,7 +11,7 @@ d_q = 0.129+(0.419*(M-0.161)^2).*A_base;
 
 % parasidic drag coefficient 
 
-Cd_misc_air_to_air  = (6*d_q(1)+ 2*d_q(2)) / params.Sref ;
+Cd_misc_Strike  = (4*d_q(3)+ 2*d_q(2)) / params.Sref ;
 
 % call 2000lb bomb cluster on wing
 % aim 9 missile and pylon
