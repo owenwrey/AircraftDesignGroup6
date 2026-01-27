@@ -246,11 +246,10 @@ for j = 1:length(alt)
         ell   = 44.742;              % ft
         Amax  = pi*(d_fus/2)^2;      % ft^2
         Ewd   = 3;
-
-        CD_wave = (9*pi/2) * (Amax/ell^2)^2 * Ewd;
+        CD_wave1 = (9*pi/2) * (Amax/ell^2)^2 * Ewd;
     end
 
-    cd0_total(j,k) = cd0_sum + CD_misc_M + cd_l_p + CD_wave
+    cd0_total(j,k) = cd0_sum + CD_misc_M + cd_l_p + CD_wave1 + 
 
 end
 end
