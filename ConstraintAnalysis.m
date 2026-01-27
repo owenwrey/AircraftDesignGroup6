@@ -109,7 +109,7 @@ k = 1.2; % Safety Factor
 v = 188*1.1*0.514444; % Velocity {m/s}
 [~,~,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 
-W2S_Landing = verticalCons traintAnalysis(n,beta,Cl,k,v,rho);
+W2S_Landing = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
 
 %%%%%%% Stall %%%%%%%%
 
