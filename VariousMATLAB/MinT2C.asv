@@ -109,7 +109,7 @@ bestAlt = bestAlt(good);
 bestV   = bestV(good);
 EnHt    = EnHt(good);
 
-%% Force Initial State: 0 ft, 200 TKAS
+%% Force Initial State: 0ft, 200 kts
 
 initAlt = 0;
 initV_kts = 200;
@@ -133,7 +133,11 @@ bestPs  = [Ps_init; bestPs];
 EnHt    = [EnHt_init; EnHt];
 
 
-%% Force Final State: 46250 ft, 600 KTAS
+
+% ============================================================
+% === FORCE FINAL STATE: (46,250 ft, 600 KTAS) ===
+% ============================================================
+
 finalAlt    = maxAlt;     % 46,250 ft
 finalV_kts  = 600;        % 600 KTAS
 finalV      = finalV_kts * kts2fps;
@@ -160,7 +164,9 @@ bestAlt = bestAlt(idx);
 bestV   = bestV(idx);
 bestPs  = bestPs(idx);
 
-%% Integrate time using Ps = dHe/dt
+% ============================================================
+% === Integrate time using Ps = dHe/dt ===
+% ============================================================
 
 dHe = diff(EnHt);             
 Ps_mid = bestPs(1:end-1);     
@@ -171,7 +177,9 @@ TTC = sum(dt)/60;   % minutes
 % cumulative time
 t_profile = [0; cumsum(dt)];
 
-%% Store climb schedule for plotting
+% ============================================================
+% === Store climb schedule for plotting ===
+% ============================================================
 
 Alt_profile  = bestAlt;
 KTAS_profile = bestV / kts2fps;
