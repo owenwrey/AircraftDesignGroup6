@@ -153,9 +153,9 @@ for k = 1:length(m)
             d_q = 0.129 + (0.419*(M - 0.161)^2).*A_base;    % 1x3
         end
 
-        % pick ONE configuration to include (don't compute then ignore it)
-        Cd_misc_air_to_air = (6*d_q(1) + 2*d_q(2)) / sref;  % scalar CD
-        Cd_misc_strike     = (4*d_q(3) + 2*d_q(2)) / sref;  % scalar CD
+        % select which mission you're implementing
+        Cd_misc_air_to_air = (6*d_q(1) + 2*d_q(2)) / sref; 
+        Cd_misc_strike     = (4*d_q(3) + 2*d_q(2)) / sref; 
 
         % choose which mission config you want:
         CD_misc_M = Cd_misc_air_to_air;   % <--- change to Cd_misc_strike if needed
@@ -173,11 +173,16 @@ for k = 1:length(m)
                 % supersonic
                 FF = 1;
                 Q  = 1;
-
-                Cf = 0.455 ./ (log10(Re).^2.58 .* (1 + 0.144*M^2).^0.65);
+                Re_cut = 44.62 * (l_ft/k_c)^1.053*M^1.16;
+                if Re_cut<Re 
+                    Re_eff = Re_cut 
+                else 
+                    Re_eff = Re
+                end 
+                    Cf = 0.455 ./ (log10(Re_eff).^2.58 .* (1 + 0.144*M^2).^0.65);
 
                 cd0_i = (Cf * FF * Q * swet) / sref;
-
+            % if m<1
             else
                 % subsonic
                 q_c = comp(i).q;
@@ -189,10 +194,15 @@ for k = 1:length(m)
                 else
                     ff_i = comp(i).ff(k);
                 end
+                Re_cut = 38.21 * (l_ft / k_c)^1.053;
 
                 % roughness cap
-                Re_cut = 38.21 * (l_ft / k_c)^1.053;
-                Re_eff = min(Re, Re_cut);
+                 if  Re_cut<Re 
+                    Re_eff = Re_cut; 
+                else 
+                    Re_eff = Re;
+                end 
+                    Cf = 0.455 ./ (log10(Re_eff).^2.58 .* (1 + 0.144*M^2).^0.65);
 
                 Cf = 0.455 ./ (log10(Re_eff).^2.58 .* (1 + 0.144*M^2).^0.65);
 
@@ -202,9 +212,7 @@ for k = 1:length(m)
             cd0_sum = cd0_sum + cd0_i;
         end
 
-        % leakage + protuberance drag = 12% of friction buildup
-        cd_l_p = 0.12 * cd0_sum;
-
+       
         % wave drag (this is technically part of msc drag) so may rename this
         if M > 1
             d_fus = 5.4;                 % ft
@@ -229,10 +237,11 @@ for k = 1:length(m)
                 CD_wave = Dq_wave / sref;      % convert to coefficient
             end
         end
-
+ % leakage + protuberance drag = 3% of total parasidic drag
         % total cd0
-        cd0_total(j,k) = cd0_sum + cd_l_p + CD_misc_M + CD_wave 
-
+        cd0_total(j,k) = cd0_sum + CD_misc_M + CD_wave;
+        cd_l_p = 0.03 *cd0_total(j,k); 
+        cd0_total(j,k) = cd0_sum + CD_misc_M + CD_wave +cd_l_p
     end
 end
 plot (m,cd0_total)

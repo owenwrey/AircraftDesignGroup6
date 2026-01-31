@@ -150,7 +150,7 @@ for k = 1:length(m)
         if M > 1
             d_q = 0.064 + (0.042*(M - 3.84)^2)*A_base;        % 1x3
         else
-            d_q = 0.129 + (0.419*(M - 0.161)^2).*A_base;    % 1x3
+            d_q = 0.139 + (0.419*(M - 0.161)^2).*A_base;    % 1x3
         end
 
         % select which mission you're implementing
@@ -168,18 +168,17 @@ for k = 1:length(m)
             l_m  = l_ft * 0.3048;     % m
 
             Re = rho_j * V * l_m / mu;
-
+            k_c = comp(i).k; 
             if M > 1
                 % supersonic
                 FF = 1;
                 Q  = 1;
-                Re_cut = 44.62 * (l_ft/k_c0^1.053*M^1.16)
-                if 
-                    Re_cut<Re 
+                Re_cut = 44.62 * (l_ft/k_c)^1.053*M^1.16;
+                if Re_cut<Re 
                     Re_eff = Re_cut 
                 else 
                     Re_eff = Re
-                
+                end 
                     Cf = 0.455 ./ (log10(Re_eff).^2.58 .* (1 + 0.144*M^2).^0.65);
 
                 cd0_i = (Cf * FF * Q * swet) / sref;
@@ -195,10 +194,15 @@ for k = 1:length(m)
                 else
                     ff_i = comp(i).ff(k);
                 end
+                Re_cut = 38.21 * (l_ft / k_c)^1.053;
 
                 % roughness cap
-                Re_cut = 38.21 * (l_ft / k_c)^1.053;
-                Re_eff = min(Re, Re_cut); %this says, if Re_cut < Re, then Re_cut should be used in the Cf equation
+                 if  Re_cut<Re 
+                    Re_eff = Re_cut; 
+                else 
+                    Re_eff = Re;
+                end 
+                    Cf = 0.455 ./ (log10(Re_eff).^2.58 .* (1 + 0.144*M^2).^0.65);
 
                 Cf = 0.455 ./ (log10(Re_eff).^2.58 .* (1 + 0.144*M^2).^0.65);
 
@@ -208,37 +212,36 @@ for k = 1:length(m)
             cd0_sum = cd0_sum + cd0_i;
         end
 
-        % leakage + protuberance drag = 12% of friction buildup
-        cd_l_p = 0.12 * cd0_sum;
+       
+  % wave drag (stored)
+CD_wave = 0;
 
-        % wave drag (this is technically part of msc drag) so may rename this
-        if M > 1
-            d_fus = 5.4;                 % ft
-            ell   = 44.742;              % ft
-            Amax  = pi*(d_fus/2)^2;      % ft^2
-            Ewd   = 2;
+if M > 1
+    d_fus = 5.4;                 % ft
+    ell   = 44.742;              % ft
+    Amax  = pi*(d_fus/2)^2;      % ft^2
+    Ewd   = 2;
 
-            if M < 1.2
-                % constant wave drag model
-                CD_wave = ((9*pi/2) * (Amax/ell^2)^2 * Ewd)/sref;
+    if M < 1.2
+        CD_wave = ((9*pi/2) * (Amax/ell^2)^2 * Ewd)/sref;
+    else
+        Dq_SH = (9*pi/2) * (Amax/ell^2)^2;   % Sears-Haack (D/q)
+        Lambda_LE_deg = comp(1).sweep_angle_deg;
 
-            else 
-                % Eq 12.45: compute (D/q)_wave then convert to CD
-                Dq_SH = (9*pi/2) * (Amax/ell^2)^2;   % Sears-Haack (D/q) % 
+        corr = 1 - 0.2*(M - 1.2).^0.57 * (1 - (pi*Lambda_LE_deg^0.77)/100);
+        Dq_wave = Ewd * corr * Dq_SH;        % (D/q)_wave  [ft^2]
 
-                Lambda_LE_deg = comp(1).sweep_angle_deg;  % LE sweep (deg) from wing
+        CD_wave = Dq_wave / sref;
+    end
+end
 
-                corr = 1 - 0.2*(M - 1.2).^0.57 * (1 - (pi*Lambda_LE_deg^0.77)/100);
-
-                Dq_wave = Ewd * corr * Dq_SH;  % (D/q)_wave, units (ft^2)
-
-                CD_wave = Dq_wave / sref;      % convert to coefficient
-            end
-        end
-
+CD_wave_mat(j,k) = CD_wave
+ % leakage + protuberance drag = 3% of total parasidic drag
         % total cd0
-        cd0_total(j,k) = cd0_sum + cd_l_p + CD_misc_M + CD_wave 
-
+        cd0_total(j,k) = cd0_sum + CD_misc_M + CD_wave;
+        cd_l_p = 0.03 *cd0_total(j,k); 
+        cd0_total(j,k) = cd0_sum + CD_misc_M + CD_wave +cd_l_p
+      
     end
 end
 plot (m,cd0_total)
