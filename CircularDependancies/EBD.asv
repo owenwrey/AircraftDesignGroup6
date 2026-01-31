@@ -1,0 +1,50 @@
+function weights = EBD(aircraft)
+
+% initialize variables
+weight.fuel = aircraft.constants.fuelWeight;
+weight.total = aircraft.constants.totalWeight;
+weight.payload = aircraft.strike.weight;
+weight.mg = aircraft.gear.mg.weight;
+weight.ng = aircraft.gear.ng.weight;
+weight.allElse = aircraf
+
+cruiseDynamicPressure = aircraft.constants.cDP;
+thicknessToChordRatio = aircraft.wing.T2C;
+ultimateLoadFactor = aircraft.constants.n_ult;
+
+wing.area = aircraft.wing.area;
+wing.AspectRatio = aircraft.wing.AR;
+wing.QuarterChordSweep = aircraft.wing.sweep;
+wing.TaperRatio = aircraft.wing.taper_ratio;
+
+ht.area = aircraft.ht.Area;
+ht.QuarterChordSweep = aircraft.ht.sweep;
+ht.AspectRatio = aircraft.ht.AR;
+ht.TaperRatio = aircraft.ht.TaperRatio;
+
+vt.area = aircraft.vt.Area;
+vt.QuarterChordSweep = aircraft.vt.sweep;
+vt.AspectRatio = aircraft.vt.AR;
+vt.TaperRatio = aircraft.vt.TaperRatio;
+
+
+% calculate new weights
+aircraft.wing.weight = .036*wing.area^(.758) * weight.fuel^(.0035) * (wing.AspectRatio/(cosd(wing.QuarterChordSweep)^2))^(.6) * cruiseDynamicPressure^(.006)...
+    * wing.TaperRatio^(.04) * (100*thicknessToChordRatio/cosd(wing.QuarterChordSweep))^(-.3) * (ultimateLoadFactor*weight.total)^(.49);
+
+aircraft.ht.weight = .016*(ultimateLoadFactor*weight.total)^(.414) * cruiseDynamicPressure^(.168) * ht.area^(.896) * (100*thicknessToChordRatio/(cosd(ht.QuarterChordSweep)))^(-.12)...
+    * (ht.AspectRatio/(cosd(ht.QuarterChordSweep))^2)^(.043) * ht.TaperRatio^(-.02);
+
+aircraft.vt.weight = .073*(ultimateLoadFactor*weight.total)^(.376) * cruiseDynamicPressure^(.122) * vt.area^(.873) * (100*thicknessToChordRatio/(cosd(vt.QuarterChordSweep)))^(-.49)...
+    * (vt.AspectRatio/(cosd(vt.QuarterChordSweep))^2)^(.357) * vt.TaperRatio^(.039);
+
+prevWeight = weight.total;
+
+weight.total = weight.fuel + weight.payload + weight.ng + weight.mg + weight.allElse + aircraft.wing.weight + aircraft.ht.weight + aircraft.vt.weight;
+
+
+
+
+
+
+end
