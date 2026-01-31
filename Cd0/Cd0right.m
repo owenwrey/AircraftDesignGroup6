@@ -1,3 +1,4 @@
+% cd0 wrong 
 %% cd0 
 
 % cd0 subsonic , component 
@@ -12,56 +13,13 @@ mu = 1.789e-5;           % dynamic viscosity [kg/(m·s)] (standard air, used wit
 
 %% Inputs 
 
+% altitude range 
 alt = 0:500:25000;
 
-    
-    % 0       % Start/Warmup
-    % 0       % Takeoff
-    % 25000   % Climb
-    % 25000   % Cruise Outbound
-    % 25000   % Descend to sea level 
-    % 0       % combat
-    % 25000   % Climb Return
-    % 25000   % Cruise Inbound
-    % 25000   % Descend Return
-    % 0       % Loiter
-    % 0   ];  % Landing
-
-
-% 
-% % KTAS from your Excel sheet (0 where blank)
-% V_KTAS = [ ...
-%     0
-%     0
-%     300
-%     662
-%     893.16
-%     562
-%     1.1851e3
-%     861.9084
-%     565
-%     1.0428e3
-%     278
-%     0 ];
-% 
-% alt_m = alt * 0.3048;         % ft → m
-% V_fts = V_KTAS * 1.68781;     % knots → ft/s
-% 
-% a_fts = zeros(size(alt));
-% 
-% for i = 1:length(alt_m)
-%     [~, a_m_s, ~, ~] = atmosisa(alt_m(i));  % speed of sound in m/s
-%     a_fts(i) = a_m_s * 3.28084;             % convert to ft/s
-% 
-% end
-% 
-% m = V_fts ./ a_fts;            % Mach number vector (12 values, one per mission segment)
+% mach range
 m = 0:0.1:1.6;
 
-%[0 0 0.8 1.1 0.8 0.85 0.8 0.94 0.8 0.42 0];
-
-
-% init values
+% initial values
 
 k_default = 0.50e-5;     % ft  % polished sheet metal
 sref = 578.846;          % reference area (ft^2)
@@ -168,107 +126,114 @@ comp(8).ff   = 1 + 0.35/comp(8).f;
 comp(8).q    = 1.5;      % pg 425 - nacelle mounted directly on wing
 comp(8).k    = k_default;
 
-%% cd0 combined (subsonic + supersonic) per mission segment
-cd0_total = zeros(length(alt),1);
+%% cd0 combined (subsonic + supersonic)
+
+cd0_total = zeros(length(alt), length(m));
 
 for k = 1:length(m)
-    
 
-for j = 1:length(alt)
+    M = m(k);   % scalar Mach for this column
 
-    
+    for j = 1:length(alt)
 
-    % Atmos at segment altitude
-    [~, a_j, ~, rho_j] = atmosisa(alt(j)*0.3048);  % a_j [m/s], rho_j [kg/m^3]
+        % Atmos at altitude
+        [~, a_j, ~, rho_j] = atmosisa(alt(j)*0.3048);  % a_j [m/s], rho_j [kg/m^3]
+        V = M * a_j;                                   % [m/s]
 
-    M = m(k);
-    V = M * a_j;    % [m/s]
+        cd0_sum   = 0;   % skin-friction + form factor buildup
+        CD_misc_M = 0;   % stores/misc drag coefficient (scalar)
+        CD_wave   = 0;   % wave drag coefficient (scalar)
 
-    cd0_sum   = 0;
-    CD_misc_M = 0;
-    CD_wave   = 0;
-
-    % CD_misc
-           % aim-120c    aim-9x      MK-83 JDAM
-
-    A_base = [19.63        19.63       153.9 ]; 
-   
-    for i = 1:length(comp)
-
-        l   = comp(i).l;       % ft
-        sw  = comp(i).swet;    % ft^2
-        l_m = l * 0.3048;      % m
-
-        Re = rho_j * V * l_m / mu;
+ % msc drag 
+ A_base = [19.63 19.63 153.9];   % [??] per your notes
 
         if M > 1
-            % supersonic 
-            FF = 1;
-            Q  = 1;
-
-            Cf = 0.455 ./ (log10(Re).^2.58 .* (1 + 0.144*M^2).^0.65);
-
-            cd0_i = (Cf * FF * Q * sw) / sref;
-            d_q = 0.064 +(0.042*(M-3.84))*A_base;
-            Cd_misc_air_to_air  = (6*d_q(1)+ 2*d_q(2)) / sref ;
-            Cd_misc_strike  = (4*d_q(3)+ 2*d_q(2)) / sref ;
+            d_q = 0.064 + (0.042*(M - 3.84)^2)*A_base;        % 1x3
         else
-           % subsonic
-            q_c = comp(i).q;
-            k_c = comp(i).k;
-
-            % FF selection (scalar vs Mach-array)
-            if length(comp(i).ff) == 1
-                ff_i = comp(i).ff;
-            else
-                ff_i = comp(i).ff(k);
-            end
-
-            % transition / roughness cap like you had
-            Re_cut = 38.21 * (l/k_c)^1.053;
-            Re_eff = min(Re, Re_cut);
-
-            Cf = 0.455 / ( log10(Re_eff)^2.58 * (1 + 0.144*M^2)^0.65 );
-
-            cd0_i = (Cf * ff_i * q_c * sw) / sref;
-            d_q = 0.129+(0.419*(M-0.161)^2).*A_base;
-            Cd_misc_air_to_air  = (6*d_q(1)+ 2*d_q(2)) / sref ;
-            Cd_misc_strike  = (4*d_q(3)+ 2*d_q(2)) / sref ;
+            d_q = 0.129 + (0.419*(M - 0.161)^2).*A_base;    % 1x3
         end
 
-        cd0_sum = cd0_sum + cd0_i;
+        % pick ONE configuration to include (don't compute then ignore it)
+        Cd_misc_air_to_air = (6*d_q(1) + 2*d_q(2)) / sref;  % scalar CD
+        Cd_misc_strike     = (4*d_q(3) + 2*d_q(2)) / sref;  % scalar CD
+
+        % choose which mission config you want:
+        CD_misc_M = Cd_misc_air_to_air;   % <--- change to Cd_misc_strike if needed
+
+        % component friction buildup 
+        for i = 1:length(comp)
+
+            l_ft = comp(i).l;         % ft
+            swet = comp(i).swet;      % ft^2
+            l_m  = l_ft * 0.3048;     % m
+
+            Re = rho_j * V * l_m / mu;
+
+            if M > 1
+                % supersonic
+                FF = 1;
+                Q  = 1;
+
+                Cf = 0.455 ./ (log10(Re).^2.58 .* (1 + 0.144*M^2).^0.65);
+
+                cd0_i = (Cf * FF * Q * swet) / sref;
+
+            else
+                % subsonic
+                q_c = comp(i).q;
+                k_c = comp(i).k;
+
+                % FF selection (scalar vs Mach-array stored in comp(i).ff)
+                if length(comp(i).ff) == 1
+                    ff_i = comp(i).ff;
+                else
+                    ff_i = comp(i).ff(k);
+                end
+
+                % roughness cap
+                Re_cut = 38.21 * (l_ft / k_c)^1.053;
+                Re_eff = min(Re, Re_cut);
+
+                Cf = 0.455 ./ (log10(Re_eff).^2.58 .* (1 + 0.144*M^2).^0.65);
+
+                cd0_i = (Cf * ff_i * q_c * swet) / sref;
+            end
+
+            cd0_sum = cd0_sum + cd0_i;
+        end
+
+        % leakage + protuberance drag = 12% of friction buildup
+        cd_l_p = 0.12 * cd0_sum;
+
+        % wave drag (this is technically part of msc drag) so may rename this
+        if M > 1
+            d_fus = 5.4;                 % ft
+            ell   = 44.742;              % ft
+            Amax  = pi*(d_fus/2)^2;      % ft^2
+            Ewd   = 2;
+
+            if M < 1.2
+                % constant wave drag model
+                CD_wave = ((9*pi/2) * (Amax/ell^2)^2 * Ewd)/sref;
+
+            else 
+                % Eq 12.45: compute (D/q)_wave then convert to CD
+                Dq_SH = (9*pi/2) * (Amax/ell^2)^2;   % Sears-Haack (D/q) % 
+
+                Lambda_LE_deg = comp(1).sweep_angle_deg;  % LE sweep (deg) from wing
+
+                corr = 1 - 0.2*(M - 1.2).^0.57 * (1 - (pi*Lambda_LE_deg^0.77)/100);
+
+                Dq_wave = Ewd * corr * Dq_SH;  % (D/q)_wave, units (ft^2)
+
+                CD_wave = Dq_wave / sref;      % convert to coefficient
+            end
+        end
+
+        % total cd0
+        cd0_total(j,k) = cd0_sum + cd_l_p + CD_misc_M + CD_wave 
 
     end
-
-    % leakage + protuberance drag = 12% of skin friction sum
-    cd_l_p = 0.12 * cd0_sum;
-
-    % wave drag only when supersonic
-  CD_wave = 0;   % default
-
-d_fus = 5.4;                 % ft
-ell   = 44.742;              % ft
-Amax  = pi*(d_fus/2)^2;      % ft^2
-Ewd   = 3;
-
-if (M > 1) && (M < 1.2)
-    % use your original "constant" wave drag model for 1 < M < 1.2
-    CD_wave = (9*pi/2) * (Amax/ell^2)^2 * Ewd;
-
-elseif (M >= 1.2)
-    % Eq. 12.45 (D/q)_wave, then convert to CD_wave
-    Dq_SH = (9*pi/2) * (Amax/ell^2)^2;   % Sears-Haack (D/q)
-
-    Dq_wave = Ewd * ( ...
-        1 - 0.386*(M - 1.2)^0.57 * (1 - (pi*comp(1).sweep_angle_deg^0.77)/100) ...
-        ) * Dq_SH;
-
-    CD_wave = Dq_wave / sref;            % convert (D/q) -> CD
 end
-
-cd0_total(j,k) = cd0_sum + CD_misc_M + cd_l_p + CD_wave
-
-end
-end
-
-%array2table(cd0_total,"RowNames",[])
+plot (m,cd0_total)
+% plot (alt, cd0_total)

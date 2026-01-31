@@ -172,11 +172,8 @@ comp(8).k    = k_default;
 cd0_total = zeros(length(alt),1);
 
 for k = 1:length(m)
-    
 
 for j = 1:length(alt)
-
-    
 
     % Atmos at segment altitude
     [~, a_j, ~, rho_j] = atmosisa(alt(j)*0.3048);  % a_j [m/s], rho_j [kg/m^3]
@@ -244,29 +241,16 @@ for j = 1:length(alt)
     cd_l_p = 0.12 * cd0_sum;
 
     % wave drag only when supersonic
-  CD_wave = 0;   % default
+    if M > 1
+        d_fus = 5.4;                 % ft
+        ell   = 44.742;              % ft
+        Amax  = pi*(d_fus/2)^2;      % ft^2
+        Ewd   = 3;
 
-d_fus = 5.4;                 % ft
-ell   = 44.742;              % ft
-Amax  = pi*(d_fus/2)^2;      % ft^2
-Ewd   = 3;
+        CD_wave = (9*pi/2) * (Amax/ell^2)^2 * Ewd;
+    end
 
-if (M > 1) && (M < 1.2)
-    % use your original "constant" wave drag model for 1 < M < 1.2
-    CD_wave = (9*pi/2) * (Amax/ell^2)^2 * Ewd;
-
-elseif (M >= 1.2)
-    % Eq. 12.45 (D/q)_wave, then convert to CD_wave
-    Dq_SH = (9*pi/2) * (Amax/ell^2)^2;   % Sears-Haack (D/q)
-
-    Dq_wave = Ewd * ( ...
-        1 - 0.386*(M - 1.2)^0.57 * (1 - (pi*comp(1).sweep_angle_deg^0.77)/100) ...
-        ) * Dq_SH;
-
-    CD_wave = Dq_wave / sref;            % convert (D/q) -> CD
-end
-
-cd0_total(j,k) = cd0_sum + CD_misc_M + cd_l_p + CD_wave
+    cd0_total(j,k) = cd0_sum + CD_misc_M + cd_l_p + CD_wave
 
 end
 end

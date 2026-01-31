@@ -12,56 +12,13 @@ mu = 1.789e-5;           % dynamic viscosity [kg/(m·s)] (standard air, used wit
 
 %% Inputs 
 
+% altitude range
 alt = 0:500:25000;
 
-    
-    % 0       % Start/Warmup
-    % 0       % Takeoff
-    % 25000   % Climb
-    % 25000   % Cruise Outbound
-    % 25000   % Descend to sea level 
-    % 0       % combat
-    % 25000   % Climb Return
-    % 25000   % Cruise Inbound
-    % 25000   % Descend Return
-    % 0       % Loiter
-    % 0   ];  % Landing
-
-
-% 
-% % KTAS from your Excel sheet (0 where blank)
-% V_KTAS = [ ...
-%     0
-%     0
-%     300
-%     662
-%     893.16
-%     562
-%     1.1851e3
-%     861.9084
-%     565
-%     1.0428e3
-%     278
-%     0 ];
-% 
-% alt_m = alt * 0.3048;         % ft → m
-% V_fts = V_KTAS * 1.68781;     % knots → ft/s
-% 
-% a_fts = zeros(size(alt));
-% 
-% for i = 1:length(alt_m)
-%     [~, a_m_s, ~, ~] = atmosisa(alt_m(i));  % speed of sound in m/s
-%     a_fts(i) = a_m_s * 3.28084;             % convert to ft/s
-% 
-% end
-% 
-% m = V_fts ./ a_fts;            % Mach number vector (12 values, one per mission segment)
+% mach range
 m = 0:0.1:1.6;
 
-%[0 0 0.8 1.1 0.8 0.85 0.8 0.94 0.8 0.42 0];
-
-
-% init values
+% initial values
 
 k_default = 0.50e-5;     % ft  % polished sheet metal
 sref = 578.846;          % reference area (ft^2)
@@ -175,8 +132,6 @@ for k = 1:length(m)
     
 
 for j = 1:length(alt)
-
-    
 
     % Atmos at segment altitude
     [~, a_j, ~, rho_j] = atmosisa(alt(j)*0.3048);  % a_j [m/s], rho_j [kg/m^3]

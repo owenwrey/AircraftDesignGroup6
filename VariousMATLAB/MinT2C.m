@@ -48,7 +48,7 @@ KTAS = linspace(200,1000,iend)';                % generate speed array
 EnHt_start = (KTAS(1)*kts2fps).^2/(2*32.2);
 EnHt_end   = maxAlt + (600*kts2fps).^2/(2*32.2);
 
-EnHt = linspace(EnHt_start,EnHt_end,iend)';
+EnHt = linspace(EnHt_start,EnHt_end,(iend-2))';
 
 %% Build the grids
 
@@ -72,14 +72,17 @@ En_grid = ALT_grid + (V_grid.^2)/(2*32.2);
 
 %% Best Excess Power Logic
 
-tol = 10000;   % wide tolerance for matching energy height
+tol = 5000;   % wide tolerance for matching energy height
 
 bestPs  = zeros(length(EnHt),1);
 bestAlt = zeros(length(EnHt),1);
 bestV   = zeros(length(EnHt),1);
 
+Vmax_kts = 800;                 % max allowed KTAS
+Vmax = Vmax_kts * kts2fps;      % ft/s
+
 for i = 1:length(EnHt)
-    mask = abs(En_grid - EnHt(i)) < tol;
+    mask = abs(En_grid - EnHt(i)) < tol & V_grid <= Vmax;
     Ps_candidates = Ps_grid(mask);
 
     if isempty(Ps_candidates)
@@ -98,9 +101,7 @@ for i = 1:length(EnHt)
     bestV(i)   = V_candidates(idx);
 end
 
-% ============================================================
-% === Remove NaNs from the climb path ===
-% ============================================================
+%% Remove NaNs from the climb path
 
 good = ~isnan(bestPs);
 bestPs  = bestPs(good);
@@ -108,7 +109,7 @@ bestAlt = bestAlt(good);
 bestV   = bestV(good);
 EnHt    = EnHt(good);
 
-
+%% Force Initial State: 0 ft, 200 TKAS
 
 initAlt = 0;
 initV_kts = 200;
@@ -117,7 +118,7 @@ initV = initV_kts*kts2fps;
 q_init = 0.5*rho(1)*initV^2;
 
 CL_init = W0/(q_init*S);
-CD_init = CD0 + K2*CL_init^2;
+CD_init = CD0 + K1*CL_init + K2*CL_init^2;
 
 D_init = q_init*S*CD_init;
 T_init = fullThrust*thrustLapse(1);
@@ -132,11 +133,7 @@ bestPs  = [Ps_init; bestPs];
 EnHt    = [EnHt_init; EnHt];
 
 
-
-% ============================================================
-% === FORCE FINAL STATE: (46,250 ft, 600 KTAS) ===
-% ============================================================
-
+%% Force Final State: 46250 ft, 600 KTAS
 finalAlt    = maxAlt;     % 46,250 ft
 finalV_kts  = 600;        % 600 KTAS
 finalV      = finalV_kts * kts2fps;
@@ -163,9 +160,7 @@ bestAlt = bestAlt(idx);
 bestV   = bestV(idx);
 bestPs  = bestPs(idx);
 
-% ============================================================
-% === Integrate time using Ps = dHe/dt ===
-% ============================================================
+%% Integrate time using Ps = dHe/dt
 
 dHe = diff(EnHt);             
 Ps_mid = bestPs(1:end-1);     
@@ -176,9 +171,7 @@ TTC = sum(dt)/60;   % minutes
 % cumulative time
 t_profile = [0; cumsum(dt)];
 
-% ============================================================
-% === Store climb schedule for plotting ===
-% ============================================================
+%% Store climb schedule for plotting
 
 Alt_profile  = bestAlt;
 KTAS_profile = bestV / kts2fps;
