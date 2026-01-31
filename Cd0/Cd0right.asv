@@ -17,7 +17,7 @@ mu = 1.789e-5;           % dynamic viscosity [kg/(m·s)] (standard air, used wit
 alt = 0:500:25000;
 
 % mach range
-m = 0:0.1:2;
+m = 0:0.1:1.6;
 
 % initial values
 
@@ -145,8 +145,8 @@ for k = 1:length(m)
         CD_wave   = 0;   % wave drag coefficient (scalar)
 
  % msc drag 
-           %aim 120   %aim 9x    %mk83
- A_base = [19.63      19.63      153.9];   
+ 
+ A_base = [19.63 19.63 153.9];   
         if M > 1
             d_q = 0.064 + (0.042*(M - 3.84)^2)*A_base;        % 1x3
         else
