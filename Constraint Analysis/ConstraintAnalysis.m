@@ -49,7 +49,7 @@ T2W_Climb = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
 alt = 46250*0.3048; % Altitude {m}
 n = 1; % Load Factor
-M = 1.7; % Mach number
+M = 0.8; % Mach number
 [T,a,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 v = M.*a; % Velocity {m/s}
 ddt_h = 500*0.3048/60; % Climb Speed {m/s}
