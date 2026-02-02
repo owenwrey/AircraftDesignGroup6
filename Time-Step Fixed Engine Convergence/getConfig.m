@@ -12,7 +12,7 @@ f.fuelBufferPercent = 0.06;
 
 
 % Re-evaluate the following using CL/CD and CL^(3/2)/CD optimization
-f.cruise.altitude = 25000; % [ft]
+f.cruise.altitude = 30000; % [ft]
 f.cruise.distance.out.A2A = 0;
 f.cruise.speed.out.A2A = 0; % [KTAS] not yet implemented
 f.cruise.distance.in.A2A = 850; % [nmi]

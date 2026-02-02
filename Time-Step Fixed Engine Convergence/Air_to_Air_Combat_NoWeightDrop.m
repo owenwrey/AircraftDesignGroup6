@@ -330,7 +330,7 @@ Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.023; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.08; % drag polar
 Tbl.CDR(i) = 0; % drag polar
@@ -388,7 +388,7 @@ Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.023; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.08; % drag polar
 Tbl.CDR(i) = 0; % drag polar
@@ -441,7 +441,7 @@ Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.023; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.08; % drag polar
 Tbl.CDR(i) = 0; % drag polar
@@ -491,7 +491,7 @@ Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.023; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.08; % drag polar
 Tbl.CDR(i) = 0; % drag polar
@@ -549,7 +549,7 @@ Tbl.dhdt(i) = -3000; % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.023; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.08; % drag polar
 Tbl.CDR(i) = 0; % drag polar
@@ -602,7 +602,7 @@ Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.023; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.08; % drag polar
 Tbl.CDR(i) = 0; % drag polar
@@ -659,7 +659,7 @@ Tbl.dDist(i) = 0; % delta distance (NM)
 Tbl.dhdt(i) = 0; % rate of climb (ft/min)
 Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.023; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.08; % drag polar
 Tbl.CDR(i) = 0; % drag polar
