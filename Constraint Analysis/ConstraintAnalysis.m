@@ -77,7 +77,7 @@ T2W_SustainedTurn = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2
 
 alt = 30000*0.3048; % Altitude {m}
 n = 1; % Load Factor
-M = 1.6; % Mach number
+M = 1.8; % Mach number
 [~,a,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 v = M.*a; % Velocity {m/s}
 ddt_h = 0; % Climb Speed {m/s}
@@ -140,7 +140,7 @@ plot(W2S.*0.02088547,T2W_MaxSpeed,'LineStyle','-')
 plot(W2S.*0.02088547,T2W_Takeoff,'LineStyle','-')
 xl1=xline(W2S_Landing.*0.02088547,'-r');
 xl2=xline(W2S_Stall.*0.02088547,'-b');
-plot(105, 0.87,"o")
+plot(100, 1.0,"o")
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
 ylim([0,2.5])
