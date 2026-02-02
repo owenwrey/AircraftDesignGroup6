@@ -168,7 +168,7 @@ for k = 1:length(m)
             l_m  = l_ft * 0.3048;     % m
 
             Re = rho_j * V * l_m / mu;
-
+            k_c = comp(i).k; 
             if M > 1
                 % supersonic
                 FF = 1;
@@ -242,6 +242,7 @@ for k = 1:length(m)
         cd0_total(j,k) = cd0_sum + CD_misc_M + CD_wave;
         cd_l_p = 0.03 *cd0_total(j,k); 
         cd0_total(j,k) = cd0_sum + CD_misc_M + CD_wave +cd_l_p
+        CD_wave(j,k) = 
     end
 end
 plot (m,cd0_total)
