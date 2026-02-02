@@ -1,8 +1,8 @@
 function [CD0] = CD0F18(M)
-%D_Q2kBfuselage Calculates CD0 for the f18 at a given mach number
+%CD0F18 Calculates CD0 for the f18 at a given mach number
 %   Inputs: M - Mach number
-%   Outputs: D/q
-%   taken from P.426 in Raymer textbook.
+%   Outputs: CD0
+%   
 arguments (Input)
     M double
 end
@@ -23,7 +23,7 @@ Data = [0.6,0.0251
 1.6,0.058
 ];
 
-func =griddedInterpolant(Data(:,1),Data(:,2));
+func = griddedInterpolant(Data(:,1),Data(:,2));
 
 CD0 = func(M);
 
