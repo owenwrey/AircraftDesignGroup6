@@ -21,7 +21,7 @@ W2S = (10:10:350).*47.88025888888984; % Wing Loadings {N/m^2}
 
 alt = 30000 * 0.3048; % Altitude {m}
 n = 1; % Load Factor
-M = 1.7; % Mach number
+M = 1.2; % Mach number
 [~,a,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 v = M.*a; % Velocity {m/s}
 ddt_h = 0; % Climb Speed {m/s}
@@ -47,12 +47,12 @@ T2W_Climb = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
 %%%%%%% Ceiling %%%%%%%%
 
-alt = 46250*0.3048; % Altitude {m}
+alt = 38700*0.3048; % Altitude {m}
 n = 1; % Load Factor
 M = 0.9; %1.4; % Mach number
 [T,a,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 v = M.*a; % Velocity {m/s}
-ddt_h = 300*0.3048/60; % Climb Speed {m/s}
+ddt_h = 200*0.3048/60; % Climb Speed {m/s}
 ddt_v = 0; % Acceleration {m/s^2}
 alpha = 1.11*(rho/rho_SL)-0.11; % Thrust Lapse
 beta = 0.7; % Weight Lapse
@@ -83,7 +83,7 @@ v = M.*a; % Velocity {m/s}
 ddt_h = 0; % Climb Speed {m/s}
 ddt_v = 0; % Acceleration {m/s^2}
 alpha = 1.11*(rho/rho_SL)-0.11; % Thrust Lapse
-beta = 1; % Weight Lapse
+beta =0.7; % Weight Lapse
 
 T2W_MaxSpeed = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
@@ -93,7 +93,7 @@ T2W_MaxSpeed = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
 alt = 0; % Altitude {m}
 [~,~,rho] = atmos(alt); % Air Density {kg/m^3}
-Cl = 1.6/cosd(24);
+Cl = 1.7/cosd(24);
 
 T2W_Takeoff = TakeoffConstraintAnalysis(TOP,rho/1.225,Cl,W2S);
 
@@ -103,10 +103,10 @@ T2W_Takeoff = TakeoffConstraintAnalysis(TOP,rho/1.225,Cl,W2S);
 
 alt = 0; % Altitude {m}
 n = 1; % Load Factor
-beta = 1; % Weight Lapse
-Cl = 2.0/cosd(24); % Lift Coefficient
+beta = 0.58; % Weight Lapse
+Cl = 1.8/cosd(24); % Lift Coefficient
 k = 1.2; % Safety Factor
-v = 160*0.514444; % Velocity {m/s}
+v = 131*1.1*0.514444; % Velocity {m/s}
 [~,~,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 
 W2S_Landing = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
@@ -115,10 +115,10 @@ W2S_Landing = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
 
 alt = 0; % Altitude {m}
 n = 1; % Load Factor
-beta = 1; % Weight Lapse
-Cl = 1.1; % Lift Coefficient
+beta = 0.58; % Weight Lapse
+Cl = 1.2; % Lift Coefficient
 k = 1.0; % Safety Factor
-v = 170*0.514444; % Velocity {m/s}
+v = 131*0.514444; % Velocity {m/s}
 [~,~,~,rho] = atmosisa(alt,"extended","on"); % Air Density {kg/m^3}
 
 W2S_Stall = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
@@ -140,7 +140,7 @@ plot(W2S.*0.02088547,T2W_MaxSpeed,'LineStyle','-')
 plot(W2S.*0.02088547,T2W_Takeoff,'LineStyle','-')
 xl1=xline(W2S_Landing.*0.02088547,'-r');
 xl2=xline(W2S_Stall.*0.02088547,'-b');
-plot(105, 0.87,"o")
+plot(115, 0.75,"o")
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
 ylim([0,2.5])
