@@ -43,7 +43,7 @@ Alt = linspace(0,maxAlt, iend)';   % altitude array
 rho = rho*0.00194032; % to slug/ft^3
 thrustLapse = TLapse(Alt);
 
-KTAS = linspace(200,1000,iend)';                % generate speed array
+KTAS = linspace(160,1000,iend)';                % generate speed array
 
 EnHt_start = (KTAS(1)*kts2fps).^2/(2*32.2);
 EnHt_end   = maxAlt + (600*kts2fps).^2/(2*32.2);
@@ -78,7 +78,7 @@ bestPs  = zeros(length(EnHt),1);
 bestAlt = zeros(length(EnHt),1);
 bestV   = zeros(length(EnHt),1);
 
-Vmax_kts = 800;                 % max allowed KTAS
+Vmax_kts = 900;                 % max allowed KTAS
 Vmax = Vmax_kts * kts2fps;      % ft/s
 
 for i = 1:length(EnHt)
