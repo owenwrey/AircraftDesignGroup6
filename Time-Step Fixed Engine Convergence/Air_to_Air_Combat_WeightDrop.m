@@ -93,7 +93,7 @@ Thrust = 58000; % lb
 % given
 
 for i = 2:npts(1,:)
-SFC_idle = 0.; %lb/(lb.h)
+SFC_idle = 0.5; %lb/(lb.h)
 T_W_idle = 0.05;
 
 
@@ -168,9 +168,9 @@ Tbl.dDist(i) = 0; % delta distance (NM)
 Tbl.dhdt(i) = 0; % rate of climb (ft/min)
 Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
-Tbl.CD0(i) = 0.023; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
@@ -301,8 +301,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% 5. loiter 1
-% Mach 0.8 - 481 ktas
-% 25,000 ft
+
+% 30,000 ft
 % 15 min duration for M1
 % no distance credit
 
@@ -321,7 +321,7 @@ Tbl.Alt(i) = 30000; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 339; % true airspeed (kt)
+Tbl.KTAS(i) = 265; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
@@ -362,7 +362,7 @@ end
 % full afterburner
 % assume occurs at 30,000 ft
 % only occurs for M1
-% Mach 1.2
+% Mach 2
 
 SFC_combat = 1; % reevaluate
 istart6 = sum(npts(1:5))+1;
@@ -379,12 +379,12 @@ Tbl.Alt(i) = 30000; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 772.4; % true airspeed (kt)
+Tbl.KTAS(i) = 1322; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.025; % drag polar
+Tbl.CD0(i) = 0.045; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
@@ -432,12 +432,12 @@ Tbl.Alt(i) = 30000; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 722.4; % true airspeed (kt)
+Tbl.KTAS(i) = 1322; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.025; % drag polar
+Tbl.CD0(i) = 0.045; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
@@ -482,7 +482,7 @@ Tbl.Alt(i) = 30000; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 443; % true airspeed (kt)
+Tbl.KTAS(i) = 414; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
@@ -534,7 +534,7 @@ Tbl.Alt(istart9:iend9) = linspace(Tbl.Alt(istart9 - 1),0,npts(9,:)); % altitude 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.MACH(i) = 0.8; % Mach number
+Tbl.MACH(i) = 0.9; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
@@ -593,7 +593,7 @@ Tbl.Alt(i) = 0; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 226; % true airspeed (kt)
+Tbl.KTAS(i) = 212; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
@@ -633,7 +633,7 @@ end
 
 % (T/W)_idle = 0.05;
 % no distance credit
-SFC_shutdown = 0.6;
+SFC_shutdown = 0.5;
 istart11 = sum(npts(1:10))+1;
 iend11 = sum(npts(1:11));
 
