@@ -1,0 +1,22 @@
+function [W_w] = Wwing(Kw,n_lim,W,tc,lam_LE,lam,AR,S)
+%WWING Estimates wing weight based on geometry. from roksam 5.10
+%   Detailed explanation goes here
+arguments (Input)
+    Kw
+    n_lim
+    W
+    tc
+    lam_LE
+    lam
+    AR
+    S
+end
+
+arguments (Output)
+    W_w
+end
+
+W_w = (19.29*(...
+    ((Kw*n_lim*W)/tc) * ((tand(lam_LE) - 2*(1-lam)/(AR*(1+lam)))^2 + 1.0)*10^(-6) ...
+    )^.464) * ((1+lam)*AR)^.70 * S^.58;
+end
