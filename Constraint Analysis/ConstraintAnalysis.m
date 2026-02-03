@@ -10,7 +10,10 @@ CD_0 = 0.02;
 k1 = 0; 
 k2 = .05; 
 CD_R = 0; 
-
+CD_0 = 0.02; % zero-lift drag coeficient
+k1 = 0; % drag polar constant 1
+k2 = .05; % drag polar constant 2
+CD_R = 0; % resultant drag coeficient
 TOP = 300; 
 
 %% ISA + Delta T Setup

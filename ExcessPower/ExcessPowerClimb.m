@@ -2,29 +2,29 @@ clear
 close all
 clc
 %% Script Settings
-printStatsAtEachAltitude = 0; % if ==1 your command window gets cluttered
+printStatsAtEachAltitude = true; % if ==1 your command window gets cluttered
 
 % This what defines what the service ceiling is:
 serviceCeilingClimbRate = 100; % [ft/min] (not [fps] here)
 
 % you don't need to change these unless your not reaching the abs ceiling
-altRange = 50000; % max altitude tested, if ceiling is below this the script stops
-machRangeMax = 2.8; % this is the max speed plotted
+altRange = 52000; % max altitude tested, if ceiling is below this the script stops
+machRangeMax = 2.0; % this is the max speed plotted
 
 
 %% Aircraft Settings
 throtRatio = 1.0; % 1.0 == full afterburner, don't increase past 1
 
 %% Aircraft Parameters
-W = 76965; % Aircraft Weight [lb_f]
-Sref = 592.04; % Wing Area [ft^2]
-Max_Thrust = 44000; % Max Thrust SLS [lb_f]
+W = 84127; % Aircraft Weight [lb_f]
+Sref = W/115; % Wing Area [ft^2]
+Max_Thrust = 58000; % Max Thrust SLS [lb_f]
 
 % Drag Polar
-CD0 = 0.02;
-K1 = 0;
-K2 = 0.129;
-CDR = 0;
+% CD0 = 0.02;
+% K1 = 0;
+% K2 = 0.129;
+% CDR = 0;
 CLmax = 1.2;
 
 n = 1;
@@ -34,7 +34,7 @@ n = 1;
 %[~,~,rho_SL] = atmos_English(0);
 [~, ~, ~, rho_SL] = atmosEnglish(0, 'ft', 'slugs', 'R');
 
-altitude = 0:25:altRange; % TO VARY ALTITUDE CHANGE THIS PARAMETER
+altitude = 0:250:altRange; % TO VARY ALTITUDE CHANGE THIS PARAMETER
 % you cant set this over your service ceiling
 
 fpsToKnots = 0.592484;
@@ -78,8 +78,8 @@ tbl.KTAS = tbl.V_TAS*fpsToKnots;
 tbl.KEAS = tbl.V_EAS*fpsToKnots;
 tbl.q = .5.*rho.*tbl.V_TAS.^2;
 tbl.CL = W./tbl.q./Sref;
-tbl.CD = CD0 + K1.*tbl.CL + K2.*tbl.CL.^2 + CDR;
-% tbl.CD = getCD(tbl.CL); % <-- change the name of this function to our drag polar function
+% tbl.CD = CD0 + K1.*tbl.CL + K2.*tbl.CL.^2 + CDR;
+tbl.CD = getCD(tbl.CL, tbl.Mach); % <-- change the name of this function to our drag polar function
 tbl.L2D = tbl.CL./tbl.CD;
 tbl.CL12_CD = tbl.CL.^(1/2)./tbl.CD;
 tbl.Drag = Sref.*tbl.q.*tbl.CD;
@@ -101,7 +101,7 @@ tbl.FPA = real(asind(tbl.hdot./tbl.V_TAS)); % [degree]
 
 Vx(i) = tbl.V_EAS(max(tbl.FPA) == tbl.FPA)*fpsToKnots; % [KEAS]
 Vy(i) = tbl.V_EAS(max(tbl.hdot) == tbl.hdot)*fpsToKnots; % [KEAS]
-% find the index where the hdot changes sign:
+% find the index where hdot changes sign:
 idx = find(tbl.hdot(2:end) .* tbl.hdot(1:end-1) < 0) + 1; 
 % find the row where V_EAS is largest among sign-change points (there's probably only two options)
 [~, k] = max(tbl.V_EAS(idx));
@@ -113,11 +113,13 @@ if isempty(imax)
     absCeiling = altitude(i-1);
     break;
 end
-% assign results
+
+% if ~isempty(imax)
+%% Assign results
 VmaxKEAS(i) = tbl.V_EAS(imax) * fpsToKnots;
 VmaxKTAS(i) = tbl.V_TAS(imax) * fpsToKnots;
 Mmax(i)     = tbl.Mach(imax);
-
+% end
 VstallKTAS(i) = sqrt((2/rho) * (W/Sref) *(n/CLmax))*fpsToKnots;
 VstallKEAS(i) = VstallKTAS(i) * sqrt(sigma);
 Mstall(i)     = VstallKTAS(i)/a;
@@ -128,7 +130,7 @@ FPA_x(i) = max(tbl.FPA);
 FPA_y(i) = tbl.FPA(max(tbl.hdot) == tbl.hdot);
 
 % thrust(i) = tbl.Thrust(1);
-% cd(i)     = tbl.CD(1000);
+% cd(i)     = tbl.CD(555);
 
 % check if max speed is less than stall speed and assign abs ceil
 if VmaxKEAS(i) < VstallKEAS(i)
@@ -139,7 +141,7 @@ end
 
 
 %% Print
-if printStatsAtEachAltitude == 1
+if printStatsAtEachAltitude == 1 % && (altitude(i) == 0 || altitude(i) == 10000 || altitude(i) == 20000 || altitude(i) == 30000 || altitude(i) == 40000 || altitude(i) == 50000)
 fprintf('============================\n')
 fprintf('At altitude %.0f ft:\n',altitude(i))
 
@@ -158,7 +160,10 @@ Tcell{i} = tbl;
 
 end % "for i = 1:length(altitude)" end
 serviceCeiling = altitude(find(hdot_y >= serviceCeilingClimbRate, 1, 'last')); % find highest altitud where hdot_y is still 200 ft/min
-fprintf('Service Ceiling: %u ft (%u ft/min climb rate)\n', serviceCeiling, serviceCeilingClimbRate);
+fprintf('Service Ceiling:  %u ft (%u ft/min climb rate)\n', serviceCeiling, serviceCeilingClimbRate);
+fprintf('Maximum velocity: %.0f KEAS\n', max(VmaxKEAS))
+fprintf('Maximum velocity: %.0f KTAS\n', max(VmaxKTAS))
+fprintf('Maximum Mach Num: %.2f\n', max(Mmax))
 
 %% Prep data for plots
 
@@ -185,10 +190,10 @@ if ~exist("absCeiling", "var")
     absCeiling = altRange;
     warning('Max altitude checked is not the absolute ceiling');
 end
-absCeilingForPlot    = absCeiling * ones(length(altitude),1);
+absCeilingForPlot    = absCeiling * ones(length(altitude),1)';
 absCeilingVeloForPlot = linspace(0, 1500, length(absCeilingForPlot));
 
-serviceCeilingForPlot = serviceCeiling * ones(length(altitude),1);
+serviceCeilingForPlot = serviceCeiling * ones(length(altitude),1)';
 serviceCeilingVeloForPlot = linspace(0, 1500, length(serviceCeilingForPlot));
 
 
@@ -235,6 +240,13 @@ xlim([100, 1200]);
 xlabel("Maximum Velocity (KTAS)",Interpreter="latex")
 ylabel("Altitude (ft)",Interpreter="latex")
 legend('Maximum Speed', 'Stall Speed', 'Absolute Ceiling', 'Service Ceiling');
+
+% % Hdot_y vs ALT
+% figure;
+% plot(hdot_y,altitude,'LineWidth',1.75); hold on;
+% grid on;
+% xlabel("Climb Rate ($\frac{ft}{min}$)",Interpreter="latex")
+% ylabel("Altitude (ft)",Interpreter="latex")
 
 % figure;
 % plot(thrust, altitude(1:end-1))
@@ -313,4 +325,26 @@ else
     error('Temperature units not recognized.')    
 end
 
-end
+end % end atmosEnglish
+
+function CD = getCD(CL, M)
+
+CD0_sub = 0.02;
+K2_sub = 0.025;
+
+CD0_super = 0.022;
+K2_super = 0.025;
+
+CDR = zeros(size(M));
+
+machCurve = [0        0.85    0.95                               1.05       2             ];
+%CD0curve = [0.02     0.02    0.03                               0.045      0.04          ];
+CD0curve  = [CD0_sub  CD0_sub 1.125*(CD0_super-CD0_sub)+CD0_sub  CD0_super  0.95*CD0_super];
+K2curve   = [K2_sub   K2_sub  1.125*(K2_super-K2_sub)+K2_sub     K2_super   K2_super      ];
+
+CD0 = interp1(machCurve, CD0curve, M, "linear", "extrap");
+K2 = interp1(machCurve, K2curve, M, "linear", "extrap");
+
+CD = CD0 + K2 .* (CL.^2) + CDR;
+
+end % end getCD
