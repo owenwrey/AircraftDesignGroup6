@@ -19,9 +19,9 @@ M = 1.7;                % max Mach number
 CL_max = 1.1;           % CL_max
 CL_min = -1;            % negative CL_max
 
-beta = .7;            % mid mission weight fraction
-WL = 130;               % wing loading, lbf/ft^2
-TW = .6;                % thrust to weight
+beta = .7;              % mid mission weight fraction
+WL = 115;               % wing loading, lbf/ft^2
+TW = .75;               % thrust to weight
 rho_sl = .002377;       % air density, slug/ft^3
 
 % gust line inputs
@@ -38,7 +38,8 @@ VC = 573;               % cruise speed
 
 %% Calculations
 % Calc Positive load limits
-Vs_pos = sqrt(2*beta*WL/(rho_sl*CL_max));       % positive stall speed
+%Vs_pos = sqrt(2*beta*WL/(rho_sl*CL_max));       % positive stall speed
+Vs_pos = 131;
 Vs_pos_line = [Vs_pos;Vs_pos];
 V = linspace(Vs_pos,VD,100)';                   % create span of V values
 q_bar = .5*rho_sl*V.^2;                         % calc q_bar
@@ -51,10 +52,12 @@ for i = 1:length(V)
     end
 end
 
-VA = Vs_pos*sqrt(n_lim_p);
+% VA = Vs_pos*sqrt(n_lim_p);
+VA = 710.2;
 
 % Calc Negative load limits
-Vs_neg = sqrt(2*beta*WL/(rho_sl*abs(CL_min)));       % negative stall speed
+%Vs_neg = sqrt(2*beta*WL/(rho_sl*abs(CL_min)));       % negative stall speed
+Vs_neg = Vs_pos*1.1;
 Vs_neg_line = [Vs_neg;Vs_neg];
 V_neg = linspace(Vs_neg,VD,100)';
 q_bar = .5*rho_sl*V_neg.^2;

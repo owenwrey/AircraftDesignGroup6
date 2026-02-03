@@ -20,16 +20,16 @@ kts2fps = 1/0.59248;    % knots to feet per sec
 NM2ft = 6067;           % nautical miles to feet
 ft2m = 0.305;           % feet to meters
 
-W0 = 76965;             % MTOW (lbm)
+W0 = 84127;             % MTOW (lbm)
 WtFrac = 1;             % weight fraction
-W_S = 130;              % takeoff wing loading (psf)
+W_S = 115;              % takeoff wing loading (psf)
 S = W0/W_S;             % wing area ft^2
-maxAlt = 46250;         % service ceiling, ft
-fullThrust = 44000;     % lb
+maxAlt = 41000;         % service ceiling, ft
+fullThrust = 58000;     % lb
 
-CD0 = 0.008;            
+CD0 = 0.02;            
 K1 = 0;      
-K2 = 0.08;   
+K2 = 0.05;   
 CDR = 0;     
 
 istart = 1;
