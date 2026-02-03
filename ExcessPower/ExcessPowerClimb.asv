@@ -233,8 +233,6 @@ plot(serviceCeilingVeloForPlot, serviceCeilingForPlot, 'LineWidth', 1.25, 'LineS
 grid on
 xlim([0.15, 1.8])
 ylim([0 52500])
-ax = gca;
-ax.YAxis.Exponent = 3; % 1000s feet
 xlabel("Maximum Mach Number",Interpreter="latex")
 ylabel("Altitude (ft)",Interpreter="latex")
 legend('Maximum Speed', 'Stall Speed', 'Absolute Ceiling', 'Service Ceiling');

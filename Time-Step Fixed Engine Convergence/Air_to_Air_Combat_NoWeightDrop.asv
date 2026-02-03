@@ -580,7 +580,7 @@ end
 
 %% 10. loiter at sea level
 % 20 min duration
-
+% 481 KTAS
 % no distance credit
 
 istart10 = sum(npts(1:9))+1;
@@ -597,7 +597,7 @@ Tbl.Alt(i) = 0; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 212; % true airspeed (kt)
+Tbl.KTAS(i) = 311; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
@@ -659,9 +659,9 @@ Tbl.dDist(i) = 0; % delta distance (NM)
 Tbl.dhdt(i) = 0; % rate of climb (ft/min)
 Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
-Tbl.CD0(i) = 0.025; % drag polar
+Tbl.CD0(i) = 0.023; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.05; % drag polar
+Tbl.K2(i) = 0.08; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio

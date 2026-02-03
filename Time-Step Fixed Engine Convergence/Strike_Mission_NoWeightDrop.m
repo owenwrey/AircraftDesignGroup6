@@ -517,7 +517,7 @@ end
 
 %% 9. cruise inbound
 % 650 nm
-% 660 mph
+
 % 30,000 ft
 
 istart9 = sum(npts(1:8))+1;
@@ -529,7 +529,7 @@ SFC_cruise = 0.7; %estimate
 for  i = istart9:iend9
 Tbl.Dist(istart9:iend9) = linspace((Tbl.Dist(istart9-1)),(Tbl.Dist(istart9-1)+ 650),npts(9,:)); % distance (NM)
 Tbl.dDist(i) = Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
-Tbl.Alt(i) = 25000; % Altitude (ft)
+Tbl.Alt(i) = 30000; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
