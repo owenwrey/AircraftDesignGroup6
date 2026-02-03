@@ -7,7 +7,7 @@ close all
 
 CD_0 = 0.02; % zero-lift drag coeficient
 k1 = 0; % drag polar constant 1
-k2 = .129; % drag polar constant 2
+k2 = .05; % drag polar constant 2
 CD_R = 0; % resultant drag coeficient
 
 TOP = 300; % Take Off Parameter
