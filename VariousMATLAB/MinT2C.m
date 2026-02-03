@@ -7,7 +7,7 @@ clear; clc; close all;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % things to update include: MTOW, weight fraction, wing loading, max alt,
 % thrust, drag values, TSFC, min/max speed in speed array, EnHt start and end, 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Inputs
 TLapse = griddedInterpolant([0, 10000, 20000, 30000, 40000, 50000], ...
