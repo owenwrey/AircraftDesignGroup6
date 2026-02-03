@@ -76,13 +76,13 @@ tol = 2;
 
 while tol >1
 
-W_S = 130; % takeoff wing loading (psf)
+W_S = 115; % takeoff wing loading (psf)
 rho_SL = 0.0023769;
 mps2kts = 1.94384; % meters per sec to knots
 kts2fps = 1/0.59248; % knots to feet per sec
 NM2ft = 6067; % nautical miles to feet
 ft2m = 0.305; % feet to meters
-Thrust = 44000; %lb
+Thrust = 58000; %lb
 % segment information
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,7 +94,7 @@ Thrust = 44000; %lb
 % given
 
 for i = 2:npts(1,:)
-SFC_idle = 0.6; %lb/(lb.h)
+SFC_idle = 0.5; %lb/(lb.h)
 T_W_idle = 0.05;
 
 
@@ -115,9 +115,9 @@ Tbl.dDist(i) = 0; % delta distance (NM)
 Tbl.dhdt(i) = 0; % rate of climb (ft/min)
 Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
@@ -169,9 +169,9 @@ Tbl.dDist(i) = 0; % delta distance (NM)
 Tbl.dhdt(i) = 0; % rate of climb (ft/min)
 Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
@@ -193,7 +193,7 @@ end
 
 %% 3. climb 1
 % Mach 0.8
-% level off at 25,000 ft
+% level off at 30,000 ft
 % no afterburner [THROT = 1]
 % take distance credit
 
@@ -202,12 +202,12 @@ iend3 = sum(npts(1:3));
 SFC_climb = 0.75;
 for  i = istart3:iend3
 
-Tbl.Alt(istart3:iend3) = linspace(0,25000,npts(3,:)); % altitude (ft)
+Tbl.Alt(istart3:iend3) = linspace(0,30000,npts(3,:)); % altitude (ft)
 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.MACH(i) = 0.8; % Mach number
+Tbl.MACH(i) = 0.9; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
@@ -218,9 +218,9 @@ Tbl.dhdt(i) = ((Tbl.Thrust(i)*Tbl.KTAS(i)*kts2fps*60) - (Tbl.Drag(i)*Tbl.KTAS(i)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -249,28 +249,28 @@ end
 
 %% 4. cruise outbound
 % F18 E/F cruise speed
-% 25,000 ft
-% 750 NM
-SFC_cruise = 0.85; %estimate
+% 30,000 ft
+% 650 NM
+SFC_cruise = 0.7; %estimate
 istart4 = sum(npts(1:3))+1;
 iend4 = sum(npts(1:4));
 
 for  i = istart4:iend4
-Tbl.Dist(istart4:iend4) = linspace((Tbl.Dist(istart4-1)),(Tbl.Dist(istart4-1)+ 750),npts(4,:)); % distance (NM)
+Tbl.Dist(istart4:iend4) = linspace((Tbl.Dist(istart4-1)),(Tbl.Dist(istart4-1)+ 650),npts(4,:)); % distance (NM)
 Tbl.dDist(i) = Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
-Tbl.Alt(i) = 25000; % Altitude (ft)
+Tbl.Alt(i) = 30000; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 662; % true airspeed (kt) (660 mph taken from F18 e/f cruise)
+Tbl.KTAS(i) = 468; % true airspeed (kt) 
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
-Tbl.CDR(i) = 0.01; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
+Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
 Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); % drag (lbf)
@@ -314,7 +314,7 @@ Tbl.Alt(istart5:iend5) = linspace(Tbl.Alt(istart5 - 1),0,npts(5,:)); % altitude 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.MACH(i) = 0.8; % Mach number
+Tbl.MACH(i) = 0.9; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
@@ -325,9 +325,9 @@ Tbl.dhdt(i) = -3000; % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -360,7 +360,7 @@ end
 % sea level
 % Mach 0.85
 
-SFC_combat = 0.85; % reevaluate
+SFC_combat = 1; % reevaluate
 istart6 = sum(npts(1:5))+1;
 iend6 = sum(npts(1:6));
 
@@ -371,15 +371,15 @@ Tbl.Alt(i) = 0; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 562; % true airspeed (kt) (660 mph taken from F18 e/f cruise)
+Tbl.KTAS(i) = 595; % true airspeed (kt) Mach 0.9
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
-Tbl.CDR(i) = 0.01; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
+Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
 Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); % drag (lbf)
@@ -411,7 +411,7 @@ end
 % 7. weapons fire/drop
 %  4380 lb dropped
 % occurs only in M1
-SFC_weightdrop = 0.85;
+SFC_weightdrop = 1;
 istart7 = sum(npts(1:6))+1;
 iend7 = sum(npts(1:7));
 
@@ -425,14 +425,14 @@ Tbl.Alt(i) = 0; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 722.4; % true airspeed (kt)
+Tbl.KTAS(i) = 595; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -462,7 +462,7 @@ end
 
 %% 8. climb 2
 % Mach 0.8
-% level off at 25,000 ft
+% level off at 30,000 ft
 % no afterburner [THROT = 1]
 % take distance credit
 
@@ -471,12 +471,12 @@ iend8 = sum(npts(1:8));
 SFC_climb = 0.75;
 for  i = istart8:iend8
 
-Tbl.Alt(istart8:iend8) = linspace(0,25000,npts(8,:)); % altitude (ft)
+Tbl.Alt(istart8:iend8) = linspace(0,30000,npts(8,:)); % altitude (ft)
 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.MACH(i) = 0.8; % Mach number
+Tbl.MACH(i) = 0.9; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
@@ -487,9 +487,9 @@ Tbl.dhdt(i) = ((Tbl.Thrust(i)*Tbl.KTAS(i)*kts2fps*60) - (Tbl.Drag(i)*Tbl.KTAS(i)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -516,32 +516,32 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% 9. cruise inbound
-% 800 nm
+% 650 nm
 % 660 mph
-% 25,000 ft
+% 30,000 ft
 
 istart9 = sum(npts(1:8))+1;
 iend9 = sum(npts(1:9));
 
-SFC_cruise = 0.85; %estimate
+SFC_cruise = 0.7; %estimate
 
 
 for  i = istart9:iend9
-Tbl.Dist(istart9:iend9) = linspace((Tbl.Dist(istart9-1)),(Tbl.Dist(istart9-1)+ 800),npts(9,:)); % distance (NM)
+Tbl.Dist(istart9:iend9) = linspace((Tbl.Dist(istart9-1)),(Tbl.Dist(istart9-1)+ 650),npts(9,:)); % distance (NM)
 Tbl.dDist(i) = Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.Alt(i) = 25000; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 605; % true airspeed (kt) (660 mph taken from F18 e/f cruise)
+Tbl.KTAS(i) = 414; % true airspeed (kt) (660 mph taken from F18 e/f cruise)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
-Tbl.CDR(i) = 0.01; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
+Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
 Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); % drag (lbf)
@@ -584,7 +584,7 @@ Tbl.Alt(istart10:iend10) = linspace(Tbl.Alt(istart10 - 1),0,npts(10,:)); % altit
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.MACH(i) = 0.8; % Mach number
+Tbl.MACH(i) = 0.9; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
@@ -595,9 +595,9 @@ Tbl.dhdt(i) = -3000; % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -628,7 +628,7 @@ end
 % 20 min duration
 % 481 KTAS
 % no distance credit
-SFC_loiter = 0.75;
+SFC_loiter = 0.7;
 istart11 = sum(npts(1:10))+1;
 iend11 = sum(npts(1:11));
 
@@ -643,14 +643,14 @@ Tbl.Alt(i) = 0; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
-Tbl.KTAS(i) = 298; % true airspeed (kt)
+Tbl.KTAS(i) = 212; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -683,7 +683,7 @@ end
 
 % (T/W)_idle = 0.05;
 % no distance credit
-SFC_shutdown = 0.6;
+SFC_shutdown = 0.5;
 istart12 = sum(npts(1:11))+1;
 iend12 = sum(npts(1:12));
 
@@ -705,9 +705,9 @@ Tbl.dDist(i) = 0; % delta distance (NM)
 Tbl.dhdt(i) = 0; % rate of climb (ft/min)
 Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
-Tbl.CD0(i) = 0.008; % drag polar
+Tbl.CD0(i) = 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.08; % drag polar
+Tbl.K2(i) = 0.05; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
