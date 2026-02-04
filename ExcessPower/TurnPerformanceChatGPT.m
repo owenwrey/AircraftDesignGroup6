@@ -200,9 +200,9 @@ end
 % ---------------------------
 % 4) Labels / limits / legend
 % ---------------------------
-xlabel('KTAS');
-ylabel('Turn Rate, d\Psi/dt (deg/s)');
-title('Turn Performance');
+xlabel('KTAS', Interpreter='latex');
+ylabel('Turn Rate, $\dot{\Psi}$ (deg/s)', Interpreter='latex');
+title('Turn Performance', Interpreter='latex');
 
 % Make y-limits sane (optional but usually necessary)
 % Use max of instantaneous data but clamp to something readable
@@ -217,7 +217,7 @@ legend( ...
     '30k ft Sustained','30k ft Instantaneous', ...
     '40k ft Sustained','40k ft Instantaneous', ...
     '50k ft Sustained','50k ft Instantaneous', ...
-    'Location','northeastoutside');
+    'Location','northeastoutside', Interpreter='latex');
 
 
 %% Functions 
