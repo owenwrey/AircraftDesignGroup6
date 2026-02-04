@@ -24,7 +24,7 @@ W0 = 84127;             % MTOW (lbm)
 WtFrac = 1;             % weight fraction
 W_S = 115;              % takeoff wing loading (psf)
 S = W0/W_S;             % wing area ft^2
-maxAlt = 41000;         % service ceiling, ft
+maxAlt = 49000;         % service ceiling, ft
 fullThrust = 58000;     % lb
 
 CD0 = 0.02;            
