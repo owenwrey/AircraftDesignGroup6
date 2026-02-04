@@ -7,6 +7,11 @@ clc; clear; close all
 % data input: locWeight = [X_loc weight]
 addpath(genpath('CGFunctions'))
 
+% change linewidth for plots
+set(groot, 'DefaultLineLineWidth', 2.2)
+set(groot, 'DefaultLineMarkerSize', 10); % Set to 10 points
+
+
 % given geometry
 
 n_lim = 3.8;      % limit load
