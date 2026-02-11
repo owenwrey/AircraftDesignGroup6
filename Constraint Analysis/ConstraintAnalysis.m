@@ -8,7 +8,7 @@ close all
 
 CD_0 = 0.02; 
 k1 = 0; 
-k2 = .05; 
+k2 = 0.05; 
 CD_R = 0; 
 CD_0 = 0.02; % zero-lift drag coeficient
 k1 = 0; % drag polar constant 1
@@ -77,7 +77,7 @@ a = sqrt(gamma*R*T);
 rho = rho_ISA .* (T_ISA ./ T);
 
 v = M.*a;
-ddt_h = 200*0.3048/60;
+ddt_h = 500*0.3048/60;
 ddt_v = 0;
 alpha = 1.11*(rho/rho_SL)-0.11;
 beta = 0.7;
@@ -158,6 +158,46 @@ T = T_ISA + DeltaT;
 rho = rho_ISA .* (T_ISA ./ T);
 W2S_Stall = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
 
+
+%%%%%%% Single-Engine Climb %%%%%%%%
+
+alt = 0;
+n = 1;
+M = 0.8;
+
+[T_ISA,a_ISA,~,rho_ISA] = atmosisa(alt,"extended","on");
+T = T_ISA + DeltaT;
+a = sqrt(gamma*R*T);
+rho = rho_ISA .* (T_ISA ./ T);
+
+v = M.*a;
+ddt_h = 28000*0.3048/60;
+ddt_v = 0;
+alpha = 1.11*(rho/rho_SL)-0.11;
+beta = 1.0;
+
+T2W_SEClimb = 0.5*Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
+
+
+%%%%%%% Single-Engine Ceiling %%%%%%%%
+
+alt = 38700*0.3048;
+n = 1;
+M = 0.9;
+
+[T_ISA,a_ISA,~,rho_ISA] = atmosisa(alt,"extended","on");
+T = T_ISA + DeltaT;
+a = sqrt(gamma*R*T);
+rho = rho_ISA .* (T_ISA ./ T);
+
+v = M.*a;
+ddt_h = 500*0.3048/60;
+ddt_v = 0;
+alpha = 1.11*(rho/rho_SL)-0.11;
+beta = 0.7;
+
+T2W_SECeiling = (0.5)*Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
+
 %% Plotting
 
 figure
@@ -166,16 +206,23 @@ ax = gca;
 ax.ColorOrder = lines(13);
 set(ax,'DefaultLineLineWidth',1.2)
 box on
+purple = [0.35 0 0.757];
+colors = jet(8);   % Generate 8 colors from jet colormap
 
-plot(W2S.*0.02088547,T2W_Cruise)
-plot(W2S.*0.02088547,T2W_Climb)
-plot(W2S.*0.02088547,T2W_Ceiling)
-plot(W2S.*0.02088547,T2W_SustainedTurn)
-plot(W2S.*0.02088547,T2W_MaxSpeed)
-plot(W2S.*0.02088547,T2W_Takeoff)
+plot(W2S.*0.02088547, T2W_Cruise,        'Color', colors(1,:), 'LineWidth', 1.5)
+plot(W2S.*0.02088547, T2W_Climb,         'Color', colors(2,:), 'LineWidth', 1.5)
+plot(W2S.*0.02088547, T2W_Ceiling,       'Color', colors(3,:), 'LineWidth', 1.5)
+plot(W2S.*0.02088547, T2W_SustainedTurn, 'Color', colors(4,:), 'LineWidth', 1.5)
+plot(W2S.*0.02088547, T2W_MaxSpeed,      'Color', colors(5,:), 'LineWidth', 1.5)
+plot(W2S.*0.02088547, T2W_Takeoff,       'Color', colors(6,:), 'LineWidth', 1.5)
+plot(W2S.*0.02088547, T2W_SEClimb,       'Color', colors(7,:), 'LineWidth', 1.5)
+plot(W2S.*0.02088547, T2W_SECeiling,     'Color', colors(8,:), 'LineWidth', 1.5)
 
-xline(W2S_Landing.*0.02088547,'-r')
-xline(W2S_Stall.*0.02088547,'-b')
+xline(W2S_Landing.*0.02088547,'-m','LineWidth',1.5)
+xline(W2S_Stall.*0.02088547,'Color',purple,'LineWidth',1.5)
+
+colormap(jet)
+   
 
 plot(115,0.75,'o')
 
@@ -183,4 +230,4 @@ xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
 ylim([0 2.5])
 
-legend("Cruise","Climb","Ceiling","Turn","Max Speed","Takeoff","Landing","Stall","Point")
+legend("Cruise","Climb","Ceiling","Turn","Max Speed","Takeoff","SE Climb", "SE Ceiling", "Landing","Stall","Point")
