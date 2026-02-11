@@ -173,10 +173,10 @@ rho = rho_ISA .* (T_ISA ./ T);
 v = M.*a;
 ddt_h = 28000*0.3048/60;
 ddt_v = 0;
-alpha = 1.11*(rho/rho_SL)-0.11;
+alpha = 0.5*(1.11*(rho/rho_SL)-0.11);
 beta = 1.0;
 
-T2W_SEClimb = 0.5*Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
+T2W_SEClimb = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
 
 %%%%%%% Single-Engine Ceiling %%%%%%%%
@@ -193,10 +193,10 @@ rho = rho_ISA .* (T_ISA ./ T);
 v = M.*a;
 ddt_h = 500*0.3048/60;
 ddt_v = 0;
-alpha = 1.11*(rho/rho_SL)-0.11;
+alpha = 0.5*(1.11*(rho/rho_SL)-0.11);
 beta = 0.7;
 
-T2W_SECeiling = (0.5)*Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
+T2W_SECeiling = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
 %% Plotting
 
