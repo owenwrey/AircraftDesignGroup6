@@ -245,7 +245,7 @@ Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
 Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.Dist(istart) = Tbl.Dist(istart - 1);
-Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(istart - 1); % distance (NM)
+Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(i - 1); % distance (NM)
 Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.dVdt(i) = (Tbl.KTAS(i)*kts2fps - (Tbl.KTAS(i-1)*kts2fps))/(Tbl.dTime(i)*60); % acceleration
 Tbl.dVdt(istart) = 0;
@@ -393,7 +393,7 @@ for  i = istart:iend
 Tbl.Time(istart:iend) = linspace((Tbl.Time(istart-1)),(Tbl.Time(istart-1)+5),npts(seg)); % distance (NM)
 Tbl.dTime(istart) = 0; 
 Tbl.dTime(i) = Tbl.Time(i) - Tbl.Time(i-1); % delta distance (NM)
-Tbl.Dist(i) = Tbl.Dist(istart);
+Tbl.Dist(i) = Tbl.Dist(istart-1);
 Tbl.dDist(i) = 0;
 
 Tbl.Alt(i) = 0; % Altitude (ft)
@@ -527,7 +527,7 @@ Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
 Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.Dist(istart) = Tbl.Dist(istart - 1);
-Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(istart - 1); % distance (NM)
+Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(i - 1); % distance (NM)
 Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.dVdt(i) = (Tbl.KTAS(i)*kts2fps - (Tbl.KTAS(i-1)*kts2fps))/(Tbl.dTime(i)*60); % acceleration
 Tbl.dVdt(istart) = 0;
@@ -555,16 +555,16 @@ iend = sum(npts(1:seg));
 
 for  i = istart:iend
 
-Tbl.Dist(istart:iend) = linspace(Tbl.Dist(istart - 1),Tbl.Dist(istart - 1) + 200,npts(seg)); % distance (NM)
+Tbl.Dist(istart:iend) = linspace(Tbl.Dist(istart - 1), (cfg.cruise.distance.out.STK + cfg.cruise.distance.in.STK),npts(seg)); % distance (NM)
 Tbl.dDist(istart) = 0;
 Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 
 Tbl.Alt(i) = cfg.cruise.altitude; % altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.9; % Mach number
-Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
+Tbl.KTAS(i) = cfg.cruise.speed.out.STK; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
+Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) = 0.025; % drag polar
@@ -603,8 +603,8 @@ end
 %% 10. descent 2
 % 3,000 ft/min
 
-% finish at sea level\
-SFC_descent = 0.60;
+% finish at sea level
+SFC_descent = cfg.SFC.descent;
 
 % Segment 10 indices
 seg = 10;
@@ -662,7 +662,7 @@ end
 % 20 min duration
 % 481 KTAS
 % no distance credit
-SFC_loiter = 0.7;
+SFC_loiter = cfg.SFC.loiter;
 
 % Segment 11 indices
 seg = 11;
@@ -673,7 +673,7 @@ for  i = istart:iend
 Tbl.Time(istart:iend) = linspace((Tbl.Time(istart-1)),(Tbl.Time(istart-1)+20),npts(seg)); % distance (NM)
 Tbl.dTime(istart) = 0; 
 Tbl.dTime(i) = Tbl.Time(i) - Tbl.Time(i-1); % delta distance (NM)
-Tbl.Dist(i) = Tbl.Dist(istart);
+Tbl.Dist(i) = Tbl.Dist(istart-1);
 Tbl.dDist(i) = 0;
 
 Tbl.Alt(i) = 0; % Altitude (ft)
@@ -720,7 +720,7 @@ end
 
 % (T/W)_idle = 0.05;
 % no distance credit
-SFC_shutdown = 0.5;
+SFC_shutdown = cfg.SFC.shutdown;
 
 % Segment 12 indices
 seg = 12;
@@ -740,7 +740,7 @@ Tbl.KTAS(i) = 0; % true airspeed (kt)
 Tbl.MACH(i) = 0; % Mach number
 Tbl.GS(i) = 0; % ground speed (kt)
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.Dist(i) = 0; % distance (NM)
+Tbl.Dist(i) = Tbl.Dist(istart-1); % distance (NM)
 Tbl.dDist(i) = 0; % delta distance (NM)
 Tbl.dhdt(i) = 0; % rate of climb (ft/min)
 Tbl.dVdt(i) = 0; % acceleration
@@ -785,14 +785,15 @@ end
 
 Tbl.EnHt = Tbl.Alt + (Tbl.KTAS*NM2ft).^2/(2*32.17);
 Tbl.GS = Tbl.KTAS.*cosd(Tbl.FPA);
-disp(Tbl)
+disp(Tbl);
 A = 2.34;
 C = -0.13;
 EWF = A*W0^C;
-W_crew = 300;
-W_payload = 4380; % weight of weapons 
+W_crew = cfg.W.crew;
+W_payload = cfg.W.PL.STK; % weight of weapons 
 OEW = EWF*W0;
-FuelAllow = 0.06*(Tbl.FuelBurn(iend)); % 6% fuel allowance 
+% OEW = EWB(W0);
+FuelAllow = cfg.fuelBufferPercent*(Tbl.FuelBurn(iend)); % 6% fuel allowance 
 FuelReq = FuelAllow + Tbl.FuelBurn(iend); 
 FuelAvail = W0 - OEW - W_crew - W_payload;
 FuelExcess = FuelAvail - FuelReq;
