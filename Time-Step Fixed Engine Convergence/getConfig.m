@@ -8,12 +8,13 @@ f.W.fuelReq = 16440;
 f.weightTolerance = 2; % [lb]
 f.W.crew = 300;
 f.W.PL.A2A = 2390;
-f.W.PL.STK = 4000; % revise
+f.W.PL.STK = 4380;
 f.fuelBufferPercent = 0.06;
 
 
 % Re-evaluate the following using CL/CD and CL^(3/2)/CD optimization
 f.cruise.altitude = 30000; % [ft]
+
 f.cruise.distance.out.A2A = 700;
 f.cruise.speed.out.A2A = 468; % [KTAS] not yet implemented
 f.cruise.distance.in.A2A = 700; % [nmi]
@@ -21,6 +22,15 @@ f.cruise.speed.in.A2A = 414; % not yet implemented
 f.loiter1.speed.A2A = 212; % KTAS
 f.loiter1.time.A2A = 45; % not yet implemented
 f.loiter2.time.A2A = 0; % not yet implemented
+
+f.cruise.distance.out.STK = 700;
+f.cruise.speed.out.STK = 468; % [KTAS] not yet implemented
+f.cruise.distance.in.STK = 700; % [nmi]
+f.cruise.speed.in.STK = 414; % not yet implemented
+f.loiter1.speed.STK = 212; % KTAS
+f.loiter1.time.STK = 45; % not yet implemented
+f.loiter2.time.STK = 0; % not yet implemented
+
 f.descentRate = -3000;
 
 % f.dragPolar.CD0 = 0;

@@ -1,6 +1,10 @@
+%% fixed engine sizing
+
 clc
 clear
 cfg = getConfig();
+
+displayTable = true;
 % segment names
 SegNames = {'SWT','TKO','CLIMB','CR OBD', 'DESC 1', 'COMBAT', 'WP FIRE', 'CLIMB2', 'CR IBD', ...
 'DESC 2', 'LTR2', 'LTS'};
@@ -71,19 +75,21 @@ Tbl.FuelBurn = zeros(npts_sum,1); % fuel burned (lb)
 % ThrustLapse(Alt_ft);
 
 
-W0 = 63738;
-FuelReq = 16440;
-tol = 2;
+W0 = cfg.W.TOguess;
+FuelReq = cfg.W.fuelReq;
+tol = cfg.weightTolerance;
 
 while tol >1
 
-W_S = 115; % takeoff wing loading (psf)
+W_S = cfg.wingLoading; % takeoff wing loading (psf)
+Thrust = cfg.thrust; %lb
+
+% unit conversions
 rho_SL = 0.0023769;
 mps2kts = 1.94384; % meters per sec to knots
 kts2fps = 1/0.59248; % knots to feet per sec
 NM2ft = 6067; % nautical miles to feet
 ft2m = 0.305; % feet to meters
-Thrust = 58000; %lb
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 1. start, warmup
@@ -98,8 +104,9 @@ iend = sum(npts(1:seg));
 % given
 
 for i = 2:npts(seg)
-SFC_idle = 0.5; %lb/(lb.h)
-T_W_idle = 0.05;
+
+SFC_idle = cfg.SFC.idle; %lb/(lb.h)
+T_W_idle = cfg.thrustToWeight_idle;
 
 
 Tbl.Time(istart:iend) = linspace(0,3,npts(seg)); % time (min)
@@ -157,7 +164,7 @@ seg = 2;
 istart = sum(npts(1:seg-1)) + 1;
 iend = sum(npts(1:seg));
 
-SFC_takeoff = 1.85;
+SFC_takeoff = cfg.SFC.takeoff;
 
 for  i = istart:iend
 
@@ -209,10 +216,11 @@ seg = 3;
 istart = sum(npts(1:seg-1)) + 1;
 iend = sum(npts(1:seg));
 
-SFC_climb = 0.75;
+SFC_climb = cfg.SFC.climb;
+
 for  i = istart:iend
 
-Tbl.Alt(istart:iend) = linspace(0,30000,npts(seg)); % altitude (ft)
+Tbl.Alt(istart:iend) = linspace(0,cfg.cruise.altitude,npts(seg)); % altitude (ft)
 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
@@ -241,7 +249,7 @@ Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
 Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.Dist(istart) = Tbl.Dist(istart - 1);
-Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(istart - 1); % distance (NM)
+Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(i - 1); % distance (NM)
 Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.dVdt(i) = (Tbl.KTAS(i)*kts2fps - (Tbl.KTAS(i-1)*kts2fps))/(Tbl.dTime(i)*60); % acceleration
 Tbl.dVdt(istart) = 0;
@@ -259,7 +267,7 @@ end
 %% 4. cruise outbound at 30,000 ft
 % 200 NM traveled
 % THROT = 1.0
-SFC_cruise = 0.70;
+SFC_cruise = cfg.SFC.cruise; % estimate
 
 % Segment 4 indices
 seg = 4;
@@ -272,7 +280,7 @@ Tbl.Dist(istart:iend) = linspace(Tbl.Dist(istart - 1),Tbl.Dist(istart - 1) + 200
 Tbl.dDist(istart) = 0;
 Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 
-Tbl.Alt(i) = 30000; % altitude (ft)
+Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
 Tbl.MACH(i) = 0.9; % Mach number
@@ -319,7 +327,7 @@ end
 
 % finish at sea level\
 
-SFC_descent = 0.60;
+SFC_descent = cfg.SFC.descent;
 
 % Segment 5 indices
 seg = 5;
@@ -378,7 +386,7 @@ end
 % COMBAT-LOADED 15000 pounds of THRUST
 % THROT = 1.25
 % no distance credit
-SFC_combat = 1.85;
+SFC_combat = cfg.SFC.combat;
 
 % Segment 6 indices
 seg = 6;
@@ -389,7 +397,7 @@ for  i = istart:iend
 Tbl.Time(istart:iend) = linspace((Tbl.Time(istart-1)),(Tbl.Time(istart-1)+5),npts(seg)); % distance (NM)
 Tbl.dTime(istart) = 0; 
 Tbl.dTime(i) = Tbl.Time(i) - Tbl.Time(i-1); % delta distance (NM)
-Tbl.Dist(i) = Tbl.Dist(istart);
+Tbl.Dist(i) = Tbl.Dist(istart-1);
 Tbl.dDist(i) = 0;
 
 Tbl.Alt(i) = 0; % Altitude (ft)
@@ -434,6 +442,8 @@ end
 % no time elapsed
 % no distance credit
 % Segment 7 indices
+SFC_weightdrop = cfg.SFC.weightdrop;
+
 seg = 7;
 istart = sum(npts(1:seg-1)) + 1;
 iend = sum(npts(1:seg));
@@ -483,7 +493,7 @@ end
 % no afterburner [THROT = 1]
 % take distance credit
 
-SFC_climb2 = 0.75;
+SFC_climb2 = cfg.SFC.climb;
 
 % Segment 8 indices
 seg = 8;
@@ -492,7 +502,7 @@ iend = sum(npts(1:seg));
 
 for  i = istart:iend
 
-Tbl.Alt(istart:iend) = linspace(0,28000,npts(seg)); % altitude (ft)
+Tbl.Alt(istart:iend) = linspace(0,cfg.cruise.altitude,npts(seg)); % altitude (ft)
 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
@@ -521,7 +531,7 @@ Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
 Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.Dist(istart) = Tbl.Dist(istart - 1);
-Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(istart - 1); % distance (NM)
+Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(i - 1); % distance (NM)
 Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.dVdt(i) = (Tbl.KTAS(i)*kts2fps - (Tbl.KTAS(i-1)*kts2fps))/(Tbl.dTime(i)*60); % acceleration
 Tbl.dVdt(istart) = 0;
@@ -539,7 +549,8 @@ end
 %% 9. cruise inbound at 28,000 ft
 % 200 NM traveled
 % THROT = 1.0
-SFC_cruise2 = 0.70;
+
+SFC_cruise2 = cfg.SFC.cruise;
 
 % Segment 9 indices
 seg = 9;
@@ -548,16 +559,16 @@ iend = sum(npts(1:seg));
 
 for  i = istart:iend
 
-Tbl.Dist(istart:iend) = linspace(Tbl.Dist(istart - 1),Tbl.Dist(istart - 1) + 200,npts(seg)); % distance (NM)
+Tbl.Dist(istart:iend) = linspace(Tbl.Dist(istart - 1), (cfg.cruise.distance.out.STK + cfg.cruise.distance.in.STK),npts(seg)); % distance (NM)
 Tbl.dDist(istart) = 0;
 Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 
-Tbl.Alt(i) = 28000; % altitude (ft)
+Tbl.Alt(i) = cfg.cruise.altitude; % altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.9; % Mach number
-Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
+Tbl.KTAS(i) = cfg.cruise.speed.out.STK; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
+Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) = 0.025; % drag polar
@@ -596,8 +607,8 @@ end
 %% 10. descent 2
 % 3,000 ft/min
 
-% finish at sea level\
-SFC_descent = 0.60;
+% finish at sea level
+SFC_descent = cfg.SFC.descent;
 
 % Segment 10 indices
 seg = 10;
@@ -655,7 +666,7 @@ end
 % 20 min duration
 % 481 KTAS
 % no distance credit
-SFC_loiter = 0.7;
+SFC_loiter = cfg.SFC.loiter;
 
 % Segment 11 indices
 seg = 11;
@@ -666,7 +677,7 @@ for  i = istart:iend
 Tbl.Time(istart:iend) = linspace((Tbl.Time(istart-1)),(Tbl.Time(istart-1)+20),npts(seg)); % distance (NM)
 Tbl.dTime(istart) = 0; 
 Tbl.dTime(i) = Tbl.Time(i) - Tbl.Time(i-1); % delta distance (NM)
-Tbl.Dist(i) = Tbl.Dist(istart);
+Tbl.Dist(i) = Tbl.Dist(istart-1);
 Tbl.dDist(i) = 0;
 
 Tbl.Alt(i) = 0; % Altitude (ft)
@@ -713,7 +724,7 @@ end
 
 % (T/W)_idle = 0.05;
 % no distance credit
-SFC_shutdown = 0.5;
+SFC_shutdown = cfg.SFC.shutdown;
 
 % Segment 12 indices
 seg = 12;
@@ -733,7 +744,7 @@ Tbl.KTAS(i) = 0; % true airspeed (kt)
 Tbl.MACH(i) = 0; % Mach number
 Tbl.GS(i) = 0; % ground speed (kt)
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.Dist(i) = 0; % distance (NM)
+Tbl.Dist(i) = Tbl.Dist(istart-1); % distance (NM)
 Tbl.dDist(i) = 0; % delta distance (NM)
 Tbl.dhdt(i) = 0; % rate of climb (ft/min)
 Tbl.dVdt(i) = 0; % acceleration
@@ -778,14 +789,17 @@ end
 
 Tbl.EnHt = Tbl.Alt + (Tbl.KTAS*NM2ft).^2/(2*32.17);
 Tbl.GS = Tbl.KTAS.*cosd(Tbl.FPA);
-disp(Tbl)
+if displayTable == true
+    disp(Tbl);
+end
 A = 2.34;
 C = -0.13;
 EWF = A*W0^C;
-W_crew = 300;
-W_payload = 4380; % weight of weapons 
+W_crew = cfg.W.crew;
+W_payload = cfg.W.PL.STK; % weight of weapons 
 OEW = EWF*W0;
-FuelAllow = 0.06*(Tbl.FuelBurn(iend)); % 6% fuel allowance 
+% OEW = EWB(W0);
+FuelAllow = cfg.fuelBufferPercent*(Tbl.FuelBurn(iend)); % 6% fuel allowance 
 FuelReq = FuelAllow + Tbl.FuelBurn(iend); 
 FuelAvail = W0 - OEW - W_crew - W_payload;
 FuelExcess = FuelAvail - FuelReq;
