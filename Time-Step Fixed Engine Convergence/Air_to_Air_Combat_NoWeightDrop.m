@@ -237,8 +237,8 @@ Tbl.dTime(i) = (Tbl.Alt(i) - Tbl.Alt(i-1))/Tbl.dhdt(i);% delta time (min)
 Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
-Tbl.Dist(i) = (Tbl.Alt(i) - Tbl.Alt(i-1))/(tand(Tbl.FPA(i))*NM2ft); % distance (NM)
-Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
+Tbl.dDist(i) = (Tbl.Alt(i) - Tbl.Alt(i-1))/(tand(Tbl.FPA(i))*NM2ft); % distance (NM)
+Tbl.Dist(i) =Tbl.Dist(i-1) + Tbl.dDist(i); % delta distance (NM)
 Tbl.dVdt(istart3) = 0;
 Tbl.dVdt(i) = (Tbl.KTAS(i)*kts2fps - (Tbl.KTAS(i-1)*kts2fps))/(Tbl.dTime(i)*60); % acceleration
 
