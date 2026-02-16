@@ -6,13 +6,15 @@ W0 = aircraft.constants.totalWeight;
 weight.payload = aircraft.strike.weight;
 weight.mg = aircraft.gear.mg.weight;
 weight.ng = aircraft.gear.ng.weight;
-weight.allElse = aircraft.avionics.weight;
+weight.avionics = aircraft.avionics.weight;
 
 cruiseDynamicPressure = aircraft.constants.cDP;
 T2C = aircraft.wing.T2C;                    % thickness to chord ratio
 N_lim = aircraft.constants.limitLoad;       % limit load factor (8g)
 Nz = N_lim*1.5;                             % ultimate load factor
+M = aircraft.constants.maxMach;             % max Mach number
 
+% wing
 wing.area = aircraft.wing.area;
 wing.AR = aircraft.wing.AR;
 wing.QuarterChordSweep = aircraft.wing.sweep;
@@ -20,9 +22,9 @@ wing.TaperRatio = aircraft.wing.taper_ratio;
 wing.span = aircraft.wing.span;
 rootChord = aircraft.wing.rootChord;
 tipChord = aircraft.wing.tipChord;
-chordFrac = .2;             % control surface chord fraction
+chordFrac = .2;                             % control surface chord fraction
 
-% calculate control surface areas
+% calculate wing control surface areas
 % ailerons: 20% local chord, going from 50% to 90% span
 % flaps: 20% local chord, going from 0% to 50% span
 chord50 = (rootChord-tipChord)*.5 + tipChord;       % chord @ 50% span
@@ -37,42 +39,64 @@ aileronArea = .5*(chord90_20 + chord50_20)*span40;  % aileron area, ft^2
 S_csw = flapArea + aileronArea;                     % total control surface area
 
 
+% horizontal tail
 ht.area = aircraft.ht.Area;
 ht.QuarterChordSweep = aircraft.ht.sweep;
 ht.AspectRatio = aircraft.ht.AR;
 ht.TaperRatio = aircraft.ht.TaperRatio;
 
+% vertical tail
 vt.area = aircraft.vt.Area;
 vt.QuarterChordSweep = aircraft.vt.sweep;
 vt.AspectRatio = aircraft.vt.AR;
 vt.TaperRatio = aircraft.vt.TaperRatio;
 
+% 25% chord and 90% span
+% calculate rudder area, 25% local chord, going from 0% to 90% span
+vt.rootChord = 1;
+vt.chord90 = 1;
+vt.chord0_20 = vt.rootChord*.2;
+vt.chord90_20 = vt.chord90*.2;
+vt.span = sqrt(vt.AspectRatio*vt.area);
+vt.rudderArea = .5*(vt.chord0_20 + vt.chord90_20)*vt.span*.9;
 
-% calculate new weights
+%% Calculate New Weights
 % from Raymer Fighter/Attack Weights, Sec 15.3.1
+
+% main wing
 aircraft.wing.weight = .0103*(W0*Nz)^(.5) * (wing.area)^(.622) * (wing.AR)^(.785)...
                         * T2C * (1+wing.TaperRatio)^(.05) * ...
                         (cosd(wing.QuarterChordSweep))^(-1) * (S_csw)^(.04);
 
+% horizontal tail
 Fw = 3.2;   % fuselage width at ht intersection
 Bh = sqrt(wing.AR*wing.area);
 
-aircraft.ht.weight = 3.316*(1+)
+aircraft.ht.weight = 3.316*(1+Fw/Bh)^(-2) * (W0*Nz/1000)^(.26) * ht.area^(.806);
 
-%.016*(ultimateLoadFactor*weight.total)^(.414) * cruiseDynamicPressure^(.168) * ht.area^(.896) * (100*thicknessToChordRatio/(cosd(ht.QuarterChordSweep)))^(-.12)...
-    * (ht.AspectRatio/(cosd(ht.QuarterChordSweep))^2)^(.043) * ht.TaperRatio^(-.02);
+% vertical tail
+K_rht = 1.047;
+L_t = aircraft.vt.leverArm;
 
+aircraft.vt.weight = .452*K_rht * (W0*Nz)^(.488) * vt.area^(.718) * M^(.341)...
+    * L_t^(-1) * (1+vt.rudderArea/vt.area)^(.348) * vt.AspectRatio^.223...
+    * (1+vt.TaperRatio)^(.25) * cosd(vt.QuarterChordSweep)^(-.323);
 
+% fuselage
+K_dwf = 1;      % delta wing multiplier
+L = aircraft.fuselage.length;
+D = 6;
+W = 6;
 
-aircraft.vt.weight = .073*(ultimateLoadFactor*weight.total)^(.376) * cruiseDynamicPressure^(.122) * vt.area^(.873) * (100*thicknessToChordRatio/(cosd(vt.QuarterChordSweep)))^(-.49)...
-    * (vt.AspectRatio/(cosd(vt.QuarterChordSweep))^2)^(.357) * vt.TaperRatio^(.039);
+aircraft.fuselage.weight = .499*K_dwf * W0^(.35) * Nz^(.25) * L^(.5) * D^(.849)...
+    * W^(.685);
 
 
 
 
 prevWeight = weight.total;
 
-weight.total = weight.fuel + weight.payload + weight.ng + weight.mg + weight.allElse + aircraft.wing.weight + aircraft.ht.weight + aircraft.vt.weight;
+weight.total = weight.fuel + weight.payload + weight.ng + weight.mg + weight.avionics + aircraft.wing.weight + aircraft.ht.weight + aircraft.vt.weight;
 
 aircraft.constants.weight = weight.total;
 
