@@ -8,6 +8,7 @@ f.W.fuelReq = 16440;
 f.weightTolerance = 2; % [lb]
 f.W.crew = 300;
 f.W.PL.A2A = 2390;
+f.W.PL.STK = 4000; % revise
 f.fuelBufferPercent = 0.06;
 
 
@@ -20,11 +21,14 @@ f.cruise.speed.in.A2A = 414; % not yet implemented
 f.loiter1.speed.A2A = 212; % KTAS
 f.loiter1.time.A2A = 45; % not yet implemented
 f.loiter2.time.A2A = 0; % not yet implemented
+f.descentRate = -3000;
 
 % f.dragPolar.CD0 = 0;
 % f.dragPolar.K1 = 0;
 % f.dragPolar.K2 = 0;
-% f.dragPolar.CDR = 0;
+% f.dragPolar.CDR.A2A = 0;
+% f.dragPolar.CDR.STK = 0;
+f.CLmax.clean = 1.2;
 
 f.wingLoading = 115; % takeoff wing loading [psf]
 f.thrust = 58000; % [lb]
