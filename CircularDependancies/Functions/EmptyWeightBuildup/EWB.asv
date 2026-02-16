@@ -55,7 +55,7 @@ aircraft.wing.weight = .0103*(W0*Nz)^(.5) * (wing.area)^(.622) * (wing.AR)^(.785
                         (cosd(wing.QuarterChordSweep))^(-1) * (S_csw)^(.04);
 
 Fw = 3.2;   % fuselage width at ht intersection
-Bh = sqrt(wing.AR*wing.area);
+Bh = sqrt(wing.AR)
 
 aircraft.ht.weight = 3.316*(1+)
 
