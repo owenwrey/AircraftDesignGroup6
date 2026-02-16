@@ -21,6 +21,7 @@ f.cruise.speed.in.A2A = 414; % not yet implemented
 f.loiter1.speed.A2A = 212; % KTAS
 f.loiter1.time.A2A = 45; % not yet implemented
 f.loiter2.time.A2A = 0; % not yet implemented
+
 f.descentRate = -3000;
 
 % f.dragPolar.CD0 = 0;

@@ -204,6 +204,7 @@ end
 istart3 = sum(npts(1:2))+1;
 iend3 = sum(npts(1:3));
 SFC_climb = cfg.SFC.climb;
+
 for  i = istart3:iend3
 
 Tbl.Alt(istart3:iend3) = linspace(0,cfg.cruise.altitude,npts(3,:)); % altitude (ft)
@@ -255,7 +256,8 @@ end
 % F18 E/F cruise speed
 % 25,000 ft
 % 850 nm
-SFC_cruise = cfg.SFC.cruise; %estimate
+SFC_cruise = cfg.SFC.cruise; % estimate
+
 istart4 = sum(npts(1:3))+1;
 iend4 = sum(npts(1:4));
 
