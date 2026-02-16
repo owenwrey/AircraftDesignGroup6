@@ -1,0 +1,295 @@
+
+MODELNAME = "LowBPRTurbofan";
+
+ //#################### Flight Conditions ####################
+Element FlightConditions AMBIENT {
+    alt = 0;          // flight altitude (ft)
+    MN = 0;               // flight Mach number
+    //Ts = -58.47;            // ambient temperature, F (only needed for non-standard day)
+    //Ps = 230.3;             // ambient pressure, psia (only needed for non-standard day)
+    W = 270;                       // mass flow rate, lbm/sec
+   // Fl_O.switchTransport = "EQUIL";  // Equilibrium flow, need this for Janaf and CEA
+}
+
+
+//#################### Inlet ####################
+Element Inlet INLET {
+   // Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+    //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+eRamBase = 0.99; // ram recovery
+}
+
+//########################### Splitter #######################
+Element Splitter SPLITTER {
+BPR = 0.76; // bypass ratio
+}
+
+//############################################# Bypass Duct ######################################################
+
+//################### Bypass Compressor ##########################
+Element Compressor COMPRESSORBP {
+#include "fan.map"
+//Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+//Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+S_map.effDes = 0.8; // Design Efficiency
+S_map.PRdes = 3;  // Design Pressure Ratio
+
+}
+
+
+ //############# Bypass Duct ####################
+ Element Duct DUCTBP {
+ //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ dPqPbase = 0.025; // pressure loss
+ }
+ 
+ 
+
+ 
+ // ####################### Engine Core #############################################
+
+//################### Engine Core Compressor 1 ##########################
+Element Compressor LPC {
+#include "lpc.map"
+//Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+//Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+S_map.effDes = 0.845; // Design Efficiency
+S_map.PRdes = 3.2;  // Design Pressure Ratio
+
+}
+
+//################### Engine Core Compressor 2 ##########################
+Element Compressor HPC {
+#include "hpc.map"
+//Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+//Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+S_map.effDes = 0.89; // Design Efficiency
+S_map.PRdes = 9.6;  // Design Pressure Ratio
+}
+
+
+//########### Engine Core Diffuser#################
+Element Diffuser DIFFUSEREC {
+dPqP = 0.025; 
+}
+
+ //########### Engine Core FuelStart ################
+ Element FuelStart FUELSTARTEC {
+ //fuelType = "Jet-A(L)";
+ LHV = 18513; // lower heating value
+ }
+ 
+ //############### Engine Core Burner ###############
+ Element Burner BURNER {
+ //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ effBase = 0.985; //Adiabatic burner efficiency, from socket
+ dPqPBase = 0.04; //duct friction pressure drop
+ countFuelMax = 250; //fuel loop max counter
+ switchBurn = "TEMPERATURE";
+ TtCombOut = 3060; // exit temperature in R
+ }
+ 
+  //################# Engine Core Bleed 1 ##################
+Element Bleed BLEEDEC1 {
+//Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+//Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+
+}
+
+ //################## Engine Core Turbine 1 ################
+ Element Turbine HPT {
+//Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ #include "hpt.map"
+ S_map.effDes = 0.88;
+ }
+ 
+ //################# Engine Core Bleed 2 ##################
+Element Bleed BLEEDEC2 {
+//Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+//Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+}
+
+
+
+ //################## Engine Core Turbine 2 ################
+ Element Turbine LPT {
+//Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ #include "lpt.map"
+ S_map.effDes = 0.87;
+ }
+ 
+  //################# Engine Core Bleed 3 ##################
+Element Bleed BLEEDEC3 {
+//Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+//Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+}
+ 
+ // ################## Mixed Stream ##################
+ 
+ //################# Mixer ############################
+  Element Mixer MIXER {
+  Fl_I1.MN = 0.5;
+  }
+  
+  //######################## Mixed Bleed #################
+  Element Bleed BLEED4 {
+  }
+  
+  //################# Diffuser #######################
+  Element Diffuser DIFFUSER {
+  dPqP = 0.025;
+  }
+  
+  //################# FuelStart ########################
+   Element FuelStart FUELSTARTAB {
+ //fuelType = "Jet-A(L)";
+ LHV = 18513; // lower heating value
+ }
+ 
+ //########### Afterburner #########################
+  Element Burner AFTERBURNER {
+ //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+ countFuelMax = 1000;
+ effBase = 0.925; //Adiabatic burner efficiency, from socket
+ effChemBase = 0.96; //base chemical efficiency
+ 
+ //Afterburner off
+ //switchBurn = "WFUEL";
+ //dPqPBase = 0.05; 
+ //Wfuel = 0;
+ 
+ //Afterburner on
+ switchBurn = "TEMPERATURE";
+ dPqPBase = 0.09;
+ TtCombOut = 4140;
+ switchBurn = "FAR";
+ FAR = 0.06836;
+ }
+
+ //############ Bleed #####################
+ Element Bleed BLEED5 {
+ }
+ 
+ //################# Duct ###############
+ Element Duct DUCT {
+ dPqPbase = 0.005;
+ }
+
+ 
+ //############### Engine Core Nozzle ####################
+ Element Nozzle NOZZLE {
+//Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA   
+//Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
+PsExhName = "AMBIENT.Fl_O.Ps";
+switchType = "CON_DIV";
+switchCoef = "CV";
+Cv = 0.995;
+dPqP = 0.04; 
+//Fl_O.MNfroz = 0.0; //use next two lines for freezing flow in the nozzle
+//Fl_Oideal.MNfroz = 0.0;
+ }
+ 
+ //############# FlowEnd ####################
+ Element FlowEnd FLOWEND {
+ }
+
+ 
+  //################### Engine Core Shaft 1 #################
+ Element Shaft HPS {
+ ShaftInputPort HPCshaft, HPTshaft;
+ Nmech = 14000; // mechanical shaft speed
+ HPX = 243;
+ fracLoss = 0.02;
+ }
+ 
+   //################### Engine Core Shaft 2 #################
+ Element Shaft LPS {
+ ShaftInputPort HPCshaft, HPTshaft, Fan;
+ Nmech = 11000; // mechanical shaft speed
+ fracLoss = 0.03;
+ }
+ 
+
+ 
+ 
+ //############# EnginePerformance ##############
+ Element EngPerf PERF {
+  //************* Calculates Overall Engine Performance Results*************************
+    //Fg           Overall gross thrust
+    //Fn           Overall net thrust
+    //Fnc          Corrected overall net thrust
+    //Fram         Overall ram drag
+    //MN           Mach number
+    //OPR          Engine overall pressure ratio
+    //SFC          Specific fuel consumption (same as TSFC, output for ARP) 0 lbm/(hr*lbf) output
+    //TSFC         Specific fuel consumption 0 lbm/(hr*lbf) output
+    //W            Engine total airflow 0 lbm/sec output
+    //WAR          Incoming WAR 0 none output
+    //Wfuel        Overall fuel flow (per sec) 0 lbm/sec output
+    //WfuelHour    Overall fuel flow (per hour) 0 lbm/hr output
+    //alt          Altitude
+    //dTs          Delta temperature from standard atmosphere
+}
+
+// ######### Inlet link ports ####################	
+linkPorts( "AMBIENT.Fl_O", "INLET.Fl_I", "FL0" ); // FlightConditions to Inlet
+linkPorts("INLET.Fl_O", "SPLITTER.Fl_I","FL1"); //Inlet to Splitter
+
+// ################ Bypass Duct link ports ###########
+linkPorts("SPLITTER.Fl_02", "COMPRESSORBP.Fl_I","FL2"); // splitter to bypass compressor
+linkPorts("COMPRESSORBP.Fl_O", "DUCTBP.Fl_I","FL3"); //bypass compressor to bypass duct
+linkPorts("DUCTBP.Fl_O", "MIXER.Fl_I2","FL4"); // bypass duct to bypass mixer
+
+
+// ############### Core air link ports ##################
+
+linkPorts( "SPLITTER.Fl_01", "LPC.Fl_I", "FL5"); // splitter to low pressure compressor
+linkPorts("LPC.Fl_O", "HPC.Fl_I", "FL6"); //low pressure compressor to high pressure compressor
+linkPorts("HPC.Fl_O", "DIFFUSEREC.Fl_I", "FL7"); // HPC to core diffuser
+linkPorts("DIFFUSEREC.Fl_O", "BURNER.Fl_I","FL8"); //Incore diffuser to burner
+linkPorts("BURNER.Fl_O", "BLEEDEC1.Fl_I", "FL9"); //Burner to bleed
+linkPorts("BLEEDEC1.Fl_O", "HPT.Fl_I", "FL10"); //bleed to high pressure turbine
+linkPorts("HPT.Fl_O", "BLEEDEC2.Fl_I", "FL11"); //high pressure turbine to bleed
+linkPorts("BLEEDEC2.Fl_O", "LPT.Fl_I", "FL12"); //bleed to low pressure turbine
+linkPorts("LPT.Fl_O", "BLEEDEC3.Fl_I", "FL13"); //low pressure turbine to bleed
+linkPorts("BLEEDEC3.Fl_O", "MIXER.Fl_I1", "FL14"); //Nozzle to FlowEnd
+
+
+//####################### Mixed Stream link ports ###############
+linkPorts("MIXER.Fl_O", "BLEED4.Fl_I", "FL15"); // Mixer to bleed
+linkPorts("BLEED4.Fl_O", "DIFFUSER.Fl_I","FL16"); //bleed to diffuser
+linkPorts("DIFFUSER.Fl_O", "AFTERBURNER.Fl_I", "FL17"); //diffuser to afterburner
+linkPorts("AFTERBURNER.Fl_O", "BLEED5.Fl_I", "FL18"); //burner to bleed
+linkPorts("BLEED5.Fl_O", "DUCT.Fl_I", "FL19"); //bleed to duct
+linkPorts("DUCT.Fl_O", "NOZZLE.Fl_I", "FL20"); //duct to nozzle
+linkPorts("NOZZLE.Fl_O", "FLOWEND.Fl_I", "FL21"); //Nozzle to flowend
+
+
+//############### Bleed linkports ##########
+linkBleedCB("LPC", "BLEEDEC3", 0.08, 0.60, 1.0, "BLEED1_port" );
+linkBleedCB( "LPC", "BLEEDEC2" , 0.07, 1.0, 1.0,"BLEED2_port" );
+linkBleedCT( "HPC", "HPT", 0.05, 0.5 , 1.0, 0.12, 1.2, "BLEED3_port" );
+linkBleedCT( "HPC" , "HPT" , 0.05, 0.8, 1.0, 0.88, 1.5, "BLEED4_port" );
+linkBleedCB( "HPC", "BLEEDEC1", 0.08, 1.0 , 1.0, "BLEED5_port" );
+linkBleedBB( "BLEED4" , "BLEED5" , 0.08, 1.0, 0.68, "BLEED6_port" );
+
+
+
+// ############## Fuel LinkPorts ##################
+linkPorts("FUELSTARTEC.Fu_O", "BURNER.Fu_I", "FL22"); //Fuestart to burner
+linkPorts("FUELSTARTAB.Fu_O", "AFTERBURNER.Fu_I", "FL23"); //Fuestart to afterburner
+
+
+//############## shaft linkports ###############
+linkPorts("HPC.Sh_O", "HPS.HPCshaft", "SH1"); // compressor to shaft
+linkPorts("HPT.Sh_O", "HPS.HPTshaft", "SH2"); // turbine to shaft
+
+linkPorts("COMPRESSORBP.Sh_O", "LPS.Fan", "SH3"); // fan to LPS
+linkPorts("LPC.Sh_O", "LPS.HPCshaft", "SH4"); // comressor to shaft
+linkPorts("LPT.Sh_O", "LPS.HPTshaft", "SH5"); // turbine to shaft
+

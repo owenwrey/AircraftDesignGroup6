@@ -1,0 +1,5 @@
+setOption( "switchDes", "DESIGN" );
+autoSolverSetup();
+CASE++;
+run();
+ncpView.display();
