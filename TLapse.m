@@ -23,14 +23,14 @@ arguments (Output)
 end
 
 % Neccessary values
-[Ts,as,Ps,rhos,~,~] = atmosisa(0);
-[Ts,as,Ps,rhos] = deal(Ts.*1.8,as./0.3048,Ps.*0.0208854,rhos.*0.0019403203);
+[Ts,~,Ps,rhos,~,~] = atmosisa(0);
+[Ts,~,Ps,~] = deal(Ts.*1.8,as./0.3048,Ps.*0.0208854,rhos.*0.0019403203);
 
 [T,a,P,rho,~,~] = atmosisa(Alt.*0.3048);
-[T,a,P,rho] = deal(T.*1.8,a./0.3048,P.*0.0208854,rho.*0.0019403203);
+[T,~,P,~] = deal(T.*1.8,a./0.3048,P.*0.0208854,rho.*0.0019403203);
 
-th = T/Ts; th0 = th*(1 + 0.2*M*M);
-d = P/Ps; d0 = d*(1 + 0.2*M*M)^(1.4/0.4);
+th = T./Ts; th0 = th.*(1 + 0.2.*M.*M);
+d = P./Ps; d0 = d.*(1 + 0.2.*M.*M).^(1.4./0.4);
 
 
 
@@ -51,15 +51,15 @@ switch selectEng
         
         if TR <= 1
             if (th0 <= TR)
-                alpha = 0.6*d0;
+                alpha = 0.6.*d0;
             else
-                alpha = 0.6.*d0.*(1 - 3.8*(th0-TR)/th0);
+                alpha = 0.6.*d0.*(1 - 3.8.*(th0-TR)./th0);
             end
         else % afterburning, TR > 1
             if (th0 <= TR)
                 alpha = d0;
             else
-                alpha = d0.*(1 - 3.5*(th0-TR)/th0);
+                alpha = d0.*(1 - 3.5.*(th0-TR)./th0);
             end
         end
 
@@ -67,15 +67,15 @@ switch selectEng
         
         if TR > 1 % afterburner
             if (th0 <= TR)
-                alpha = d0.*(1 - 0.3.*(th0-1)-0.1*sqrt(M));
+                alpha = d0.*(1 - 0.3.*(th0-1)-0.1.*sqrt(M));
             else
-                alpha = d0.*(1 - 0.3.*(th0-1)-0.1*sqrt(M) - 1.5*(th0-TR)/th0);
+                alpha = d0.*(1 - 0.3.*(th0-1)-0.1.*sqrt(M) - 1.5.*(th0-TR)./th0);
             end
         else % no afterburner
             if (th0 <= TR)
-                alpha = 0.8*d0.*(1 - 0.16.*sqrt(M));
+                alpha = 0.8.*d0.*(1 - 0.16.*sqrt(M));
             else
-                alpha = 0.8*d0.*(1 - 0.16.*sqrt(M) - 24*(th0-TR)/(th0*(9+M)));
+                alpha = 0.8.*d0.*(1 - 0.16.*sqrt(M) - 24.*(th0-TR)./(th0.*(9+M)));
             end
         end
 
