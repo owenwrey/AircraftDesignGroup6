@@ -1,31 +1,5 @@
 function aircraft = dimensionalize_aircraft(aircraft)
 %DIMENSIONALIZE_AIRCRAFT  Compute aircraft dimensions from W0 and W/S.
-% Required inputs:
-% aircraft.constants.totalWeight  % W0 [lb]
-% aircraft.constants.wingLoading  % W/S [lb/ft^2]
-% aircraft.fuselage.length        % [ft]
-% aircraft.fuselage.diameter      % [ft]
-%
-%   aircraft.wing.AR
-%   aircraft.wing.taper_ratio
-%
-%   aircraft.ht.VolCoeff             % C_HT
-%   aircraft.ht.AR
-%   aircraft.ht.TaperRatio           % TR_HT
-%   aircraft.ht.leverArm_frac        % L_HT_percent (fraction of fuselage length)
-%
-%   aircraft.vt.VolCoeff             % C_VT
-%   aircraft.vt.AR
-%   aircraft.vt.TaperRatio           % TR_VT
-%   aircraft.vt.leverArm_frac        % L_VT_percent (fraction of fuselage length)
-%   aircraft.vt.twinTail (optional)  % true/false (default true)
-%
-% Outputs (the ones you listed):
-%   Fuselage: aircraft.fuselage.volume
-%   Wing:     aircraft.wing.Area, span, MAC, chord.root, chord.tip
-%   HT:       aircraft.ht.Area, span, MAC, leverArm, chord.root, chord.tip
-%   VT:       aircraft.vt.Area (total), Area_each, span_each, MAC_each, leverArm,
-%             chord.root_each, chord.tip_each
 
 %% Required checks 
 req = @(s,f) isfield(s,f) && ~isempty(s.(f));
@@ -52,11 +26,12 @@ if ~isfield(aircraft.vt,'twinTail')
     aircraft.vt.twinTail = true;
 end
 
-W0 = aircraft.constants.totalWeight;   % [lb]
-WS = aircraft.constants.wingLoading;   % [lb/ft^2]
+%% Pull inputs
+W0 = aircraft.constants.totalWeight;
+WS = aircraft.constants.wingLoading;
 
-Lf = aircraft.fuselage.length;         % [ft]
-df = aircraft.fuselage.diameter;       % [ft]
+Lf = aircraft.fuselage.length;
+df = aircraft.fuselage.diameter;
 
 ARw = aircraft.wing.AR;
 TRw = aircraft.wing.taper_ratio;
@@ -75,7 +50,7 @@ Lv = aircraft.vt.leverArm_frac * Lf;
 %% Fuselage 
 aircraft.fuselage.volume = pi*(df/2)^2 * Lf;
 
-%%  Wing 
+%% Wing 
 S_w = W0 / WS;
 b_w = sqrt(ARw * S_w);
 
@@ -123,7 +98,7 @@ Ctip_VT_each  = TRv * Croot_VT_each;
 MAC_VT_each = ((2/3) * Croot_VT_each * (1 + TRv + TRv^2)) / (1 + TRv);
 
 aircraft.vt.leverArm  = Lv;
-aircraft.vt.Area      = S_VT_total;   % total area
+aircraft.vt.Area      = S_VT_total;   
 aircraft.vt.Area_each = S_VT_each;
 aircraft.vt.span_each = b_VT_each;
 aircraft.vt.MAC_each  = MAC_VT_each;
