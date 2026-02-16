@@ -1,6 +1,10 @@
+%% fixed engine sizing
+
 clc
 clear
 cfg = getConfig();
+
+displayTable = true;
 % segment names
 SegNames = {'SWT','TKO','CLIMB','CR OBD', 'DESC 1', 'COMBAT', 'WP FIRE', 'CLIMB2', 'CR IBD', ...
 'DESC 2', 'LTR2', 'LTS'};
@@ -785,7 +789,9 @@ end
 
 Tbl.EnHt = Tbl.Alt + (Tbl.KTAS*NM2ft).^2/(2*32.17);
 Tbl.GS = Tbl.KTAS.*cosd(Tbl.FPA);
-disp(Tbl);
+if displayTable == true
+    disp(Tbl);
+end
 A = 2.34;
 C = -0.13;
 EWF = A*W0^C;

@@ -1,8 +1,10 @@
 %% fixed engine sizing
 
 clc
- clear
+clear
 cfg = getConfig();
+
+displayTable = true;
 % segment names
 SegNames = {'SWT','TKO','CLIMB','CR OBD', 'LTR 1', 'COMBAT', 'WP FIRE', 'CR IBD', ...
 'DESC', 'LTR2', 'LTS'};
@@ -56,7 +58,7 @@ Tbl.CD = zeros(npts_sum,1); % drag coefficient
 Tbl.L_D = zeros(npts_sum,1); % lift-to-drag ratio
 Tbl.Drag = zeros(npts_sum,1); % drag (lbf)
 Tbl.Thrust = zeros(npts_sum,1); % thrust (lbf)
-Tbl.TLapse = zeros(npts_sum,1); % thrust lapse
+Tbl.ThrustLapse = zeros(npts_sum,1); % thrust lapse
 Tbl.Ps = zeros(npts_sum,1); % specific excess pwr (ft/min)
 Tbl.THROT = zeros(npts_sum,1); % throttle setting
 Tbl.FF = zeros(npts_sum,1); % fuel flow (lb/h)
@@ -65,10 +67,10 @@ Tbl.FuelRem = zeros(npts_sum,1); % fuel remaining (lb)
 Tbl.FuelBurn = zeros(npts_sum,1); % fuel burned (lb)
 
 
-TLapse = griddedInterpolant([0, 10000, 20000, 30000, 40000, 50000], [1, 0.80, 0.60, ...
-0.40, 0.20, 0.15],'linear','nearest');
-Alt_ft = 28000;
-TLapse(Alt_ft);
+% ThrustLapse = griddedInterpolant([0, 10000, 20000, 30000, 40000, 50000], [1, 0.80, 0.60, ...
+% 0.40, 0.20, 0.15],'linear','nearest');
+% Alt_ft = 28000;
+% ThrustLapse(Alt_ft);
 
 
 W0 = cfg.W.TOguess;
@@ -128,8 +130,8 @@ Tbl.L_D(i) = 0; % lift-to-drag ratio
 Tbl.Drag(i) = 0; % drag (lbf)
 Tbl.Thrust(1) = T_W_idle*W0;
 Tbl.Thrust(i) = T_W_idle*W0; % thrust (lbf)
-Tbl.TLapse(1) = 1;
-Tbl.TLapse(i) = 1; % thrust lapse
+Tbl.ThrustLapse(1) = 1;
+Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 Tbl.THROT(i) = 0; % throttle setting
 Tbl.FF(1) = SFC_idle*Tbl.Thrust(1);
@@ -180,10 +182,10 @@ Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
 Tbl.Drag(i) = 0; % drag (lbf)
-Tbl.TLapse(i) = 1; % thrust lapse
+Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 Tbl.THROT(i) = 1.25; % throttle setting
-Tbl.Thrust(i) = Thrust*Tbl.TLapse(i)*Tbl.THROT(i); % thrust (lbf)
+Tbl.Thrust(i) = Thrust*Tbl.ThrustLapse(i)*Tbl.THROT(i); % thrust (lbf)
 Tbl.FF(i) = SFC_takeoff*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dFuel(i) = (Tbl.FF(i)*Tbl.dTime(i))/60; % delta fuel (lb)
 Tbl.FuelBurn(i) = sum(Tbl.dFuel(1:i)); % fuel burned (lb)
@@ -211,13 +213,13 @@ Tbl.Alt(istart3:iend3) = linspace(0,cfg.cruise.altitude,npts(3,:)); % altitude (
 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
 Tbl.MACH(i) = 0.8; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
 Tbl.THROT(i) = 1; % throttle setting
-Tbl.Thrust(i) = Thrust*Tbl.TLapse(i)*Tbl.THROT(i); % thrust (lbf)
+Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i));
+Tbl.Thrust(i) = Thrust*Tbl.ThrustLapse(i)*Tbl.THROT(i); % thrust (lbf)
 Tbl.FF(i) = SFC_climb*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = ((Tbl.Thrust(i)*Tbl.KTAS(i)*kts2fps*60) - (Tbl.Drag(i)*Tbl.KTAS(i)*kts2fps*60))/Tbl.Weight(i-1) ; % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
@@ -267,7 +269,6 @@ Tbl.dDist(i) = Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
 Tbl.KTAS(i) = 468; % true airspeed (kt) (660 mph taken from F18 e/f cruise)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
@@ -282,8 +283,9 @@ Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
 Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); % drag (lbf)
 
 % solve for throttle setting 
+Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i-1));
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
-Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.TLapse(i)); % throttle setting
+Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 Tbl.FF(i) = SFC_cruise*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
@@ -326,7 +328,6 @@ Tbl.dDist(i) = 0;
 Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
 Tbl.KTAS(i) = cfg.loiter1.speed.A2A; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
@@ -341,8 +342,9 @@ Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
 Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); % drag (lbf)
 
 % solve for throttle setting 
+Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i-1));
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
-Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.TLapse(i)); % throttle setting
+Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 Tbl.FF(i) = SFC_loiter*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
@@ -384,7 +386,6 @@ Tbl.dDist(i) = 0;
 Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
 Tbl.KTAS(i) = 1322; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
@@ -400,7 +401,8 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 
 % solve for throttle setting 
 Tbl.THROT(i) = 1.25; % throttle setting
-Tbl.Thrust(i) = Thrust*Tbl.TLapse(i)*Tbl.THROT(i); % thrust (lbf); % thrust (lbf)
+Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i));
+Tbl.Thrust(i) = Thrust*Tbl.ThrustLapse(i)*Tbl.THROT(i); % thrust (lbf); % thrust (lbf)
 Tbl.FF(i) = SFC_combat*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0;  % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
@@ -437,7 +439,6 @@ Tbl.dDist(i) = 0;
 Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
 Tbl.KTAS(i) = 1322; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
@@ -453,7 +454,8 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 
 % solve for throttle setting 
 Tbl.THROT(i) = 1.25; % throttle setting
-Tbl.Thrust(i) = Thrust*Tbl.TLapse(i)*Tbl.THROT(i); % thrust (lbf); % thrust (lbf)
+Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i));
+Tbl.Thrust(i) = Thrust*Tbl.ThrustLapse(i)*Tbl.THROT(i); % thrust (lbf); % thrust (lbf)
 Tbl.FF(i) = SFC_weightdrop*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0;  % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
@@ -487,7 +489,6 @@ Tbl.dDist(i) = Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
 Tbl.KTAS(i) = cfg.cruise.speed.out.A2A; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
@@ -503,7 +504,8 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 
 % solve for throttle setting 
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
-Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.TLapse(i)); % throttle setting
+Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i-1));
+Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 Tbl.FF(i) = SFC_cruise*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
@@ -539,13 +541,13 @@ Tbl.Alt(istart9:iend9) = linspace(Tbl.Alt(istart9 - 1),0,npts(9,:)); % altitude 
 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
 Tbl.MACH(i) = 0.9; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
 Tbl.THROT(i) = 1; % throttle setting
-Tbl.Thrust(i) = Thrust*Tbl.TLapse(i)*Tbl.THROT(i); % thrust (lbf)
+Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i));
+Tbl.Thrust(i) = Thrust*Tbl.ThrustLapse(i)*Tbl.THROT(i); % thrust (lbf)
 Tbl.FF(i) = SFC_descent*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = -3000; % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
@@ -598,7 +600,6 @@ Tbl.dDist(i) = 0;
 Tbl.Alt(i) = 0; % Altitude (ft)
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.TLapse(i) = TLapse(Tbl.Alt(i)); % thrust lapse
 Tbl.KTAS(i) = 212; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
@@ -614,7 +615,8 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 
 % solve for throttle setting 
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
-Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.TLapse(i)); % throttle setting
+Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i-1));
+Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 Tbl.FF(i) = SFC_loiter*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
@@ -668,10 +670,10 @@ Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
 Tbl.Drag(i) = 0; % drag (lbf)
-Tbl.TLapse(i) = 1; % thrust lapse
+Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 Tbl.THROT(i) = 1; % throttle setting
-Tbl.Thrust(i) = T_W_idle*Tbl.TLapse(i)*W0*Tbl.THROT(i); % thrust (lbf)
+Tbl.Thrust(i) = T_W_idle*Tbl.ThrustLapse(i)*W0*Tbl.THROT(i); % thrust (lbf)
 Tbl.FF(i) = SFC_shutdown*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dFuel(istart11) = 0;
 Tbl.dFuel(i) = (Tbl.FF(i)*Tbl.dTime(i))/60; % delta fuel (lb)
@@ -702,7 +704,9 @@ end
 
 Tbl.EnHt = Tbl.Alt + (Tbl.KTAS*NM2ft).^2/(2*32.17);
 Tbl.GS = Tbl.KTAS.*cosd(Tbl.FPA);
-% disp(Tbl);
+if displayTable == true
+    disp(Tbl);
+end
 A = 2.34;
 C = -0.13;
 EWF = A*W0^C;
