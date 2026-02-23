@@ -4,18 +4,38 @@ function [airOut] = CgInertiaCalc(airIn)
 
 %% main loop
 
+airOut = airIn;
+
+
+% place fields that shouldnt be iterated over here.
+blacklist = {""};
+
+% initialize variables
 xsum = 0;
 ysum = 0;
 zsum = 0;
-
 weightsum = 0;
 
-for field = fieldnames(airIn)'
+field = fieldnames(airIn)';
 
-xsum = airIn.field
-
-
+for i = 1:numel(field)
+    
+    if ~any(strcmp(blacklist,field{i}))
+        
+        % sum weights times locations
+        xsum = airIn.field{i}.weight.*airIn.field{i}.x + xsum;
+        ysum = airIn.field{i}.weight.*airIn.field{i}.y + ysum;
+        zsum = airIn.field{i}.weight.*airIn.field{i}.z + zsum;
+        
+        % sum weight
+        weightsum = airIn.field{i}.weight + weightsum;
+       
+    end
 end
+
+airOut.cg.x = xsum./weightsum;
+airOut.cg.y = ysum./weightsum;
+airOut.cg.z = zsum./weightsum;
 
 %% outputs
 
