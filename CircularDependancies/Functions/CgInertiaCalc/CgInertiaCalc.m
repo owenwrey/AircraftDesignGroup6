@@ -1,0 +1,43 @@
+function [airOut] = CgInertiaCalc(airIn)
+%CGINERTIACALC Calculates CG and products of inertia of Aircraft Struct.
+%   Detailed explanation will go here
+
+%% main loop
+
+airOut = airIn;
+
+
+% place fields that shouldnt be iterated over here.
+blacklist = {""};
+
+% initialize variables
+xsum = 0;
+ysum = 0;
+zsum = 0;
+weightsum = 0;
+
+field = fieldnames(airIn)';
+
+for i = 1:numel(field)
+    
+    if ~any(strcmp(blacklist,field{i}))
+        
+        % sum weights times locations
+        xsum = airIn.field{i}.weight.*airIn.field{i}.x + xsum;
+        ysum = airIn.field{i}.weight.*airIn.field{i}.y + ysum;
+        zsum = airIn.field{i}.weight.*airIn.field{i}.z + zsum;
+        
+        % sum weight
+        weightsum = airIn.field{i}.weight + weightsum;
+       
+    end
+end
+
+airOut.cg.x = xsum./weightsum;
+airOut.cg.y = ysum./weightsum;
+airOut.cg.z = zsum./weightsum;
+
+%% outputs
+
+
+end
