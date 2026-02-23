@@ -1,0 +1,17 @@
+function [airOut] = CgInertiaCalc(airIn)
+%CGINERTIACALC Calculates CG and products of inertia of Aircraft Struct.
+%   Detailed explanation will go here
+
+%% main loop
+
+for field = fieldnames(airIn)
+    
+
+
+
+end
+
+%% outputs
+
+
+end
