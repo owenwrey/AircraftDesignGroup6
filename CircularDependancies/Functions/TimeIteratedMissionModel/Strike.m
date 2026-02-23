@@ -821,5 +821,6 @@ fprintf('Strike Mission Results\n')
 fprintf('Converged Gross Weight is %5.0f lbs .\n', W0)
 fprintf('Fuel Required is %5.0f lbs', FuelReq)
 
+aircraftResults = aircraft;
 aircraftResults.table = Tbl;
 end
