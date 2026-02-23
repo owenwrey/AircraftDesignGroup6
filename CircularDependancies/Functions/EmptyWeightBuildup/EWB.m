@@ -93,6 +93,24 @@ aircraft.fuselage.weight = .499*K_dwf * W0^(.35) * Nz^(.25) * L^(.5) * D^(.849).
 
 
 
+% main landing gear
+N_gear = 5.5;
+K_cb = 1;                                   % cross-beam gear (we are not cross-beam)
+K_tpg = .826;                               % tripod gear (we are tripod)
+W_l = aircraft.constants.landingWeight;     % landing design gross weight, lb
+N_l = 1.5*N_gear;                           % ultimate landing load factor
+L_m = ;                                     % extended length of main gear, in
+
+aircraft.gear.mg.weight = K_cb * K_tpg * (W_l*N_l)^(.25) * L_m^(.973);
+
+% nose landing gear
+N_nw = 2;       % number of nosewheels
+L_n = ;         % extended length 
+
+aircraft.gear.ng.weight = (W_l*N_l)^(.29) * 
+
+
+
 
 prevWeight = weight.total;
 
@@ -105,3 +123,4 @@ weights = [prevWeight;aircraft.constants.weight];
 
 
 end
+
