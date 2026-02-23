@@ -65,12 +65,9 @@ while( not(exitFlag) && iteration < iterationMax )
     %-| Fixed MTOW convergence Check |-------------------------------------
     % type "help continue" to see how to send while loop back to top
 
-    % Something like this:
-    % if abs(aircraftOld.weight.total - aircraft.weight.total) < weightTol
-    %   go to next step of loop (time iterated mission model)
-    % else
-    %   go back to top of loop
-    % end
+    if abs(aircraftOld.weight.total - aircraft.weight.total) < weightTol
+      continue; % this should go back to the top of the while loop
+    end % go on to time-iterated mission model
 
 
     %----------------------------------------------------------------------

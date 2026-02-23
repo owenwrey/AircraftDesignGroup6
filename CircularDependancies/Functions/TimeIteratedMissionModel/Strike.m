@@ -822,5 +822,5 @@ end
 % fprintf('Converged Gross Weight is %5.0f lbs .\n', W0)
 % fprintf('Fuel Required is %5.0f lbs', FuelReq)
 
-
+aircraftResults.table = Tbl;
 end
