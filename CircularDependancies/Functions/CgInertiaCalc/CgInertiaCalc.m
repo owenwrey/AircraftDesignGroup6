@@ -9,7 +9,7 @@ airOut = airIn;
 
 %% calculate Center of Gravity
 % place fields that shouldnt be iterated over here.
-blacklist = {""};
+blacklist = {"flightcond","cg","constants"};
 
 % initialize variables
 xsum = 0;
