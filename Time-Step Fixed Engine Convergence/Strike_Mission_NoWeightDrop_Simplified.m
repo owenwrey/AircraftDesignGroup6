@@ -1,7 +1,7 @@
 %% fixed engine sizing
 
-clc
-clear
+% clc
+clearvars -except Results;
 cfg = getConfig();
 
 displayTable = true;
