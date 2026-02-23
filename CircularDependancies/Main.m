@@ -10,10 +10,10 @@ addpath(genpath('Functions')); % lets matlab see all the functions within Functi
 %% -| Aircraft Struct |----------------------------------------------------
 % All variable information related to the aircraft should be
 % stored/accesible in this struct.
-aircraft = struct;
 
-components = {Wing, Htail, Vtail, fuselage, Gear, Crew};
-variables
+aircraft.cg.x = 0;
+aircraft.cg.y = 0;
+aircraft.cg.z = 0;
 
 
 
