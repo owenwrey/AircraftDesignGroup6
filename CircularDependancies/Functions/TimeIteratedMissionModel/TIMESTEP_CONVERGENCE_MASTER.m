@@ -14,20 +14,24 @@ switch missionToRun
 
     case "Strike"
         Results.Strike = Strike(aircraft);
+        aircraft = Results.Strike;
 
     case "Both"
         Results.A2A = A2A(aircraft);       
         Results.Strike = Strike(aircraft);
 
         if Results.A2A.weight.total > Results.Strike.weight.total
-            constrainingMission = "A2A";
+            aircraft.constrainingMission = "A2A";
             aircraft = Results.A2A;
-        else
-            constrainingMission = "Strike";
+        elseif Results.Strike.weight.total > Results.A2A.weight.total
+            aircraft.constrainingMission = "Strike";
             aircraft = Results.Strike;
         end
 
     otherwise
         error("Unknown mission type: %s", missionToRun)
 
-end
+end % switch
+
+
+end % function
