@@ -12,7 +12,7 @@ addpath(genpath('Functions')); % lets matlab see all the functions within Functi
 % stored/accesible in this struct.
 aircraft = struct;
 
-components = {Wing, Htail, Vtail, fuselage, Gear, Crew, } 
+components = {Wing, Htail, Vtail, fuselage, Gear, Crew};
 variables
 
 
