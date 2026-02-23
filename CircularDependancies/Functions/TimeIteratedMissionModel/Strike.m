@@ -798,7 +798,7 @@ EWF = A*W0^C;
 W_crew = cfg.W.crew;
 W_payload = cfg.W.PL.STK; % weight of weapons 
 OEW = EWF*W0;
-% OEW = EWB(W0);
+% OEW = EWB(aircraft);
 FuelAllow = cfg.fuelBufferPercent*(Tbl.FuelBurn(iend)); % 6% fuel allowance 
 FuelReq = FuelAllow + Tbl.FuelBurn(iend); 
 FuelAvail = W0 - OEW - W_crew - W_payload;
@@ -812,6 +812,13 @@ W0 = W0_calc;
 
 end
 
+%% Assign results to aircraft struct
+aircraft.weight.total = W0;
+aircraft.weight.fuel = FuelAvail;
+aircraft.weight.empty = OEW;
+aircraft.weight.totalOnLanding = Tbl.Weight(end);
+
+%% Print and Plot
 % figure
 % plot(Tbl.Time, Tbl.FuelBurn)
 % xlabel("Time (min)")
@@ -822,5 +829,5 @@ fprintf('Converged Gross Weight is %5.0f lbs\n', W0)
 fprintf('Fuel Required is %5.0f lbs', FuelReq)
 
 aircraftResults = aircraft;
-aircraftResults.table = Tbl;
+aircraftResults.TimeStepTable = Tbl;
 end

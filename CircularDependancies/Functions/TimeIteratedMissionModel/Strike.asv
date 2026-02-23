@@ -2,10 +2,10 @@ function aircraftResults = Strike(aircraft)
 %% fixed engine sizing
 
 % clc
-clearvars -except Results;
+clearvars -except aircraft Results;
 cfg = getConfig();
 
-displayTable = true;
+displayTable = false;
 % segment names
 SegNames = {'SWT','TKO','CLIMB','CR OBD', 'DESC 1', 'COMBAT', 'WP FIRE', 'CLIMB2', 'CR IBD', ...
 'DESC 2', 'LTR2', 'LTS'};
@@ -79,8 +79,9 @@ Tbl.FuelBurn = zeros(npts_sum,1); % fuel burned (lb)
 W0 = cfg.W.TOguess;
 FuelReq = cfg.W.fuelReq;
 tol = cfg.weightTolerance;
+diff = 10000; % initialize
 
-while tol > 1
+while diff > tol
 
 W_S = cfg.wingLoading; % takeoff wing loading (psf)
 Thrust = cfg.thrust; %lb
@@ -365,9 +366,8 @@ Tbl.dTime(i) = (Tbl.Alt(i) - Tbl.Alt(i-1))/Tbl.dhdt(i);% delta time (min)
 Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
-Tbl.Dist(istart) = Tbl.Dist(istart - 1);
-Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(istart - 1); % distance (NM)
-Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
+Tbl.dDist(i) = Tbl.GS(i)*Tbl.dTime(i)/60; % delta distance (NM)
+Tbl.Dist(i) = Tbl.dDist(i) + Tbl.Dist(i-1); % distance (NM)
 Tbl.dVdt(i) = (Tbl.KTAS(i)*kts2fps - (Tbl.KTAS(i-1)*kts2fps))/(Tbl.dTime(i)*60); % acceleration
 Tbl.dVdt(istart) = 0;
 
@@ -426,7 +426,7 @@ Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.dVdt(i) = 0; % acceleration
 
 Tbl.dFuel(istart) = 0;
@@ -591,7 +591,7 @@ Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 Tbl.dTime(i) = Tbl.dDist(i)/(Tbl.KTAS(i)/60);% delta time (min)
 Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.dVdt(i) = 0; % acceleration
 
 Tbl.dFuel(istart) = 0;
@@ -646,9 +646,8 @@ Tbl.dTime(i) = (Tbl.Alt(i) - Tbl.Alt(i-1))/Tbl.dhdt(i);% delta time (min)
 Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
-Tbl.Dist(istart) = Tbl.Dist(istart - 1);
-Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(istart - 1); % distance (NM)
-Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
+Tbl.dDist(i) = Tbl.GS(i)*Tbl.dTime(i)/60; % delta distance (NM)
+Tbl.Dist(i) = Tbl.dDist(i) + Tbl.Dist(i-1); % distance (NM)
 Tbl.dVdt(i) = (Tbl.KTAS(i)*kts2fps - (Tbl.KTAS(i-1)*kts2fps))/(Tbl.dTime(i)*60); % acceleration
 Tbl.dVdt(istart) = 0;
 
@@ -706,7 +705,7 @@ Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.dVdt(i) = 0; % acceleration
 
 Tbl.dFuel(istart) = 0;
@@ -799,12 +798,12 @@ EWF = A*W0^C;
 W_crew = cfg.W.crew;
 W_payload = cfg.W.PL.STK; % weight of weapons 
 OEW = EWF*W0;
-% OEW = EWB(W0);
+% OEW = EWB(aircraft);
 FuelAllow = cfg.fuelBufferPercent*(Tbl.FuelBurn(iend)); % 6% fuel allowance 
 FuelReq = FuelAllow + Tbl.FuelBurn(iend); 
 FuelAvail = W0 - OEW - W_crew - W_payload;
 FuelExcess = FuelAvail - FuelReq;
-tol = abs(FuelExcess);
+diff = abs(FuelExcess);
 
 
 W0_calc = FuelReq + OEW + W_crew + W_payload;
@@ -813,13 +812,22 @@ W0 = W0_calc;
 
 end
 
+%% Assign results to aircraft struct
+aircraft.weight.total = W0;
+aircraft.weight.fuel = FuelAvail;
+aircraft.weight.empty = OEW;
+aircraft.weight.totalOnLanding = Tbl.Weight(end);
+
+%% Print and Plot
 % figure
 % plot(Tbl.Time, Tbl.FuelBurn)
 % xlabel("Time (min)")
 % ylabel("Total Fuel Burn (lb)")
 % 
-% fprintf('Converged Gross Weight is %5.0f lbs .\n', W0)
-% fprintf('Fuel Required is %5.0f lbs', FuelReq)
+fprintf('Strike Mission Results\n')
+fprintf('Converged Gross Weight is %5.0f lbs\n', W0)
+fprintf('Fuel Required is %5.0f lbs', FuelReq)
 
-
+aircraftResults = aircraft;
+aircraftResults.timeS = Tbl;
 end
