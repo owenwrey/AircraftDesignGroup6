@@ -7,6 +7,7 @@ function [airOut] = CgInertiaCalc(airIn)
 airOut = airIn;
 
 
+%% calculate Center of Gravity
 % place fields that shouldnt be iterated over here.
 blacklist = {""};
 
@@ -23,21 +24,21 @@ for i = 1:numel(field)
     if ~any(strcmp(blacklist,field{i}))
         
         % sum weights times locations
-        xsum = airIn.field{i}.weight.*airIn.field{i}.x + xsum;
-        ysum = airIn.field{i}.weight.*airIn.field{i}.y + ysum;
-        zsum = airIn.field{i}.weight.*airIn.field{i}.z + zsum;
+        xsum = airIn.(field{i}).weight.*airIn.(field{i}).x + xsum;
+        ysum = airIn.(field{i}).weight.*airIn.(field{i}).y + ysum;
+        zsum = airIn.(field{i}).weight.*airIn.(field{i}).z + zsum;
         
         % sum weight
-        weightsum = airIn.field{i}.weight + weightsum;
+        weightsum = airIn.(field{i}).weight + weightsum;
        
     end
 end
 
+% cg  & add to output
 airOut.cg.x = xsum./weightsum;
 airOut.cg.y = ysum./weightsum;
 airOut.cg.z = zsum./weightsum;
 
-%% outputs
 
 
 end
