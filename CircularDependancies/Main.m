@@ -28,9 +28,11 @@ variables
 %% calculation loop
 
 exitFlag=false; 
+iteration = 0;
+iterationMax = 1000;
 
-while(not(exitFlag))
-
+while(not(exitFlag) && iteration < iterationMax )
+    iteration = iteration + 1;
     %-| Geometry Updater |-------------------------------------------------
 
     %----------------------------------------------------------------------
@@ -63,12 +65,17 @@ while(not(exitFlag))
     %-| Fixed MTOW convergence Check |-------------------------------------
     % type "help continue" to see how to send while loop back to top
 
+    % if aircraftOld.weight.total - aircraft.weight.total < weightTol
+    %   continue;
+    % else
+
+
     %----------------------------------------------------------------------
 
 
 
     %-| Time Iterated Mission Model |--------------------------------------
-
+    % run time step here
     %----------------------------------------------------------------------
 
     
