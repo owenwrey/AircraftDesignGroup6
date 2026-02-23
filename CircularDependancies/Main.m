@@ -27,11 +27,11 @@ variables
 
 %% calculation loop
 
-exitFlag=false; 
+exitFlag = false; 
 iteration = 0;
 iterationMax = 1000;
 
-while(not(exitFlag) && iteration < iterationMax )
+while( not(exitFlag) && iteration < iterationMax )
     iteration = iteration + 1;
     %-| Geometry Updater |-------------------------------------------------
 
@@ -65,9 +65,12 @@ while(not(exitFlag) && iteration < iterationMax )
     %-| Fixed MTOW convergence Check |-------------------------------------
     % type "help continue" to see how to send while loop back to top
 
-    % if aircraftOld.weight.total - aircraft.weight.total < weightTol
-    %   continue;
+    % Something like this:
+    % if abs(aircraftOld.weight.total - aircraft.weight.total) < weightTol
+    %   go to next step of loop (time iterated mission model)
     % else
+    %   go back to top of loop
+    % end
 
 
     %----------------------------------------------------------------------

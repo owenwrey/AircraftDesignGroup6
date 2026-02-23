@@ -5,7 +5,7 @@ function f = getConfig()
 
 f.W.TOguess = 63738;
 f.W.fuelReq = 16440;
-f.weightTolerance = 2; % [lb]
+f.weightTolerance = 250; % [lb]
 f.W.crew = 300;
 f.W.PL.A2A = 2390;
 f.W.PL.STK = 4380;
