@@ -568,7 +568,7 @@ Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
 Tbl.Dist(istart9) = Tbl.Dist(istart9 - 1);
-Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(i - 1); % distance (NM)
+Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(istart9 - 1); % distance (NM)
 Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.dVdt(i) = (Tbl.KTAS(i)*kts2fps - (Tbl.KTAS(i-1)*kts2fps))/(Tbl.dTime(i)*60); % acceleration
 Tbl.dVdt(istart9) = 0;
@@ -737,5 +737,9 @@ end
 % fprintf('Converged Gross Weight is %5.0f lbs .\n', W0)
 % fprintf('Fuel Required is %5.0f lbs', FuelReq)
 
-aircraftResults.table = Tbl;
+<<<<<<< Updated upstream
+aircraft = T
+=======
+
+>>>>>>> Stashed changes
 end
