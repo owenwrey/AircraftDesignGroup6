@@ -1,7 +1,7 @@
 function aircraftResults = A2A(aircraft)
 %% fixed engine sizing
 
-clc
+% clc
 clearvars -except Results;
 cfg = getConfig();
 
