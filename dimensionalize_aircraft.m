@@ -106,3 +106,59 @@ aircraft.vt.chord.root_each = Croot_VT_each;
 aircraft.vt.chord.tip_each  = Ctip_VT_each;
 
 end
+
+
+%% Engine & Systems
+K_vg = 1.62; %For variable geomtry (otherwise = 1)
+K_d = 2.75; % Sqaure Inlet Duct
+L_s_L_d = 1;
+K_vsh = 1.425; %Variable sweep, 1 otherwise
+
+W_engine_mounts = 0.013*N_en^0.795*T^0.579*N_z;
+
+W_firewall = 1.13*S_fw;
+W_engine_section = 0.001*W_en^0.717*N_en*N_z;
+
+W_air_induction = 13.29*K_vg*L_d^0.643*K_d^0.182 * N_en^1.498*(L_s_L_d)^(-0.373)*D_e;
+
+W_tailpipe = 3.5*D_e*L_tp*N_en;
+W_engine_cooling = 4.55*D_e*L_sh*N_en;
+W_oil_cooling = 37.82*N_en^1.023;
+
+W_engine_controls = 10.5*N_en^1.008*L_ec^0.222;
+W_starter = 0.025*T_e^0.760*N_en^0.72;
+
+W_fuel_system = 7.45*V_t^0.47 * (1+V_i/V_t)^(-0.095) * (1+V_p/V_t) * N_t^0.066 * N_en^0.052 * (T*SFC/1000)^0.249;
+
+W_flight_controls = 36.28*M^0.003*S_cs^0.489*N_s^0.484*N_c^0.127;
+
+W_instruments = 8.0 + 36.37*N_en^0.676*N_t^0.237 + 26.4*(1+N_ci)^1.356;
+W_hydraulics  = 37.23*K_vsh*N_u^0.664;
+W_electrical  = 172.2*K_mc*R_kva^0.152*N_c^0.10*L_a^0.10*N_gen^0.091;
+
+W_avionics   = 2.117*W_uav^0.933;
+W_furnishings = 217.6*N_c;
+W_AC_AI = 3.2e-4*W_dg;
+
+aircraft.enginesystems.numberofengines  = N_en;
+aircraft.enginesystems.thrust = T;   
+aircraft.enginesystems.ultload = N_z; %1.5*limit load factor
+aircraft.enginesystems.fwsurfacearea = S_fw; %Firewall surface area
+aircraft.enginesystems.engineweight  = W_en;
+aircraft.enginesystems.ductlength = L_d;
+aircraft.enginesystems.enginediameter = D_e;
+aircraft.enginesystems.tailpipe = L_tp;
+aircraft.enginesystems.shroudlength = L_sh;
+aircraft.enginesystems.efcpdistance = L_ec; %engine front to cockpit distance (total if multiple engines)
+aircraft.enginesystems.thrustperengine = T_e;
+aircraft.enginesystems.totalfuelvolume = V_t; %gallons
+aircraft.enginesystems.integraltankvolume = V_i; %gallons
+aircraft.enginesystems.selfsealtankvolume = V_p; %gallons
+aircraft.enginesystems.numberoffueltanks = N_t; 
+aircraft.enginesystems.specficfuelconsumption = SFC; 
+aircraft.enginesystems.mach = M;
+aircraft.enginesystems.constrolsurfacearea = S_cs; 
+aircraft.enginesystems.numberofflightcontrolsystem = N_s; 
+aircraft.enginesystems.numberofcrew = N_c; 
+aircraft.enginesystems.numberofcrewequivalence = N_ci; % 1 if one pilot, 1.2 if pilot + backseater, 2 if pilot and copilot
+aircraft.enginesystems.numberofhydraulicutilityfunction = N_u; %Typically 5 to 15

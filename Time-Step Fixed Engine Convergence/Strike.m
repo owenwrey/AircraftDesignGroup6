@@ -1,7 +1,8 @@
+function aircraftResults = Strike(aircraft)
 %% fixed engine sizing
 
-clc
-clear
+% clc
+clearvars -except Results;
 cfg = getConfig();
 
 displayTable = true;
@@ -812,10 +813,13 @@ W0 = W0_calc;
 
 end
 
-figure
-plot(Tbl.Time, Tbl.FuelBurn)
-xlabel("Time (min)")
-ylabel("Total Fuel Burn (lb)")
+% figure
+% plot(Tbl.Time, Tbl.FuelBurn)
+% xlabel("Time (min)")
+% ylabel("Total Fuel Burn (lb)")
+% 
+% fprintf('Converged Gross Weight is %5.0f lbs .\n', W0)
+% fprintf('Fuel Required is %5.0f lbs', FuelReq)
 
-fprintf('Converged Gross Weight is %5.0f lbs .\n', W0)
-fprintf('Fuel Required is %5.0f lbs', FuelReq)
+
+end
