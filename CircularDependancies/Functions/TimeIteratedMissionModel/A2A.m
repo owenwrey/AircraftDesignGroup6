@@ -5,7 +5,7 @@ function aircraftResults = A2A(aircraft)
 clearvars -except Results;
 cfg = getConfig();
 
-displayTable = true;
+displayTable = false;
 % segment names
 SegNames = {'SWT','TKO','CLIMB','CR OBD', 'LTR 1', 'COMBAT', 'WP FIRE', 'CR IBD', ...
 'DESC', 'LTR2', 'LTS'};
@@ -237,7 +237,7 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 
 Tbl.dTime(i) = (Tbl.Alt(i) - Tbl.Alt(i-1))/Tbl.dhdt(i);% delta time (min)
 Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
 Tbl.dDist(i) = (Tbl.Alt(i) - Tbl.Alt(i-1))/(tand(Tbl.FPA(i))*NM2ft); % distance (NM)
 Tbl.Dist(i) =Tbl.Dist(i-1) + Tbl.dDist(i); % delta distance (NM)
@@ -295,7 +295,7 @@ Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 Tbl.dTime(i) = Tbl.dDist(i)/(Tbl.KTAS(i)/60);% delta time (min)
 Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.dVdt(i) = 0; % acceleration
 
 Tbl.dFuel(istart) = 0;
@@ -352,7 +352,7 @@ Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.dVdt(i) = 0; % acceleration
 
 Tbl.dFuel(istart) = 0;
@@ -410,7 +410,7 @@ Tbl.dhdt(i) = 0;  % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.dVdt(i) = 0; % acceleration
 
 Tbl.dFuel(istart) = 0;
@@ -463,7 +463,7 @@ Tbl.dhdt(i) = 0;  % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.dVdt(i) = 0; % acceleration
 
 Tbl.dFuel(istart) = 0;
@@ -515,7 +515,7 @@ Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 Tbl.dTime(i) = Tbl.dDist(i)/(Tbl.KTAS(i)/60);% delta time (min)
 Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.dVdt(i) = 0; % acceleration
 
 Tbl.dFuel(istart) = 0;
@@ -563,13 +563,17 @@ Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
 Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); % drag (lbf)
 
-Tbl.dTime(i) = (Tbl.Alt(i) - Tbl.Alt(i-1))/Tbl.dhdt(i);% delta time (min)
+Tbl.dTime(i) = abs((Tbl.Alt(i) - Tbl.Alt(i-1))/Tbl.dhdt(i));% delta time (min)
+% fprintf('dTime: %.2f\n', Tbl.dTime(i))
 Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
+% fprintf('GS: %.4f\n', Tbl.GS(i));
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
-Tbl.Dist(istart9) = Tbl.Dist(istart9 - 1);
-Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(istart9 - 1); % distance (NM)
-Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
+% Tbl.Dist(istart9) = Tbl.Dist(istart9 - 1);
+Tbl.dDist(i) = Tbl.GS(i)*Tbl.dTime(i)/60;
+% fprintf('dDist: %.3f\n', Tbl.dDist(i));
+Tbl.Dist(i) = Tbl.Dist(i-1) + Tbl.dDist(i); % distance (NM)
+% fprintf('Dist: %.2f\n\n',Tbl.Dist(i));
 Tbl.dVdt(i) = (Tbl.KTAS(i)*kts2fps - (Tbl.KTAS(i-1)*kts2fps))/(Tbl.dTime(i)*60); % acceleration
 Tbl.dVdt(istart9) = 0;
 
@@ -624,7 +628,7 @@ Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 
 Tbl.FPA(i) = 0; % flightpath angle (deg)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.dVdt(i) = 0; % acceleration
 
 Tbl.dFuel(istart) = 0;
@@ -734,8 +738,8 @@ end
 % xlabel("Time (min)")
 % ylabel("Total Fuel Burn (lb)")
 % 
-% fprintf('Converged Gross Weight is %5.0f lbs .\n', W0)
-% fprintf('Fuel Required is %5.0f lbs', FuelReq)
+fprintf('Converged Gross Weight is %5.0f lbs .\n', W0)
+fprintf('Fuel Required is %5.0f lbs', FuelReq)
 
 aircraftResults.table = Tbl;
 end
