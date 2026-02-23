@@ -77,8 +77,9 @@ Tbl.FuelBurn = zeros(npts_sum,1); % fuel burned (lb)
 W0 = cfg.W.TOguess;
 FuelReq = cfg.W.fuelReq;
 tol = cfg.weightTolerance;
+diff = 10000;
 
-while tol >1
+while diff > tol
 
 W_S = cfg.wingLoading;
 Thrust = cfg.thrust;
@@ -719,7 +720,7 @@ FuelAllow = cfg.fuelBufferPercent*(Tbl.FuelBurn(iend11)); % 6% fuel allowance
 FuelReq = FuelAllow + Tbl.FuelBurn(iend11); 
 FuelAvail = W0 - OEW - W_crew - W_payload;
 FuelExcess = FuelAvail - FuelReq;
-tol = abs(FuelExcess);
+diff = abs(FuelExcess);
 
 
 W0_calc = FuelReq + OEW + W_crew + W_payload;
