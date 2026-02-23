@@ -2,10 +2,10 @@ function aircraftResults = Strike(aircraft)
 %% fixed engine sizing
 
 % clc
-clearvars -except Results;
+clearvars -except aircraft Results;
 cfg = getConfig();
 
-displayTable = true;
+displayTable = false;
 % segment names
 SegNames = {'SWT','TKO','CLIMB','CR OBD', 'DESC 1', 'COMBAT', 'WP FIRE', 'CLIMB2', 'CR IBD', ...
 'DESC 2', 'LTR2', 'LTS'};
@@ -818,7 +818,7 @@ end
 % ylabel("Total Fuel Burn (lb)")
 % 
 fprintf('Strike Mission Results\n')
-fprintf('Converged Gross Weight is %5.0f lbs .\n', W0)
+fprintf('Converged Gross Weight is %5.0f lbs\n', W0)
 fprintf('Fuel Required is %5.0f lbs', FuelReq)
 
 aircraftResults = aircraft;
