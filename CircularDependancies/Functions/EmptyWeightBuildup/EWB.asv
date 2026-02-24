@@ -120,53 +120,76 @@ L_s_L_d = 1;            % single duct length to duct length, 1 bc each engine ha
 K_vsh = 1.425;          % Variable sweep, 1 otherwise
 K_mc = 1.45;            % if mission completion required after failure, otherwise = 1
 W_uav = 800;            % uninstalled avionics weight
-N_c = 1;                % number of crew
-
-
-N_en = 2;
-T = aircraft.engine.thrust * N_en;
 S_fw = ((46.5/12)*(182/12))*3 + (47/12)^2-(pi*(46.5/12)^2)*2;        % firewall surface area, ft^2
+S_cs = S_csw + ht.area + vt.rudderArea; % total control surface area
+
+N_en = 2;               % number of engines
+N_c = 1;                % number of crew
+N_s = 2;                % numberof flight control systems
+N_ci = 1;               % number of crew equivalents
+N_u = 9;                % # hydraulic functions (gear, ailerons, flaps, ht, vt, airbrake, brakes, canopy, folding wings)
+N_gen = N_en;           % number of generators
+
+T_e = aircraft.engine.thrust;           % thrust per engine
+T = T_e * N_en;                         % total thrust
+
 W_en = aircraft.engine.weight;
 D_e = 46.5/12;          % engine diameter, ft
 L_tp = 0;               % length of tailpipe, ft. 0 bc engine has nozzle???
 L_sh = 3;               % length of cooling shroud, ft, just a guess
+L_ec = 70;              % dist from engine to cockpit, total if mult engines, ft
+% (FS.engine - FS.cockpit) * N_en
+SFC = aircraft.engine.TSFC(1);
+R_kva = 140;    % system electrical rating, 110-160 for fighters
+L_a = 30;       % electrical routing dist, ft (between gen, avionics, & cockpit)
+% (FS.engine - FS.cockpit)
+
+V_t = aircraft.constants.fuelVolume;    % fuel volume, gal
+V_i = aircraft.fuelSys.VI;              % integral fuel volume, gal
+% tanks made from cavities within the airframe, not dedicated fuel tanks
+V_p = aircraft.fuelSys.VP;              % self-sealing tanks volume, gal
+N_t = aircraft.fuelSys.Nt;
+
+
 
 W_engine_mounts = 0.013*N_en^(0.795) * T^(0.579) * Nz;
+
 W_firewall = 1.13*S_fw;
+
 W_engine_section = 0.01*W_en^(0.717) * N_en * Nz;
 
 W_air_induction = 13.29 * K_vg * L_d^(0.643) * K_d^(0.182) * N_en^(1.498) ...
     * (L_s_L_d)^(-0.373) * D_e;
 
 W_tailpipe = 3.5 * D_e * L_tp * N_en;
+
 W_engine_cooling = 4.55 * D_e * L_sh * N_en;
+
 W_oil_cooling = 37.82 * N_en^(1.023);
 
-
-L_ec = 70;      % dist from engine to cockpit, total if mult engines, ft
-% (FS.engine - FS.cockpit) * N_en
-T_e = aircraft.engine.thrust;
-V_t = aircraft.constants.fuelVolume;    % fuel volume, gal
-V_i = aircraft.constants.fuelVolume*.4; % integral fuel volume, gal
-
 W_engine_controls = 10.5 * N_en^(1.008) * L_ec^(0.222);
-W_starter = 0.025 * T_e^(0.760) * N_en^(0.72);
 
+W_starter = 0.025 * T_e^(0.760) * N_en^(0.72);
 
 W_fuel_system = 7.45 * V_t^(0.47) * (1+V_i/V_t)^(-0.095) * (1+V_p/V_t)...
     * N_t^(0.066) * N_en^(0.052) * (T*SFC/1000)^(0.249);
 
-W_flight_controls = 36.28*M^0.003*S_cs^0.489*N_s^0.484*N_c^0.127;
+W_flight_controls = 36.28 * M^(0.003) * S_cs^(0.489) * N_s^(0.484) * N_c^(0.127);
 
-W_instruments = 8.0 + 36.37*N_en^0.676*N_t^0.237 + 26.4*(1+N_ci)^1.356;
-W_hydraulics  = 37.23*K_vsh*N_u^0.664;
-W_electrical  = 172.2*K_mc*R_kva^0.152*N_c^0.10*L_a^0.10*N_gen^0.091;
+W_instruments = 8.0 + 36.37 * N_en^(0.676) * N_t^(0.237) + 26.4*(1+N_ci)^(1.356);
 
-W_avionics   = 2.117*W_uav^0.933;
-W_furnishings = 217.6*N_c;
-W_AC_AI = 201.6*( (W_uav+200*N_c)/1000  )^(.735);
-W_handlingGear = 3.2e-4*W_dg;
+W_hydraulics  = 37.23 * K_vsh * N_u^(0.664);
 
+W_electrical  = 172.2 * K_mc * R_kva^(0.152) * N_c^(0.10) * L_a^(0.10) * ...
+    N_gen^(0.091);
+
+W_avionics   = 2.117 * W_uav^(0.933);
+
+W_furnishings = 217.6 * N_c;
+
+W_AC_AI = 201.6 * ((W_uav+200*N_c)/1000)^(.735);
+
+W_handlingGear = 3.2e-4 * W0;
 
 
 
