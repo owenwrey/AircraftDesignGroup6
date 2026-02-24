@@ -33,6 +33,8 @@ Tbl.Seg([ctr:ctr+npts(i)-1]) = SegNames(i);
 Tbl.SegNum([ctr:ctr+npts(i)-1]) = i;
 ctr = ctr + npts(i);
 end
+
+%% Initialize
 Tbl.Time = zeros(npts_sum,1); % time (min)
 Tbl.dTime = zeros(npts_sum,1); % delta time (min)
 Tbl.Alt = zeros(npts_sum,1); % altitude (ft)
@@ -68,17 +70,12 @@ Tbl.FuelRem = zeros(npts_sum,1); % fuel remaining (lb)
 Tbl.FuelBurn = zeros(npts_sum,1); % fuel burned (lb)
 
 
-% ThrustLapse = griddedInterpolant([0, 10000, 20000, 30000, 40000, 50000], [1, 0.80, 0.60, ...
-% 0.40, 0.20, 0.15],'linear','nearest');
-% Alt_ft = 28000;
-% ThrustLapse(Alt_ft);
-
-
 W0 = cfg.W.TOguess;
 FuelReq = cfg.W.fuelReq;
 tol = cfg.weightTolerance;
 diff = 10000;
 
+%% Loop
 while diff > tol
 
 W_S = cfg.wingLoading;
@@ -94,12 +91,9 @@ ft2m = 0.305; % feet to meters
 % segment information
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 1. start, warmup, taxi
+%% 1. start, warmup
 % 3 min duration
 % no distance credit
-
-
-% given
 
 for i = 2:npts(1,:)
 SFC_idle = cfg.SFC.idle; %lb/(lb.h)
@@ -709,17 +703,27 @@ end
 % equations
 
 Tbl.EnHt = Tbl.Alt + (Tbl.KTAS*NM2ft).^2/(2*32.17);
-Tbl.GS = Tbl.KTAS.*cosd(Tbl.FPA);
+% Tbl.GS = Tbl.KTAS.*cosd(Tbl.FPA);
+
 if displayTable == true
     disp(Tbl);
 end
-A = 2.34;
-C = -0.13;
-EWF = A*W0^C;
+
+
 W_crew = cfg.W.crew;
 W_payload = cfg.W.PL.A2A; % weight of weapons
-OEW = EWF*W0;
-% OEW = EWB(aircraft);
+
+if isfield(aircraft, "weight") && isfield(aircraft.weight, "empty")
+    noEmptyWeightFlag = false;
+    OEW = aircraft.weight.empty;
+else
+    noEmptyWeightFlag = true;
+    A = 2.34;
+    C = -0.13;
+    EWF = A*W0^C;
+    OEW = EWF*W0;
+end
+
 FuelAllow = cfg.fuelBufferPercent*(Tbl.FuelBurn(iend11)); % 6% fuel allowance 
 FuelReq = FuelAllow + Tbl.FuelBurn(iend11); 
 FuelAvail = W0 - OEW - W_crew - W_payload;
@@ -731,6 +735,10 @@ W0_calc = FuelReq + OEW + W_crew + W_payload;
 
 W0 = W0_calc;    
 
+end
+
+if noEmptyWeightFlag == true
+    warning('No aircraft empty weight provided, using A*W0^C')
 end
 
 %% Assign results to aircraft struct
