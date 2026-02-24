@@ -18,7 +18,7 @@ TOP = 300;
 
 %% ISA + Delta T Setup
 
-DeltaT = 17;           % ISA deviation [K]
+DeltaT = 32-15;           % ISA deviation [K]
 gamma = 1.4;
 R = 287.05;
 
@@ -224,7 +224,7 @@ xline(W2S_Stall.*0.02088547,'Color',purple,'LineWidth',1.5)
 colormap(jet)
    
 
-plot(110,0.85,'o')
+plot(112,0.82,'o')
 
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
