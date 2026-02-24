@@ -105,9 +105,16 @@ aircraft.gear.mg.weight = K_cb * K_tpg * (W_l*N_l)^(.25) * L_m^(.973);
 
 % nose landing gear
 N_nw = 2;       % number of nosewheels
-L_n = ;         % extended length 
+L_n = ;         % extended length of nose gear, in
 
-aircraft.gear.ng.weight = (W_l*N_l)^(.29) * 
+aircraft.gear.ng.weight = (W_l*N_l)^(.29) * L_n^(.5) * N_nw^(.525);
+
+
+
+
+
+
+
 
 
 
@@ -116,9 +123,9 @@ prevWeight = weight.total;
 
 weight.total = weight.fuel + weight.payload + weight.ng + weight.mg + weight.avionics + aircraft.wing.weight + aircraft.ht.weight + aircraft.vt.weight;
 
-aircraft.constants.weight = weight.total;
+aircraft.constants.emptyWeight = weight.total;
 
-weights = [prevWeight;aircraft.constants.weight];
+weights = [prevWeight;aircraft.constants.emptyWeight];
 
 
 
