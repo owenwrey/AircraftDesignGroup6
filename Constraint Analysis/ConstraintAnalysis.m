@@ -18,7 +18,7 @@ TOP = 300;
 
 %% ISA + Delta T Setup
 
-DeltaT = 20;           % ISA deviation [K]
+DeltaT = 17;           % ISA deviation [K]
 gamma = 1.4;
 R = 287.05;
 
