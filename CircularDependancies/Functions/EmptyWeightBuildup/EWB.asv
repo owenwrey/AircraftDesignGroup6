@@ -148,9 +148,6 @@ L_ec = 70;      % dist from engine to cockpit, total if mult engines, ft
 T_e = aircraft.engine.thrust;
 V_t = aircraft.constants.fuelVolume;    % fuel volume, gal
 V_i = aircraft.constants.fuelVolume*.4; % integral fuel volume, gal
-% tanks made from cavities within the airframe, not dedicated fuel tanks
-V_p = aircraft.constants.fuelVolume*.6; % self-sealing tanks volume, gal
-N_t = 4;
 
 W_engine_controls = 10.5 * N_en^(1.008) * L_ec^(0.222);
 W_starter = 0.025 * T_e^(0.760) * N_en^(0.72);
