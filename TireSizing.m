@@ -4,7 +4,7 @@ clear all
 %% Constants %%
 A_D = 1.59;
 B_D = 0.302;
-W_Landing = 85301;
+W_Landing = (85301 +(0.10 * 85301))/2;
 
 A_W = 0.098;
 B_W = 0.467;

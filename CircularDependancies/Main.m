@@ -30,7 +30,7 @@ clearvars tempConfig;
 % -------------------------------------------------------------------------
 
 
-%% calculation loop
+%% Calculation Loop
 
 exitFlag = false; 
 iteration = 0;
