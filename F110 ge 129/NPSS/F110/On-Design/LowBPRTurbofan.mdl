@@ -31,7 +31,7 @@ Element Compressor COMPRESSORBP {
 #include "fan.map"
 //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
-S_map.effDes = 0.8; // Design Efficiency
+S_map.effDes = 0.98; // Design Efficiency
 S_map.PRdes = 3;  // Design Pressure Ratio
 
 }
@@ -54,8 +54,8 @@ Element Compressor LPC {
 #include "lpc.map"
 //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
-S_map.effDes = 0.845; // Design Efficiency
-S_map.PRdes = 3.2;  // Design Pressure Ratio
+S_map.effDes = 0.9; // Design Efficiency .845
+S_map.PRdes = 3.57;  // Design Pressure Ratio
 
 }
 
@@ -64,31 +64,31 @@ Element Compressor HPC {
 #include "hpc.map"
 //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
-S_map.effDes = 0.89; // Design Efficiency
-S_map.PRdes = 9.6;  // Design Pressure Ratio
+S_map.effDes = 0.9; // Design Efficiency .89
+S_map.PRdes = 8.6;  // Design Pressure Ratio
 }
 
 
 //########### Engine Core Diffuser#################
 Element Diffuser DIFFUSEREC {
-dPqP = 0.025; 
+dPqP = 0.04; 
 }
 
  //########### Engine Core FuelStart ################
  Element FuelStart FUELSTARTEC {
  //fuelType = "Jet-A(L)";
- LHV = 18513; // lower heating value
+ LHV = 18540; // lower heating value
  }
  
  //############### Engine Core Burner ###############
  Element Burner BURNER {
  //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
  //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
- effBase = 0.985; //Adiabatic burner efficiency, from socket
+ effBase = 0.98; //Adiabatic burner efficiency, from socket .985
  dPqPBase = 0.04; //duct friction pressure drop
  countFuelMax = 250; //fuel loop max counter
  switchBurn = "TEMPERATURE";
- TtCombOut = 3060; // exit temperature in R
+ TtCombOut = 2700; // exit temperature in R
  }
  
   //################# Engine Core Bleed 1 ##################
@@ -103,7 +103,7 @@ Element Bleed BLEEDEC1 {
 //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
  //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
  #include "hpt.map"
- S_map.effDes = 0.88;
+ S_map.effDes = 0.9;
  }
  
  //################# Engine Core Bleed 2 ##################
@@ -119,7 +119,7 @@ Element Bleed BLEEDEC2 {
 //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
  //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
  #include "lpt.map"
- S_map.effDes = 0.87;
+ S_map.effDes = 0.9;
  }
  
   //################# Engine Core Bleed 3 ##################
@@ -147,7 +147,7 @@ Element Bleed BLEEDEC3 {
   //################# FuelStart ########################
    Element FuelStart FUELSTARTAB {
  //fuelType = "Jet-A(L)";
- LHV = 18513; // lower heating value
+ LHV = 18540; // lower heating value
  }
  
  //########### Afterburner #########################
@@ -159,16 +159,16 @@ Element Bleed BLEEDEC3 {
  effChemBase = 0.96; //base chemical efficiency
  
  //Afterburner off
- //switchBurn = "WFUEL";
- //dPqPBase = 0.05; 
- //Wfuel = 0;
+ switchBurn = "WFUEL";
+ dPqPBase = 0.05; 
+ Wfuel = 0;
  
  //Afterburner on
- switchBurn = "TEMPERATURE";
- dPqPBase = 0.09;
- TtCombOut = 4140;
- switchBurn = "FAR";
- FAR = 0.06836;
+// switchBurn = "TEMPERATURE";
+ //dPqPBase = 0.02;
+ // TtCombOut = 4000;
+ // switchBurn = "FAR";
+ //FAR = 0.06836;
  }
 
  //############ Bleed #####################
@@ -189,7 +189,7 @@ PsExhName = "AMBIENT.Fl_O.Ps";
 switchType = "CON_DIV";
 switchCoef = "CV";
 Cv = 0.995;
-dPqP = 0.04; 
+dPqP = 0.01; 
 //Fl_O.MNfroz = 0.0; //use next two lines for freezing flow in the nozzle
 //Fl_Oideal.MNfroz = 0.0;
  }
