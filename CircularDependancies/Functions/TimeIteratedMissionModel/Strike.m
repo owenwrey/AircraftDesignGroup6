@@ -7,8 +7,8 @@ cfg = getConfig();
 
 displayTable = false;
 % segment names
-SegNames = {'SWT','TKO','CLIMB','CR OBD', 'DESC 1', 'COMBAT', 'WP FIRE', 'CLIMB2', 'CR IBD', ...
-'DESC 2', 'LTR2', 'LTS'};
+SegNames = {'SW','TKO','CLIMB 1','CR OBD', 'DESC 1', 'COMBAT', 'WP FIRE', 'CLIMB 2', 'CR IBD', ...
+'DESC 2', 'LTR2', 'LS'};
 % points per segment
 npts = [...
 3; % 1. start, warmup, taxi (SWT)

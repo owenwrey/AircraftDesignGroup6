@@ -7,8 +7,8 @@ cfg = getConfig();
 
 displayTable = false;
 % segment names
-SegNames = {'SWT','TKO','CLIMB','CR OBD', 'LTR 1', 'COMBAT', 'WP FIRE', 'CR IBD', ...
-'DESC', 'LTR2', 'LTS'};
+SegNames = {'SW','TKO','CLIMB','CR OBD', 'LTR 1', 'COMBAT', 'WP FIRE', 'CR IBD', ...
+'DESC', 'LTR2', 'LS'};
 % points per segment
 npts = [...
 3; % 1. start, warmup, taxi (SWT)
@@ -685,23 +685,7 @@ Tbl.WtDrop(i) = 0; % dropped weight (lb)
 Tbl.WtFrac(i) = Tbl.Weight(i)/Tbl.Weight(i-1);% weight fraction
 end
 
-
-
-
-
-% Any missing info: grab from Exam 2 problem setup
-% getting atmosphere properties
-% [T_K, a_ms, P_Pa, rho_kgm3] = atmosisa(Alt_m)
-% thrust model
-% THRUST = [SLS THRUST] * [LAPSE] * [THROT]
-% THROT: [0, 1.25]
-% 0-1.00: no afterburner
-% 1.00 - 1.25: afterburner engaged
-% thrust lapse model
-
-
 % equations
-
 Tbl.EnHt = Tbl.Alt + (Tbl.KTAS*NM2ft).^2/(2*32.17);
 % Tbl.GS = Tbl.KTAS.*cosd(Tbl.FPA);
 
