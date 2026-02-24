@@ -150,48 +150,46 @@ V_p = aircraft.fuelSys.VP;              % self-sealing tanks volume, gal
 N_t = aircraft.fuelSys.Nt;
 
 
+% engine structure calcs
+engine.mounts = 0.013*N_en^(0.795) * T^(0.579) * Nz;
 
-W_engine_mounts = 0.013*N_en^(0.795) * T^(0.579) * Nz;
+engine.firewall = 1.13*S_fw;
 
-W_firewall = 1.13*S_fw;
+engine.section = 0.01*W_en^(0.717) * N_en * Nz;
 
-W_engine_section = 0.01*W_en^(0.717) * N_en * Nz;
-
-W_air_induction = 13.29 * K_vg * L_d^(0.643) * K_d^(0.182) * N_en^(1.498) ...
+engine.airInduction = 13.29 * K_vg * L_d^(0.643) * K_d^(0.182) * N_en^(1.498) ...
     * (L_s_L_d)^(-0.373) * D_e;
 
-W_tailpipe = 3.5 * D_e * L_tp * N_en;
+engine.tailpipe = 3.5 * D_e * L_tp * N_en;
 
-W_engine_cooling = 4.55 * D_e * L_sh * N_en;
+engine.cooling = 4.55 * D_e * L_sh * N_en;
 
-W_oil_cooling = 37.82 * N_en^(1.023);
+engine.oilCooling = 37.82 * N_en^(1.023);
 
-W_engine_controls = 10.5 * N_en^(1.008) * L_ec^(0.222);
+engine.controls = 10.5 * N_en^(1.008) * L_ec^(0.222);
 
-W_starter = 0.025 * T_e^(0.760) * N_en^(0.72);
+engine.starter = 0.025 * T_e^(0.760) * N_en^(0.72);
 
-W_fuel_system = 7.45 * V_t^(0.47) * (1+V_i/V_t)^(-0.095) * (1+V_p/V_t)...
+% misc system calcs
+misc.fuelSystem = 7.45 * V_t^(0.47) * (1+V_i/V_t)^(-0.095) * (1+V_p/V_t)...
     * N_t^(0.066) * N_en^(0.052) * (T*SFC/1000)^(0.249);
 
-W_flight_controls = 36.28 * M^(0.003) * S_cs^(0.489) * N_s^(0.484) * N_c^(0.127);
+misc.flightControls = 36.28 * M^(0.003) * S_cs^(0.489) * N_s^(0.484) * N_c^(0.127);
 
-W_instruments = 8.0 + 36.37 * N_en^(0.676) * N_t^(0.237) + 26.4*(1+N_ci)^(1.356);
+misc.instruments = 8.0 + 36.37 * N_en^(0.676) * N_t^(0.237) + 26.4*(1+N_ci)^(1.356);
 
-W_hydraulics  = 37.23 * K_vsh * N_u^(0.664);
+misc.hydraulics  = 37.23 * K_vsh * N_u^(0.664);
 
-W_electrical  = 172.2 * K_mc * R_kva^(0.152) * N_c^(0.10) * L_a^(0.10) * ...
+misc.electrical  = 172.2 * K_mc * R_kva^(0.152) * N_c^(0.10) * L_a^(0.10) * ...
     N_gen^(0.091);
 
-W_avionics   = 2.117 * W_uav^(0.933);
+misc.avionics   = 2.117 * W_uav^(0.933);
 
-W_furnishings = 217.6 * N_c;
+misc.furnishings = 217.6 * N_c;
 
-W_AC_AI = 201.6 * ((W_uav+200*N_c)/1000)^(.735);
+misc.AC_AI = 201.6 * ((W_uav+200*N_c)/1000)^(.735);
 
-W_handlingGear = 3.2e-4 * W0;
-
-
-
+misc.handlingGear = 3.2e-4 * W0;
 
 
 
@@ -229,16 +227,15 @@ W_handlingGear = 3.2e-4 * W0;
 
 
 
+prevWeight = aircraft.constants.emptyWeight;
 
+aircraft.constants.emptyWeight = aircraft.wing.weight + aircraft.ht.weight ... 
+    + aircraft.vt.weight + aircraft.fuselage.weight + aircraft.gear.mg.weight ...
+    + aircraft.gear.ng.weight + sum(engine) + sum(misc);
 
+weightDiff = prevWeight - aircraft.constants.emptyWeight;
 
-prevWeight = weight.total;
-
-weight.total = weight.fuel + weight.payload + weight.ng + weight.mg + weight.avionics + aircraft.wing.weight + aircraft.ht.weight + aircraft.vt.weight;
-
-aircraft.constants.emptyWeight = weight.total;
-
-weights = [prevWeight;aircraft.constants.emptyWeight];
+weights = [weightDiff;aircraft.constants.emptyWeight];
 
 
 
