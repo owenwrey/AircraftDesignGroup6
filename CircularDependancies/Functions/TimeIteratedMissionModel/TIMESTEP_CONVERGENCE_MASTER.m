@@ -6,6 +6,8 @@ Results = struct;
 
 missionToRun = string(missionToRun);
 
+% switch looks at which mission is set to run, runs it,'
+% and replaces aircraft with its aircraft output
 switch missionToRun
 
     case "A2A"

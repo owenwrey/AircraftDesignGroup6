@@ -563,7 +563,7 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 
 Tbl.dTime(i) = (Tbl.Alt(i) - Tbl.Alt(i-1))/Tbl.dhdt(i);% delta time (min)
 Tbl.Time(i) = Tbl.dTime(i)+Tbl.Time(i-1); % time (min)
-Tbl.GS(i) = Tbl.KTAS(i)*sind(Tbl.FPA(i)); % ground speed (kt)
+Tbl.GS(i) = Tbl.KTAS(i)*cosd(Tbl.FPA(i)); % ground speed (kt)
 Tbl.FPA(i) = asind(Tbl.dhdt(i)/(Tbl.KTAS(i)*kts2fps*60)); % flightpath angle (deg)
 Tbl.Dist(istart9) = Tbl.Dist(istart9 - 1);
 Tbl.Dist(i) = Tbl.GS(i)*Tbl.dTime(i)/60 + Tbl.Dist(istart9 - 1); % distance (NM)
@@ -702,8 +702,8 @@ end
 
 % equations
 
-Tbl.EnHt = Tbl.Alt + (Tbl.KTAS*NM2ft).^2/(2*32.17);
-Tbl.GS = Tbl.KTAS.*cosd(Tbl.FPA);
+% Tbl.EnHt = Tbl.Alt + (Tbl.KTAS*NM2ft).^2/(2*32.17);
+% Tbl.GS = Tbl.KTAS.*cosd(Tbl.FPA);
 if displayTable == true
     disp(Tbl);
 end
