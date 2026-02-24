@@ -1,13 +1,7 @@
 function weights = EWB(aircraft)
 
 % initialize variables
-weight.fuel = aircraft.constants.fuelWeight;
 W0 = aircraft.constants.totalWeight;
-weight.payload = aircraft.strike.weight;
-weight.mg = aircraft.gear.mg.weight;
-weight.ng = aircraft.gear.ng.weight;
-weight.avionics = aircraft.avionics.weight;
-
 cruiseDynamicPressure = aircraft.constants.cDP;
 T2C = aircraft.wing.T2C;                    % thickness to chord ratio
 N_lim = aircraft.constants.limitLoad;       % limit load factor (8g)
