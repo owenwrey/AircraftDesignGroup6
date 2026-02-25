@@ -55,7 +55,7 @@ Element Compressor LPC {
 //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 S_map.effDes = 0.9; // Design Efficiency .845
-S_map.PRdes = 3.57;  // Design Pressure Ratio
+S_map.PRdes = 3.6;  // Design Pressure Ratio
 
 }
 
@@ -65,7 +65,7 @@ Element Compressor HPC {
 //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 S_map.effDes = 0.9; // Design Efficiency .89
-S_map.PRdes = 8.6;  // Design Pressure Ratio
+S_map.PRdes = 8.5;  // Design Pressure Ratio
 }
 
 
@@ -88,7 +88,7 @@ dPqP = 0.04;
  dPqPBase = 0.04; //duct friction pressure drop
  countFuelMax = 250; //fuel loop max counter
  switchBurn = "TEMPERATURE";
- TtCombOut = 2700; // exit temperature in R
+ TtCombOut = 3200; // exit temperature in R
  }
  
   //################# Engine Core Bleed 1 ##################
@@ -160,14 +160,14 @@ Element Bleed BLEEDEC3 {
  
  //Afterburner off
  switchBurn = "WFUEL";
- dPqPBase = 0.05; 
+ dPqPBase = 0.02; 
  Wfuel = 0;
  
  //Afterburner on
-// switchBurn = "TEMPERATURE";
- //dPqPBase = 0.02;
- // TtCombOut = 4000;
- // switchBurn = "FAR";
+ //switchBurn = "TEMPERATURE";
+ //dPqPBase = 0.05;
+ //TtCombOut = 4000;
+ //switchBurn = "FAR";
  //FAR = 0.06836;
  }
 
