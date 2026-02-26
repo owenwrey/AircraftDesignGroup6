@@ -107,7 +107,7 @@ aircraft.vt.chord.tip_each  = Ctip_VT_each;
 
 end
 
-
+%{
 %% Engine & Systems
 K_vg = 1.62; %For variable geomtry (otherwise = 1)
 K_d = 2.75; % Sqaure Inlet Duct
@@ -167,3 +167,4 @@ aircraft.enginesystems.systemElectricalRating = R_kva; %Typically 110-160 for fi
 aircraft.enginesystems.electricalRoutingDistance =  L_a; %generators to avionics to cockpit, ft duct length, ft
 aircraft.enginesystems.uninstalledAvionicsWeight = W_uav; %Typically 800-1400 lbs
 aircraft.constants.totalWeight = W_dg; %typically 50-60% of internal fuel for military aircraft
+%}
