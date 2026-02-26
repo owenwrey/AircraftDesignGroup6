@@ -27,7 +27,7 @@ if ~isfield(aircraft.vt,'twinTail')
 end
 
 %% Pull inputs
-W0 = aircraft.constants.totalWeight;
+W0 = aircraft.weight.total;
 WS = aircraft.constants.wingLoading;
 
 Lf = aircraft.fuselage.length;

@@ -1,7 +1,7 @@
 function weights = EWB(aircraft)
 
 % initialize variables
-W0 = aircraft.constants.totalWeight;
+W0 = aircraft.weight.total;
 T2C = aircraft.wing.T2C;                    % thickness to chord ratio
 N_lim = aircraft.constants.limitLoad;       % limit load factor (8g)
 Nz = N_lim*1.5;                             % ultimate load factor
@@ -90,7 +90,8 @@ aircraft.fuselage.weight = .499*K_dwf * W0^(.35) * Nz^(.25) * L^(.5) * D^(.849).
 N_gear = 5.5;
 K_cb = 1;                                   % cross-beam gear (we are not cross-beam)
 K_tpg = .826;                               % tripod gear (we are tripod)
-W_l = aircraft.constants.landingWeight;     % landing design gross weight, lb
+% W_l = aircraft.constants.landingWeight;     % landing design gross weight, lb
+W_l = aircraft.weight.totalOnLanding;     % landing design gross weight, lb
 N_l = 1.5*N_gear;                           % ultimate landing load factor
 L_m = aircraft.gear.mg.extendedLength;      % extended length of main gear, in
 
@@ -191,15 +192,15 @@ aircraft.enginesystems.efcpDistance = L_ec;         % engine front to cockpit di
 aircraft.enginesystems.numberOfFlightControlSystem = N_s; 
 
 
-prevWeight = aircraft.constants.emptyWeight;
+prevWeight = aircraft.weight.empty;
 
-aircraft.constants.emptyWeight = aircraft.wing.weight + aircraft.ht.weight ... 
+aircraft.weight.empty = aircraft.wing.weight + aircraft.ht.weight ... 
     + aircraft.vt.weight + aircraft.fuselage.weight + aircraft.gear.mg.weight ...
     + aircraft.gear.ng.weight + sum(engine) + sum(misc);
 
-weightDiff = prevWeight - aircraft.constants.emptyWeight;
+weightDiff = prevWeight - aircraft.weight.empty;
 
-weights = [weightDiff;aircraft.constants.emptyWeight];
+weights = [weightDiff;aircraft.weight.empty];
 
 
 end
