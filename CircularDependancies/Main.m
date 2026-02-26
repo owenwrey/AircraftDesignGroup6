@@ -54,7 +54,7 @@ while( not(exitFlag) && iteration < iterationMax )
 
 
     %-| Empty Weight Buildup |---------------------------------------------
-
+    aircraft = EWB(aircraft); % idk if these are the right i/o's - Owen
     %----------------------------------------------------------------------
 
 
@@ -69,21 +69,20 @@ while( not(exitFlag) && iteration < iterationMax )
 
     %----------------------------------------------------------------------
 
-
-    %-| Fixed MTOW convergence Check |-------------------------------------
-    % type "help continue" to see how to send while loop back to top
-
-    if abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance
-      continue; % this should go back to the top of the while loop
-    end % go on to time-iterated mission model
-
+    
+    %-| Landing Gear Convergence Check |-----------------------------------
 
     %----------------------------------------------------------------------
 
 
+    %-| Fixed MTOW convergence Check |-------------------------------------
+    if abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance
+      continue; % this should go back to the top of the while loop
+    end % go on to time-iterated mission model
+    %----------------------------------------------------------------------
+
 
     %-| Time Iterated Mission Model |--------------------------------------
-    % run time step here
     aircraft = TIMESTEP_CONVERGENCE_MASTER(aircraft, missionToRun);
     %----------------------------------------------------------------------
 
@@ -98,5 +97,5 @@ end
 
 
 %-| Display Results |------------------------------------------------------
-fprintf('Converged!!!\n')
+fprintf('Converged after %u iterations\n', iteration)
 %--------------------------------------------------------------------------
