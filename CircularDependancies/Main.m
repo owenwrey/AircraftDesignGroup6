@@ -44,6 +44,7 @@ while( not(exitFlag) && iteration < iterationMax )
     %-| Geometry Updater |-------------------------------------------------
 
     %----------------------------------------------------------------------
+    aircraft = dimensionalize_aircraft(aircraft);
 
 
 
