@@ -2,23 +2,43 @@ function aircraft = TIMESTEP_CONVERGENCE_MASTER(aircraft, missionToRun)
 % inputs: aircraft (structure)
 %         missionToRun: a string that is either 'A2A' or 'Strike' or 'Both'
 
-Results = struct;
+%% Initialize struct and constants
+% Ensure required sub-structs exist
+if ~isfield(aircraft, 'constants') || ~isstruct(aircraft.constants)
+    aircraft.constants = struct();
+end
+
+if ~isfield(aircraft, 'weight') || ~isstruct(aircraft.weight)
+    aircraft.weight = struct();
+end
+
+% Only set defaults if they do not already exist
+if ~isfield(aircraft.constants, 'wingLoading')
+    aircraft.constants.wingLoading = 115;
+    warning("Used hardcoded wingLoading")
+end
+
+if ~isfield(aircraft.weight, 'tolerance')
+    aircraft.weight.tolerance = 0.06;
+    warning("Used hardcoded weight.tolerance")
+end
+
+%% Run Mission
 
 missionToRun = string(missionToRun);
 
-% switch looks at which mission is set to run, runs it,'
+% switch looks at which mission is set to run, runs it,
 % and replaces aircraft with its aircraft output
 switch missionToRun
 
     case "A2A"
-        Results.A2A = A2A(aircraft);
-        aircraft = Results.A2A;
+        aircraft = A2A(aircraft);
 
     case "Strike"
-        Results.Strike = Strike(aircraft);
-        aircraft = Results.Strike;
+        aircraft = Strike(aircraft);
 
     case "Both"
+        Results = struct;
         Results.A2A = A2A(aircraft);       
         Results.Strike = Strike(aircraft);
 

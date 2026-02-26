@@ -3,7 +3,7 @@ function aircraftResults = A2A(aircraft)
 
 % clc
 clearvars -except aircraft Results;
-cfg = getConfig();
+cfg = getConfig(aircraft);
 
 displayTable = false;
 % segment names

@@ -3,7 +3,7 @@ function aircraftResults = Strike(aircraft)
 
 % clc
 clearvars -except aircraft Results;
-cfg = getConfig();
+cfg = getConfig(aircraft);
 
 displayTable = false;
 % segment names
@@ -793,7 +793,7 @@ W_payload = cfg.W.PL.A2A; % weight of weapons
 
 if isfield(aircraft, "weight") && isfield(aircraft.weight, "empty")
     noEmptyWeightFlag = false;
-    OEW = aircraft.weight.empt;
+    OEW = aircraft.weight.empty;
     
 else
     noEmptyWeightFlag = true;
