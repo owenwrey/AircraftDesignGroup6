@@ -10,9 +10,10 @@ addpath(genpath('Functions')); % lets matlab see all the functions within Functi
 missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
 % missionToRun = "A2A";
 
-%% -| Aircraft Struct |----------------------------------------------------
-% All variable information related to the aircraft should be
-% stored/accesible in this struct.
+%% -| Aircraft Struct (iterated variables)|--------------------------------
+% All variables that may change with each iteration should be defined here
+% (e.g cg.x, weight.total, weight.empty, 
+aircraft = struct;
 
 aircraft.cg.x = 0;
 aircraft.cg.y = 0;
@@ -24,7 +25,7 @@ tempConfig = getConfig();
 aircraft.weight.tolerance = tempConfig.weightTolerance;
 clearvars tempConfig;
 
-%example component
+%% -| Aircraft Struct (constant "variables")|--------------------------------
 
 
 

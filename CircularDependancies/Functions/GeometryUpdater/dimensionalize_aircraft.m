@@ -4,8 +4,11 @@ function aircraft = dimensionalize_aircraft(aircraft)
 %% Required checks 
 req = @(s,f) isfield(s,f) && ~isempty(s.(f));
 
-if ~isfield(aircraft,'constants') || ~req(aircraft.constants,'totalWeight') || ~req(aircraft.constants,'wingLoading')
-    error('Need aircraft.constants.totalWeight and aircraft.constants.wingLoading.');
+if ~isfield(aircraft,'constants') || ~req(aircraft.constants,'wingLoading')
+    error('Need aircraft.constants.wingLoading.');
+end
+if ~isfield(aircraft,'weight') || ~req(aircraft.constants,'total')
+    error('Need aircraft.weight.total.');
 end
 if ~isfield(aircraft,'fuselage') || ~req(aircraft.fuselage,'length') || ~req(aircraft.fuselage,'diameter')
     error('Need aircraft.fuselage.length and aircraft.fuselage.diameter.');
