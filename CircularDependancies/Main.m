@@ -7,7 +7,8 @@ clc; clear; close all
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
 %% Mission Select
-missionToRun = 'Strike'; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
+missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
+% missionToRun = "A2A";
 
 %% -| Aircraft Struct |----------------------------------------------------
 % All variable information related to the aircraft should be
