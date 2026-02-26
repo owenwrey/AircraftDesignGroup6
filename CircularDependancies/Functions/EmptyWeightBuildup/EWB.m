@@ -2,7 +2,6 @@ function weights = EWB(aircraft)
 
 % initialize variables
 W0 = aircraft.constants.totalWeight;
-cruiseDynamicPressure = aircraft.constants.cDP;
 T2C = aircraft.wing.T2C;                    % thickness to chord ratio
 N_lim = aircraft.constants.limitLoad;       % limit load factor (8g)
 Nz = N_lim*1.5;                             % ultimate load factor
@@ -28,10 +27,11 @@ chord50_20 = chord50*chordFrac;                     % 20% chord @ 50% span
 chord90_20 = chord90*chordFrac;                     % 20% chord @ 90% span
 span50 = wing.span*.5;                              % 50% wingspan
 span40 = wing.span*.4;                              % 40% wingspan
-flapArea = .5*(chord0_20 + chord50_20)*span50;      % flap area, ft^2
-aileronArea = .5*(chord90_20 + chord50_20)*span40;  % aileron area, ft^2
-S_csw = flapArea + aileronArea;                     % total control surface area
+aircraft.wing.flapArea = .5*(chord0_20 + chord50_20)*span50;        % flap area, ft^2
+aircraft.wing.aileronArea = .5*(chord90_20 + chord50_20)*span40;    % aileron area, ft^2
+S_csw = aircraft.wing.flapArea + aircraft.wing.aileronArea;         % total control surface area
 
+aircraft.wing.controlSurfaceArea = S_csw;
 
 % horizontal tail
 ht.area = aircraft.ht.Area;
@@ -52,9 +52,10 @@ vt.chord90 = 1;
 vt.chord0_20 = vt.rootChord*.2;
 vt.chord90_20 = vt.chord90*.2;
 vt.span = sqrt(vt.AspectRatio*vt.area);
-vt.rudderArea = .5*(vt.chord0_20 + vt.chord90_20)*vt.span*.9;
+aircraft.vt.rudderArea = .5*(vt.chord0_20 + vt.chord90_20)*vt.span*.9;
 
-%% Calculate New Weights
+
+%% Wing, ht, vt, fuselage and gear weights
 % from Raymer Fighter/Attack Weights, Sec 15.3.1
 
 % main wing
@@ -73,7 +74,7 @@ K_rht = 1.047;
 L_t = aircraft.vt.leverArm;
 
 aircraft.vt.weight = .452*K_rht * (W0*Nz)^(.488) * vt.area^(.718) * M^(.341)...
-    * L_t^(-1) * (1+vt.rudderArea/vt.area)^(.348) * vt.AspectRatio^.223...
+    * L_t^(-1) * (1+aircraft.vt.rudderArea/vt.area)^(.348) * vt.AspectRatio^.223...
     * (1+vt.TaperRatio)^(.25) * cosd(vt.QuarterChordSweep)^(-.323);
 
 % fuselage
@@ -91,18 +92,15 @@ K_cb = 1;                                   % cross-beam gear (we are not cross-
 K_tpg = .826;                               % tripod gear (we are tripod)
 W_l = aircraft.constants.landingWeight;     % landing design gross weight, lb
 N_l = 1.5*N_gear;                           % ultimate landing load factor
-L_m = ;                                     % extended length of main gear, in
+L_m = aircraft.gear.mg.extendedLength;      % extended length of main gear, in
 
 aircraft.gear.mg.weight = K_cb * K_tpg * (W_l*N_l)^(.25) * L_m^(.973);
 
 % nose landing gear
 N_nw = 2;                                   % number of nosewheels
-L_n = ;                                     % extended length of nose gear, in
+L_n = aircraft.gear.ng.extendedLength;      % extended length of nose gear, in
 
 aircraft.gear.ng.weight = (W_l*N_l)^(.29) * L_n^(.5) * N_nw^(.525);
-
-
-
 
 
 
@@ -113,36 +111,33 @@ K_d = 2.75;             % Sqaure Inlet Duct
 L_s_L_d = 1;            % single duct length to duct length, 1 bc each engine has its own duct
 K_vsh = 1.425;          % Variable sweep, 1 otherwise
 K_mc = 1.45;            % if mission completion required after failure, otherwise = 1
-W_uav = 800;            % uninstalled avionics weight
+W_uav = 800;            % uninstalled avionics weight (800 lbs maybe)
 S_fw = ((46.5/12)*(182/12))*3 + (47/12)^2-(pi*(46.5/12)^2)*2;        % firewall surface area, ft^2
-S_cs = S_csw + ht.area + vt.rudderArea; % total control surface area
+S_cs = S_csw + ht.area + aircraft.vt.rudderArea;        % total control surface area
 
 N_en = 2;               % number of engines
 N_c = 1;                % number of crew
-N_s = 2;                % numberof flight control systems
+N_s = 2;                % number of flight control systems
 N_ci = 1;               % number of crew equivalents
 N_u = 9;                % # hydraulic functions (gear, ailerons, flaps, ht, vt, airbrake, brakes, canopy, folding wings)
 N_gen = N_en;           % number of generators
 
 W_en = aircraft.engine.weight;
-T_e = aircraft.engine.thrust;           % thrust per engine
-T = T_e * N_en;                         % total thrust
+T_e = aircraft.engine.thrust;               % thrust per engine
+T = T_e * N_en;                             % total thrust
 D_e = 46.5/12;          % engine diameter, ft
 L_tp = 0;               % length of tailpipe, ft. 0 bc engine has nozzle???
 L_sh = 3;               % length of cooling shroud, ft, just a guess
-L_ec = 70;              % dist from engine to cockpit, total if mult engines, ft
-% (FS.engine - FS.cockpit) * N_en
+L_ec = (FS.engine - FS.cockpit) * N_en;     % dist from engine to cockpit, total if mult engines, ft
 SFC = aircraft.engine.TSFC(1);
-R_kva = 140;    % system electrical rating, 110-160 for fighters
-L_a = 30;       % electrical routing dist, ft (between gen, avionics, & cockpit)
-% (FS.engine - FS.cockpit)
+R_kva = 140;                                % system electrical rating, 110-160 for fighters
+L_a = FS.engine - FS.cockpit;               % electrical routing dist, ft (between gen, avionics, & cockpit)
 
 V_t = aircraft.constants.fuelVolume;    % fuel volume, gal
 V_i = aircraft.fuelSys.VI;              % integral fuel volume, gal
 % tanks made from cavities within the airframe, not dedicated fuel tanks
 V_p = aircraft.fuelSys.VP;              % self-sealing tanks volume, gal
 N_t = aircraft.fuelSys.Nt;
-
 
 % engine structure calcs
 engine.mounts = 0.013*N_en^(0.795) * T^(0.579) * Nz;
@@ -186,39 +181,14 @@ misc.AC_AI = 201.6 * ((W_uav+200*N_c)/1000)^(.735);
 misc.handlingGear = 3.2e-4 * W0;
 
 
-
-
-
-
-
-% aircraft.enginesystems.numberOfEngines  = N_en;
-% aircraft.engine.thrust = T;   
-% aircraft.constants.n_ult = N_z;                     % 1.5*limit load factor
-% aircraft.enginesystems.fwSurfaceArea = S_fw;        % Firewall surface area
-% aircraft.enginesystems.engineWeight  = W_en;
-% aircraft.enginesystems.ductLength = L_d;
-% aircraft.enginesystems.engineDiameter = D_e;
-% aircraft.enginesystems.tailpipe = L_tp;
-% aircraft.enginesystems.shroudLength = L_sh;
-% aircraft.enginesystems.efcpDistance = L_ec;         % engine front to cockpit distance (total if multiple engines)
-% aircraft.enginesystems.thrustPerEngine = T_e;
-% aircraft.enginesystems.totalFuelVolume = V_t;       % gallons
-% aircraft.enginesystems.integralTankVolume = V_i;    % gallons
-% aircraft.enginesystems.selfSealTankVolume = V_p;    % gallons
-% aircraft.enginesystems.numberOfFuelTanks = N_t; 
-% aircraft.enginesystems.specficFuelConsumption = SFC; 
-% aircraft.enginesystems.mach = M;
-% aircraft.enginesystems.constrolSurfaceArea = S_cs; 
-% aircraft.enginesystems.numberOfFlightControlSystem = N_s; 
-% aircraft.enginesystems.numberOfCrew = N_c; 
-% aircraft.enginesystems.numberOfCrewEquivalence = N_ci; % 1 if one pilot, 1.2 if pilot + back seater, 2 if pilot and copilot
-% aircraft.enginesystems.numberOfHydraulicUtilityFunction = N_u; %Typically 5 to 15
-% aircraft.enginesystems.systemElectricalRating = R_kva; %Typically 110-160 for fighters and bombers
-% aircraft.enginesystems.electricalRoutingDistance =  L_a; %generators to avionics to cockpit, ft duct length, ft
-% aircraft.enginesystems.uninstalledAvionicsWeight = W_uav; %Typically 800-1400 lbs
-% aircraft.constants.totalWeight = W_dg; %typically 50-60% of internal fuel for military aircraft
-
-
+aircraft.engine.firewallSA = S_fw;
+aircraft.aero.totalControlSurfaceArea = S_cs;
+aircraft.enginesystems.numberOfEngines  = N_en;
+aircraft.enginesystems.engineDiameter = D_e;
+aircraft.enginesystems.tailpipe = L_tp;
+aircraft.enginesystems.shroudLength = L_sh;
+aircraft.enginesystems.efcpDistance = L_ec;         % engine front to cockpit distance (total if multiple engines)
+aircraft.enginesystems.numberOfFlightControlSystem = N_s; 
 
 
 prevWeight = aircraft.constants.emptyWeight;
@@ -232,6 +202,4 @@ weightDiff = prevWeight - aircraft.constants.emptyWeight;
 weights = [weightDiff;aircraft.constants.emptyWeight];
 
 
-
 end
-
