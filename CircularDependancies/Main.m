@@ -93,7 +93,7 @@ iterationMax = 1000;
 
 while( not(exitFlag) && iteration < iterationMax )
     iteration = iteration + 1;
-
+    fprintf("   Iteration: %u\n", iteration);
     aircraftOld = aircraft;
     
     %% -| Geometry Updater |-----------------------------------------------
@@ -151,6 +151,8 @@ end
 
 
 %% -| Display Results |----------------------------------------------------
-fprintf('\n Converged after %u iterations\n', iteration)
+fprintf("\n Converged after %u iterations\n", iteration)
+fprintf(" MTOW: %f lb\n", aircraft.weight.total)
+fprintf("  EOW: %f lb\n", aircraft.weight.empty)
 %--------------------------------------------------------------------------
 
