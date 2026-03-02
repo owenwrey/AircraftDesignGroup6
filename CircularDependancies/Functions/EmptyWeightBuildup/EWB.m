@@ -2,7 +2,7 @@ function aircraft = EWB(aircraft)
 
 % initialize variables
 W0 = aircraft.weight.total;
-T2C = aircraft.wing.taper_ratio;            % thickness to chord ratio
+T2C = aircraft.wing.T2C;                    % thickness to chord ratio
 N_lim = aircraft.constants.limitLoad;       % limit load factor (8g)
 Nz = aircraft.constants.ultLoad;            % ultimate load factor
 M = aircraft.constants.maxMach;             % max Mach number
