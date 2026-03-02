@@ -1,4 +1,4 @@
-function weights = EWB(aircraft)
+function aircraft = EWB(aircraft)
 
 % initialize variables
 W0 = aircraft.weight.total;
@@ -200,7 +200,7 @@ aircraft.weight.empty = aircraft.wing.weight + aircraft.ht.weight ...
 
 weightDiff = prevWeight - aircraft.weight.empty;
 
-weights = [weightDiff;aircraft.weight.empty];
+% weights = [weightDiff;aircraft.weight.empty];
 
 
 end
