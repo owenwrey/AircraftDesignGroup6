@@ -49,8 +49,6 @@ aircraft.constants.wingLoading = 112; % [lbf/ft]
 
 % Time-Step Mission
 aircraft.weight.tolerance = 0.06; % GO TO getConfig to uncomment
-
-
 % -------------------------------------------------------------------------
 
 %% Calculation Loop
