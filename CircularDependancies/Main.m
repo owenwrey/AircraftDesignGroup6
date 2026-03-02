@@ -152,7 +152,7 @@ end
 
 %% -| Display Results |----------------------------------------------------
 fprintf("\n Converged after %u iterations\n", iteration)
-fprintf(" MTOW: %f lb\n", aircraft.weight.total)
-fprintf("  EOW: %f lb\n", aircraft.weight.empty)
+fprintf(" MTOW: %.0f lb\n", aircraft.weight.total)
+fprintf("  EOW: %.0f lb\n", aircraft.weight.empty)
 %--------------------------------------------------------------------------
 
