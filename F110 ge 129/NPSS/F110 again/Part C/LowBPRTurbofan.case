@@ -1,0 +1,46 @@
+solver.maxIterations = 100;
+
+// Define output stream destination
+OutFileStream case1 {
+    filename = "test.case1";
+}
+
+// Define desired outputs for CaseRowViewer
+CaseColumnViewer Case1 {
+    outStreamHandle = "case1";
+    titleBody = "???????????????????? Run on ???????? at ????????";
+    titleVars = { "VERSION",                 "date",     "timeOfDay" }
+variableList = {"AMBIENT.alt = ALT", 
+             
+				"PERF.TSFC:??.?????=TSFC",
+				
+				"PERF.Fn:??????.????=Fn"
+				
+    }
+}
+
+// Attach post execution processor to sequence
+solver.postExecutionSequence.append( "Case1" );
+
+// Run on-design case
+setOption( "switchDes", "DESIGN" );
+autoSolverSetup();
+CASE++;
+run();
+
+// Set up off-design case
+setOption( "switchDes", "OFFDESIGN" );
+autoSolverSetup();
+
+// Loop altitude over desired range
+for (AMBIENT.alt = 0; AMBIENT.alt <40001; AMBIENT.alt += 1000) {
+
+    CASE++;
+    run();
+	
+}
+
+// Send results to outputs (ncp.view and case1)
+ ncpView.display();
+ Case1.display();
+

@@ -1,0 +1,280 @@
+solver.maxIterations = 100;
+
+
+OutFileStream case1 {
+    filename = "test.case1";
+}
+
+CaseColumnViewer Case1 {
+    outStreamHandle = "case1";
+    titleBody = "???????????????????? Run on ???????? at ????????";
+    titleVars = { "VERSION",                 "date",     "timeOfDay" }
+	variableList = { "AMBIENT.alt = ALT",
+				"AMBIENT.MN:?.????=Mn",
+				"PERF.TSFC:??.?????????=TSFC",
+				"PERF.Fn:??????????.?=Fn",
+				"(0.5*FL0.gamt*AMBIENT.Ps*AMBIENT.MN*AMBIENT.MN): ???????????.??????=q_out"
+				}
+
+		}
+solver.postExecutionSequence.append( "Case1" );
+
+
+
+setOption( "switchDes", "DESIGN" );
+autoSolverSetup();
+CASE++;
+run();
+
+
+
+
+setOption( "switchDes", "OFFDESIGN" );
+autoSolverSetup();
+
+AMBIENT.alt = 0; 
+AMBIENT.MN = 0.436002311324377;
+
+CASE++;  
+run();
+
+
+
+AMBIENT.alt = 1000; 
+AMBIENT.MN = 0.443977989501242;
+
+CASE++;  
+run();
+
+
+
+AMBIENT.alt = 2000; 
+AMBIENT.MN = 0.452158130502679;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 3000; 
+AMBIENT.MN = 0.460508330594127;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 4000; 
+AMBIENT.MN = 0.469050049071251;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 5000; 
+AMBIENT.MN = 0.477816394011652;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 6000; 
+AMBIENT.MN = 0.486870528103352;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 7000; 
+AMBIENT.MN = 0.496179223842547;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 8000; 
+AMBIENT.MN = 0.505737042599501;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 9000; 
+AMBIENT.MN = 0.515548850340881;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 10000; 
+AMBIENT.MN = 0.525627089342897;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 11000; 
+AMBIENT.MN = 0.535977208547770;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 12000; 
+AMBIENT.MN = 0.546612554133684;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 13000; 
+AMBIENT.MN = 0.557539224429708;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 14000; 
+AMBIENT.MN = 0.568771556005929;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 15000; 
+AMBIENT.MN = 0.580318443675270;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 16000; 
+AMBIENT.MN = 0.592189093698352;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 17000; 
+AMBIENT.MN = 0.604399512633298;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 18000; 
+AMBIENT.MN = 0.616957770399371;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 19000; 
+AMBIENT.MN = 0.629881126928149;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 20000; 
+AMBIENT.MN = 0.643178607724493;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 21000; 
+AMBIENT.MN = 0.656868854273350;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 22000; 
+AMBIENT.MN = 0.670961962022351;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 23000; 
+AMBIENT.MN = 0.685478097683667;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 24000; 
+AMBIENT.MN = 0.700428556565082;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 25000; 
+AMBIENT.MN = 0.715835192624747;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 26000; 
+AMBIENT.MN = 0.731710648332572;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 27000; 
+AMBIENT.MN = 0.748078647467344;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 28000; 
+AMBIENT.MN = 0.764956081171325;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 29000; 
+AMBIENT.MN = 0.782360548745166;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 30000; 
+AMBIENT.MN = 0.800318974828243;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 31000; 
+AMBIENT.MN = 0.818739888268561;
+
+CASE++;  
+run();
+
+AMBIENT.alt = 32000; 
+AMBIENT.MN = 0.837669112672575;
+
+CASE++;  
+run();
+AMBIENT.alt = 33000; 
+AMBIENT.MN = 0.857223331303485;
+
+CASE++;  
+run();
+AMBIENT.alt = 34000; 
+AMBIENT.MN = 0.877591861422435;
+
+CASE++;  
+run();
+AMBIENT.alt = 35000; 
+AMBIENT.MN = 0.898698686717815;
+
+CASE++;  
+run();
+AMBIENT.alt = 36000; 
+AMBIENT.MN = 0.920511470879175;
+
+CASE++;  
+run();
+AMBIENT.alt = 37000; 
+AMBIENT.MN = 0.942906940523989;
+
+CASE++;  
+run();
+AMBIENT.alt = 38000; 
+AMBIENT.MN = 0.965841239238673;
+
+CASE++;  
+run();
+AMBIENT.alt = 39000; 
+AMBIENT.MN = 0.989333368330503;
+
+CASE++;  
+run();
+AMBIENT.alt = 40000; 
+AMBIENT.MN = 1.01339689592244;
+
+CASE++;  
+run();
+
+
+
+ncpView.display();
+Case1.display();

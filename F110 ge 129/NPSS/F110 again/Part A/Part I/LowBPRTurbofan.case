@@ -1,0 +1,15 @@
+solver.maxIterations = 100;
+
+setOption( "switchDes", "DESIGN" );
+autoSolverSetup();
+CASE++;
+run();
+ncpView.display();
+
+setOption( "switchDes", "OFFDESIGN" );
+autoSolverSetup();
+AMBIENT.MN = 0.8;
+AMBIENT.alt = 30000;
+CASE++;
+run();
+ncpView.display();
