@@ -1,0 +1,27 @@
+//--------------------------------------------------------
+// set the thermo package
+//--------------------------------------------------------
+setThermoPackage("GasTbl");
+
+//--------------------------------------------------------
+// include the standard interpreted items
+//--------------------------------------------------------
+#include <InterpIncludes.ncp>;
+#include <ncp.view>;
+
+//-------------------------------------------------------------------
+// #include the definition file for the user defined engine
+// performance component
+//-------------------------------------------------------------------
+#include <EngPerf.int>;
+
+#include <bleed_macros.fnc>;
+//-------------------------------------------------------------------
+// #include the Model Definition File
+//-------------------------------------------------------------------
+#include "LowBPRTurbofan.mdl";
+
+//-------------------------------------------------------------------
+// #include the Model Case Definition File
+//-------------------------------------------------------------------
+#include "LowBPRTurbofan.case";
