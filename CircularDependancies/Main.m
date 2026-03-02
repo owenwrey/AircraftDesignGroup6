@@ -32,17 +32,12 @@ aircraft.weight.fuel = 20e3;
 aircraft.weight.empty = 40e3;
 aircraft.weight.totalOnLanding = 42e3;
 
-
-
-% This just makes sure we are getting the tolerance from the same function
-% (getConfig) the time-step is. If you need to change it, change it there.
-tempConfig = getConfig();
-aircraft.weight.tolerance = tempConfig.weightTolerance;
-clearvars tempConfig;
-
 %% -| Aircraft Struct (constant "variables")|------------------------------
 % All variables that do not change in the loop but are necessary for
 % calculations in the loop (e.g. aircraft.constants.wingLoading, aircraft.weight.tolerance)
+
+% General
+aircraft.constants.wingLoading = 112; % [lbf/ft]
 
 % Geometry
 

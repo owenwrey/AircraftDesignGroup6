@@ -7,7 +7,7 @@ req = @(s,f) isfield(s,f) && ~isempty(s.(f));
 if ~isfield(aircraft,'constants') || ~req(aircraft.constants,'wingLoading')
     error('Need aircraft.constants.wingLoading.');
 end
-if ~isfield(aircraft,'weight') || ~req(aircraft.constants,'total')
+if ~isfield(aircraft,'weight') || ~req(aircraft.weight,'total')
     error('Need aircraft.weight.total.');
 end
 if ~isfield(aircraft,'fuselage') || ~req(aircraft.fuselage,'length') || ~req(aircraft.fuselage,'diameter')
