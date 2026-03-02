@@ -155,6 +155,6 @@ end
 
 
 %% -| Display Results |----------------------------------------------------
-fprintf('Converged after %u iterations\n', iteration)
+fprintf('\n Converged after %u iterations\n', iteration)
 %--------------------------------------------------------------------------
 
