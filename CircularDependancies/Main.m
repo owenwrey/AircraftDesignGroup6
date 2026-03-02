@@ -81,7 +81,7 @@ while( not(exitFlag) && iteration < iterationMax )
 
 
     %% -| Empty Weight Buildup |-------------------------------------------
-    aircraft = EWB(aircraft); % idk if these are the right i/o's - Owen
+    aircraft = EWB(aircraft); 
     %----------------------------------------------------------------------
 
 
