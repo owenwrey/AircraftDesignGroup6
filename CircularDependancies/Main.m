@@ -7,15 +7,32 @@ clc; clear; close all
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
 %% Mission Select
-missionToRun = 'Strike'; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
+missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
+% missionToRun = "A2A";
 
-%% -| Aircraft Struct |----------------------------------------------------
-% All variable information related to the aircraft should be
-% stored/accesible in this struct.
+%% -| Aircraft Struct (iterated variables)|--------------------------------
+% All variables that may change with each iteration should be defined here
+% (e.g aircraft.cg.x, aircraft.weight.total, aircraft.weight.empty)
+aircraft = struct;
 
+% Geometry
+
+% Empty Weight Buildup
+
+% CG and Inertia
 aircraft.cg.x = 0;
 aircraft.cg.y = 0;
 aircraft.cg.z = 0;
+
+% Landing Gear
+
+% Time-Step Mission
+aircraft.weight.total = 60e3;
+aircraft.weight.fuel = 20e3;
+aircraft.weight.empty = 40e3;
+aircraft.weight.totalOnLanding = 42e3;
+
+
 
 % This just makes sure we are getting the tolerance from the same function
 % (getConfig) the time-step is. If you need to change it, change it there.
@@ -23,14 +40,25 @@ tempConfig = getConfig();
 aircraft.weight.tolerance = tempConfig.weightTolerance;
 clearvars tempConfig;
 
-%example component
+%% -| Aircraft Struct (constant "variables")|------------------------------
+% All variables that do not change in the loop but are necessary for
+% calculations in the loop (e.g. aircraft.constants.wingLoading, aircraft.weight.tolerance)
 
+% Geometry
+
+% Empty Weight Buildup
+
+% CG and Inertia
+
+% Landing Gear
+
+% Time-Step Mission
+aircraft.weight.tolerance = 0.06; % GO TO getConfig to uncomment
 
 
 % -------------------------------------------------------------------------
 
-
-%% calculation loop
+%% Calculation Loop
 
 exitFlag = false; 
 iteration = 0;
@@ -41,54 +69,52 @@ while( not(exitFlag) && iteration < iterationMax )
 
     aircraftOld = aircraft;
     
-    %-| Geometry Updater |-------------------------------------------------
+    %% -| Geometry Updater |-----------------------------------------------
+    aircraft = dimensionalize_aircraft(aircraft);
+    %----------------------------------------------------------------------
+
+
+    %%-| Aero Updater |----------------------------------------------------
 
     %----------------------------------------------------------------------
 
 
 
-    %-| Aero Updater |-----------------------------------------------------
+    %% -| Empty Weight Buildup |-------------------------------------------
+    aircraft = EWB(aircraft); % idk if these are the right i/o's - Owen
+    %----------------------------------------------------------------------
+
+
+
+    %% -| CG and Inertia Calculator |--------------------------------------
 
     %----------------------------------------------------------------------
 
 
 
-    %-| Empty Weight Buildup |---------------------------------------------
+    %% -| Landing Gear Updater |-------------------------------------------
+
+    %----------------------------------------------------------------------
+
+    
+    %% -| Landing Gear Convergence Check |---------------------------------
 
     %----------------------------------------------------------------------
 
 
-
-    %-| CG and Inertia Calculator |----------------------------------------
-
-    %----------------------------------------------------------------------
-
-
-
-    %-| Landing Gear Updater |---------------------------------------------
-
-    %----------------------------------------------------------------------
-
-
-    %-| Fixed MTOW convergence Check |-------------------------------------
-    % type "help continue" to see how to send while loop back to top
-
+    %% -| Fixed MTOW convergence Check |-----------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance
       continue; % this should go back to the top of the while loop
     end % go on to time-iterated mission model
-
-
     %----------------------------------------------------------------------
 
 
-
-    %-| Time Iterated Mission Model |--------------------------------------
-    % run time step here
+    %% -| Time Iterated Mission Model |------------------------------------
     aircraft = TIMESTEP_CONVERGENCE_MASTER(aircraft, missionToRun);
     %----------------------------------------------------------------------
 
 
-    %-| Converged Solution Check |-----------------------------------------
+    %% -| Converged Solution Check |---------------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) < aircraft.weight.tolerance
       exitFlag = true;
     end
@@ -97,6 +123,6 @@ while( not(exitFlag) && iteration < iterationMax )
 end
 
 
-%-| Display Results |------------------------------------------------------
-fprintf('Converged!!!\n')
+%% -| Display Results |----------------------------------------------------
+fprintf('Converged after %u iterations\n', iteration)
 %--------------------------------------------------------------------------

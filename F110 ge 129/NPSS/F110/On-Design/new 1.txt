@@ -26,10 +26,8 @@ run();
 
 setOption( "switchDes", "OFFDESIGN" );
 autoSolverSetup();
-
-for (AMBIENT.alt = 0; AMBIENT.alt < 60001 ; AMBIENT.alt += 1000) {
-for (AMBIENT.MN = 0; AMBIENT.MN < 2.01 ; AMBIENT.MN += 0.050) {
-
+for (AMBIENT.alt = 0; AMBIENT.alt < 60001 ; AMBIENT.alt += 2000) {
+for (AMBIENT.MN = 0; AMBIENT.MN < 2.01 ; AMBIENT.MN += 0.5) {
 CASE++;
 run();
 }

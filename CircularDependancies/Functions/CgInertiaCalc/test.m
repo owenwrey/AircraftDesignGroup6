@@ -13,5 +13,7 @@ aircraft.fuel.y = 9;
 aircraft.fuel.z = 3;
 aircraft.fuel.weight = 300;
 
+aircraft.constants.cd0 = 0.05;
+
 
 out = CgInertiaCalc(aircraft)
