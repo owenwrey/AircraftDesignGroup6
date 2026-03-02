@@ -47,7 +47,6 @@ aircraft.fuelSys.VI = 0;                % integral fuel volume, gal
 aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
 aircraft.fuelSys.Nt = 4;
 
-
 % Geometry
 aircraft.fuselage.length   = 48;
 aircraft.fuselage.diameter = 5.4;
@@ -74,12 +73,9 @@ aircraft.constants.limitLoad = 8;
 aircraft.constants.ultLoad = 1.5 * aircraft.constants.limitLoad;
 aircraft.constants.maxMach = 1.6;
 
-
-
 % CG and Inertia
 aircraft.engine.cg.x = 45;
 aircraft.cockpit.cg.x = 8;
-
 
 % Landing Gear
 aircraft.gear.mg.extendedLength = 40;   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% fixxxxxxxxxxxxxxxxxxxx
