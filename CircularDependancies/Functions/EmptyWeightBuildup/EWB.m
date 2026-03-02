@@ -1,20 +1,20 @@
-function weights = EWB(aircraft)
+function aircraft = EWB(aircraft)
 
 % initialize variables
-W0 = aircraft.constants.totalWeight;
-T2C = aircraft.wing.T2C;                    % thickness to chord ratio
+W0 = aircraft.weight.total;
+T2C = aircraft.wing.taper_ratio;            % thickness to chord ratio
 N_lim = aircraft.constants.limitLoad;       % limit load factor (8g)
-Nz = N_lim*1.5;                             % ultimate load factor
+Nz = aircraft.constants.ultLoad;            % ultimate load factor
 M = aircraft.constants.maxMach;             % max Mach number
 
 % wing
-wing.area = aircraft.wing.area;
+wing.area = aircraft.wing.Area;
 wing.AR = aircraft.wing.AR;
 wing.QuarterChordSweep = aircraft.wing.sweep;
 wing.TaperRatio = aircraft.wing.taper_ratio;
 wing.span = aircraft.wing.span;
-rootChord = aircraft.wing.rootChord;
-tipChord = aircraft.wing.tipChord;
+rootChord = aircraft.wing.chord.root;
+tipChord = aircraft.wing.chord.tip;
 chordFrac = .2;                             % control surface chord fraction
 
 % calculate wing control surface areas
@@ -90,7 +90,7 @@ aircraft.fuselage.weight = .499*K_dwf * W0^(.35) * Nz^(.25) * L^(.5) * D^(.849).
 N_gear = 5.5;
 K_cb = 1;                                   % cross-beam gear (we are not cross-beam)
 K_tpg = .826;                               % tripod gear (we are tripod)
-W_l = aircraft.constants.landingWeight;     % landing design gross weight, lb
+W_l = aircraft.weight.totalOnLanding;     % landing design gross weight, lb
 N_l = 1.5*N_gear;                           % ultimate landing load factor
 L_m = aircraft.gear.mg.extendedLength;      % extended length of main gear, in
 
@@ -109,6 +109,7 @@ aircraft.gear.ng.weight = (W_l*N_l)^(.29) * L_n^(.5) * N_nw^(.525);
 K_vg = 1.62;            % For variable geomtry (otherwise = 1)
 K_d = 2.75;             % Sqaure Inlet Duct
 L_s_L_d = 1;            % single duct length to duct length, 1 bc each engine has its own duct
+L_d = 8;                % duct length
 K_vsh = 1.425;          % Variable sweep, 1 otherwise
 K_mc = 1.45;            % if mission completion required after failure, otherwise = 1
 W_uav = 800;            % uninstalled avionics weight (800 lbs maybe)
@@ -128,10 +129,10 @@ T = T_e * N_en;                             % total thrust
 D_e = 46.5/12;          % engine diameter, ft
 L_tp = 0;               % length of tailpipe, ft. 0 bc engine has nozzle???
 L_sh = 3;               % length of cooling shroud, ft, just a guess
-L_ec = (FS.engine - FS.cockpit) * N_en;     % dist from engine to cockpit, total if mult engines, ft
-SFC = aircraft.engine.TSFC(1);
+L_ec = (aircraft.engine.cg.x - aircraft.cockpit.cg.x) * N_en;     % dist from engine to cockpit, total if mult engines, ft
+SFC = aircraft.engine.TSFC(1,1);
 R_kva = 140;                                % system electrical rating, 110-160 for fighters
-L_a = FS.engine - FS.cockpit;               % electrical routing dist, ft (between gen, avionics, & cockpit)
+L_a = aircraft.engine.cg.x - aircraft.cockpit.cg.x;               % electrical routing dist, ft (between gen, avionics, & cockpit)
 
 V_t = aircraft.constants.fuelVolume;    % fuel volume, gal
 V_i = aircraft.fuelSys.VI;              % integral fuel volume, gal
@@ -191,15 +192,15 @@ aircraft.enginesystems.efcpDistance = L_ec;         % engine front to cockpit di
 aircraft.enginesystems.numberOfFlightControlSystem = N_s; 
 
 
-prevWeight = aircraft.constants.emptyWeight;
+prevWeight = aircraft.weight.empty;
 
-aircraft.constants.emptyWeight = aircraft.wing.weight + aircraft.ht.weight ... 
+aircraft.weight.empty = aircraft.wing.weight + aircraft.ht.weight ... 
     + aircraft.vt.weight + aircraft.fuselage.weight + aircraft.gear.mg.weight ...
-    + aircraft.gear.ng.weight + sum(engine) + sum(misc);
+    + aircraft.gear.ng.weight + sum(cell2mat(struct2cell(engine))) + sum(cell2mat(struct2cell(misc)));
 
-weightDiff = prevWeight - aircraft.constants.emptyWeight;
+weightDiff = prevWeight - aircraft.weight.empty;
 
-weights = [weightDiff;aircraft.constants.emptyWeight];
+% weights = [weightDiff;aircraft.weight.empty];
 
 
 end

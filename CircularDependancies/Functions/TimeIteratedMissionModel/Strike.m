@@ -3,7 +3,7 @@ function aircraftResults = Strike(aircraft)
 
 % clc
 clearvars -except aircraft Results;
-cfg = getConfig();
+cfg = getConfig(aircraft);
 
 displayTable = false;
 % segment names
@@ -793,7 +793,7 @@ W_payload = cfg.W.PL.A2A; % weight of weapons
 
 if isfield(aircraft, "weight") && isfield(aircraft.weight, "empty")
     noEmptyWeightFlag = false;
-    OEW = aircraft.weight.empt;
+    OEW = aircraft.weight.empty;
     
 else
     noEmptyWeightFlag = true;
@@ -832,9 +832,9 @@ aircraft.weight.totalOnLanding = Tbl.Weight(end);
 % xlabel("Time (min)")
 % ylabel("Total Fuel Burn (lb)")
 % 
-fprintf('Strike Mission Results\n')
-fprintf('Converged Gross Weight is %5.0f lbs\n', W0)
-fprintf('Fuel Required is %5.0f lbs', FuelReq)
+% fprintf('Strike Mission Results\n')
+% fprintf('Converged Gross Weight is %5.0f lbs\n', W0)
+% fprintf('Fuel Required is %5.0f lbs', FuelReq)
 
 aircraftResults = aircraft;
 aircraftResults.TimeStepTable = Tbl;
