@@ -86,7 +86,7 @@ aircraft.gear.mg.extendedLength = 40;   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% fixxxxxx
 aircraft.gear.ng.extendedLength = 40;
 
 % Time-Step Mission
-aircraft.weight.tolerance = 0.06; % GO TO getConfig to uncomment
+aircraft.weight.tolerance = 250; % GO TO getConfig to uncomment
 % -------------------------------------------------------------------------
 
 %% Calculation Loop
