@@ -32,30 +32,58 @@ aircraft.weight.fuel = 20e3;
 aircraft.weight.empty = 40e3;
 aircraft.weight.totalOnLanding = 42e3;
 
-
-
-% This just makes sure we are getting the tolerance from the same function
-% (getConfig) the time-step is. If you need to change it, change it there.
-tempConfig = getConfig();
-aircraft.weight.tolerance = tempConfig.weightTolerance;
-clearvars tempConfig;
-
 %% -| Aircraft Struct (constant "variables")|------------------------------
 % All variables that do not change in the loop but are necessary for
 % calculations in the loop (e.g. aircraft.constants.wingLoading, aircraft.weight.tolerance)
 
+% General
+aircraft.constants.wingLoading = 112; % [lbf/ft]
+aircraft.engine.weight = 3920;
+aircraft.engine.thrust = 29000;
+aircraft.engine.TSFC = .67;
+
+aircraft.constants.fuelVolume = 3500;
+aircraft.fuelSys.VI = 0;                % integral fuel volume, gal
+aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
+aircraft.fuelSys.Nt = 4;
+
 % Geometry
+aircraft.fuselage.length   = 48;
+aircraft.fuselage.diameter = 5.4;
+
+aircraft.wing.AR          = 4;
+aircraft.wing.taper_ratio = 0.25;
+aircraft.wing.sweep = 30;
+aircraft.wing.T2C = .055;   % thickness to chord
+
+aircraft.ht.VolCoeff      = 0.40;
+aircraft.ht.AR            = 4.0;
+aircraft.ht.TaperRatio    = 0.40;
+aircraft.ht.leverArm_frac = 0.45;
+aircraft.ht.sweep = 30;
+
+aircraft.vt.VolCoeff      = 0.04;
+aircraft.vt.AR            = 1.8;
+aircraft.vt.TaperRatio    = 0.30;
+aircraft.vt.leverArm_frac = 0.40;
+aircraft.vt.twinTail      = true;
+aircraft.vt.sweep = 35;
 
 % Empty Weight Buildup
+aircraft.constants.limitLoad = 8;
+aircraft.constants.ultLoad = 1.5 * aircraft.constants.limitLoad;
+aircraft.constants.maxMach = 1.6;
 
 % CG and Inertia
+aircraft.engine.cg.x = 45;
+aircraft.cockpit.cg.x = 8;
 
 % Landing Gear
+aircraft.gear.mg.extendedLength = 40;   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% fixxxxxxxxxxxxxxxxxxxx
+aircraft.gear.ng.extendedLength = 40;
 
 % Time-Step Mission
-aircraft.weight.tolerance = 0.06; % GO TO getConfig to uncomment
-
-
+aircraft.weight.tolerance = 250; % GO TO getConfig to uncomment
 % -------------------------------------------------------------------------
 
 %% Calculation Loop
@@ -66,7 +94,7 @@ iterationMax = 1000;
 
 while( not(exitFlag) && iteration < iterationMax )
     iteration = iteration + 1;
-
+    fprintf("   Iteration: %u\n", iteration);
     aircraftOld = aircraft;
     
     %% -| Geometry Updater |-----------------------------------------------
@@ -74,14 +102,14 @@ while( not(exitFlag) && iteration < iterationMax )
     %----------------------------------------------------------------------
 
 
-    %%-| Aero Updater |----------------------------------------------------
+    %% -| Aero Updater |----------------------------------------------------
 
     %----------------------------------------------------------------------
 
 
 
     %% -| Empty Weight Buildup |-------------------------------------------
-    aircraft = EWB(aircraft); % idk if these are the right i/o's - Owen
+    aircraft = EWB(aircraft); 
     %----------------------------------------------------------------------
 
 
@@ -124,5 +152,8 @@ end
 
 
 %% -| Display Results |----------------------------------------------------
-fprintf('Converged after %u iterations\n', iteration)
+fprintf("\n Converged after %u iterations\n", iteration)
+fprintf(" MTOW: %.0f lb\n", aircraft.weight.total)
+fprintf("  EOW: %.0f lb\n", aircraft.weight.empty)
 %--------------------------------------------------------------------------
+
