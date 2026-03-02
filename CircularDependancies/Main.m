@@ -11,11 +11,6 @@ missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the const
 % missionToRun = "A2A";
 
 %% -| Aircraft Struct (iterated variables)|--------------------------------
-
-aircraft = struct();
-
-aircraft.constants.totalWeight = 85301;
-
 % All variables that may change with each iteration should be defined here
 % (e.g aircraft.cg.x, aircraft.weight.total, aircraft.weight.empty)
 aircraft = struct;
@@ -38,9 +33,13 @@ aircraft.weight.empty = 40e3;
 aircraft.weight.totalOnLanding = 42e3;
 
 %% -| Aircraft Struct (constant "variables")|------------------------------
+% All variables that do not change in the loop but are necessary for
+% calculations in the loop (e.g. aircraft.constants.wingLoading, aircraft.weight.tolerance)
 
-aircraft.constants.wingLoading = 115;
+% General
+aircraft.constants.wingLoading = 112; % [lbf/ft]
 
+% Geometry
 aircraft.fuselage.length   = 48;
 aircraft.fuselage.diameter = 5.4;
 
@@ -57,14 +56,6 @@ aircraft.vt.AR            = 1.8;
 aircraft.vt.TaperRatio    = 0.70;
 aircraft.vt.leverArm_frac = 0.40;
 aircraft.vt.twinTail      = true;
-
-% All variables that do not change in the loop but are necessary for
-% calculations in the loop (e.g. aircraft.constants.wingLoading, aircraft.weight.tolerance)
-
-% General
-aircraft.constants.wingLoading = 112; % [lbf/ft]
-
-% Geometry
 
 % Empty Weight Buildup
 
