@@ -33,7 +33,7 @@ K2 = 0.05;
 CDR = 0;     
 
 istart = 1;
-iend = 400;
+iend = 250;
 
 SFC_climb = 0.75;
 THROT = 1;
@@ -72,7 +72,7 @@ En_grid = ALT_grid + (V_grid.^2)/(2*32.2);
 
 %% Best Excess Power Logic
 
-tol = 5000;   % wide tolerance for matching energy height
+tol = 2500;   % wide tolerance for matching energy height
 
 bestPs  = zeros(length(EnHt),1);
 bestAlt = zeros(length(EnHt),1);
@@ -178,7 +178,7 @@ KTAS_profile = bestV / kts2fps;
 
 %% Plotting
 
-figure;
+figure(1);
 plot(KTAS_profile, Alt_profile, 'b', 'LineWidth', 2);
 xlabel('KTAS');
 ylabel('Altitude (ft)');
@@ -217,7 +217,19 @@ for k = 1:length(He_bands)
     end
 end
 
+
 hold off;
+
+
+
+figure(2)
+plot(t_profile,Alt_profile,'b','LineWidth',2)
+grid on
+hold on
+xlabel('Time (s)')
+ylabel('Altitude (ft)')
+title('Cimb Profile')
+hold off
 
 % Print TTC
 fprintf('Total Time to Climb = %.2f minutes\n', TTC);
