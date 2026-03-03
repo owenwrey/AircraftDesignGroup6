@@ -9,7 +9,9 @@ CaseColumnViewer Case1 {
 	variableList = { "AMBIENT.alt = ALT",
 				"AMBIENT.MN:??????.????=Mn",
 				"PERF.TSFC:???.??? = TSFC",
-				"PERF.Fn:??????.??? = Fn"
+				"PERF.Fn:??????.??? = Fn",
+				"PERF.OPR: ????.?? = OPR",
+				"PERF.W: ????.?? = W"
 				
 				}
 
@@ -26,8 +28,8 @@ run();
 
 setOption( "switchDes", "OFFDESIGN" );
 autoSolverSetup();
-for (AMBIENT.alt = 0; AMBIENT.alt < 60001 ; AMBIENT.alt += 2000) {
-for (AMBIENT.MN = 0; AMBIENT.MN < 2.01 ; AMBIENT.MN += 0.5) {
+for (AMBIENT.alt = 0; AMBIENT.alt < 60000 ; AMBIENT.alt += 2000) {
+for (AMBIENT.MN = 0; AMBIENT.MN < 0.85 ; AMBIENT.MN += 0.3) {
 CASE++;
 run();
 }

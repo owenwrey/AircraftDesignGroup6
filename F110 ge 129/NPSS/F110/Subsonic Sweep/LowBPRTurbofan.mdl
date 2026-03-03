@@ -65,7 +65,7 @@ Element Compressor HPC {
 //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 S_map.effDes = 0.91; // Design Efficiency .89
-S_map.PRdes = 9.6;  // Design Pressure Ratio
+S_map.PRdes = 9.7;  // Design Pressure Ratio
 }
 
 
@@ -166,7 +166,7 @@ Element Bleed BLEEDEC3 {
  //Afterburner on
  switchBurn = "TEMPERATURE";
  dPqPBase = 0.02;
- TtCombOut = 4140;
+ TtCombOut = 4200;
  switchBurn = "FAR";
  FAR = 0.067;
  }

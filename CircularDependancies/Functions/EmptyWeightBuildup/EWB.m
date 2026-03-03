@@ -3,7 +3,6 @@ function aircraft = EWB(aircraft)
 % initialize variables
 W0 = aircraft.weight.total;
 T2C = aircraft.wing.T2C;                    % thickness to chord ratio
-N_lim = aircraft.constants.limitLoad;       % limit load factor (8g)
 Nz = aircraft.constants.ultLoad;            % ultimate load factor
 M = aircraft.constants.maxMach;             % max Mach number
 
@@ -60,7 +59,7 @@ aircraft.vt.rudderArea = .5*(vt.chord0_20 + vt.chord90_20)*vt.span*.9;
 
 % main wing
 aircraft.wing.weight = .0103*(W0*Nz)^(.5) * (wing.area)^(.622) * (wing.AR)^(.785)...
-                        * T2C * (1+wing.TaperRatio)^(.05) * ...
+                        * T2C^(-.4) * (1+wing.TaperRatio)^(.05) * ...
                         (cosd(wing.QuarterChordSweep))^(-1) * (S_csw)^(.04);
 
 % horizontal tail
