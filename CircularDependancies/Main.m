@@ -93,7 +93,7 @@ exitFlag = false;
 iteration = 0;
 iterationMax = 1000;
 
-while( not(exitFlag) && iteration < iterationMax )
+while( not(exitFlag) && iteration <= iterationMax )
     iteration = iteration + 1;
     fprintf("   Iteration: %u\n", iteration);
     aircraftOld = aircraft;
@@ -102,30 +102,21 @@ while( not(exitFlag) && iteration < iterationMax )
     aircraft = dimensionalize_aircraft(aircraft);
     %----------------------------------------------------------------------
 
-
     %% -| Aero Updater |----------------------------------------------------
-
     aircraft = aeroupdater(aircraft);
-
-
+    %----------------------------------------------------------------------
 
     %% -| Empty Weight Buildup |-------------------------------------------
     aircraft = EWB(aircraft); 
     %----------------------------------------------------------------------
 
-
-
     %% -| CG and Inertia Calculator |--------------------------------------
 
     %----------------------------------------------------------------------
 
-
-
     %% -| Landing Gear Updater |-------------------------------------------
-
+    aircraft = landingGear(aircraft);
     %----------------------------------------------------------------------
- aircraft = landingGear(aircraft);
-
     
     %% -| Landing Gear Convergence Check |---------------------------------
 
