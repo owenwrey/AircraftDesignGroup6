@@ -51,19 +51,21 @@ aircraft.fuelSys.Nt = 4;
 aircraft.fuselage.length   = 48;
 aircraft.fuselage.diameter = 5.4;
 
-aircraft.wing.AR          = 8.5;
-aircraft.wing.taper_ratio = 0.35;
+aircraft.wing.AR          = 4;
+aircraft.wing.taper_ratio = 0.25;
 aircraft.wing.sweep = 30;
+aircraft.wing.T2C = .055;   % thickness to chord
+aircraft.wing.l = 50;
 
 aircraft.ht.VolCoeff      = 0.40;
 aircraft.ht.AR            = 4.0;
-aircraft.ht.TaperRatio    = 0.60;
+aircraft.ht.TaperRatio    = 0.40;
 aircraft.ht.leverArm_frac = 0.45;
 aircraft.ht.sweep = 30;
 
 aircraft.vt.VolCoeff      = 0.04;
 aircraft.vt.AR            = 1.8;
-aircraft.vt.TaperRatio    = 0.70;
+aircraft.vt.TaperRatio    = 0.30;
 aircraft.vt.leverArm_frac = 0.40;
 aircraft.vt.twinTail      = true;
 aircraft.vt.sweep = 35;
@@ -91,7 +93,7 @@ exitFlag = false;
 iteration = 0;
 iterationMax = 1000;
 
-while( not(exitFlag) && iteration < iterationMax )
+while( not(exitFlag) && iteration <= iterationMax )
     iteration = iteration + 1;
     fprintf("   Iteration: %u\n", iteration);
     aircraftOld = aircraft;
@@ -100,47 +102,36 @@ while( not(exitFlag) && iteration < iterationMax )
     aircraft = dimensionalize_aircraft(aircraft);
     %----------------------------------------------------------------------
 
-
     %% -| Aero Updater |----------------------------------------------------
-
+    aircraft = aeroupdater(aircraft);
     %----------------------------------------------------------------------
-
-
 
     %% -| Empty Weight Buildup |-------------------------------------------
     aircraft = EWB(aircraft); 
     %----------------------------------------------------------------------
-
-
 
     %% -| CG and Inertia Calculator |--------------------------------------
     % aircraft = CgInertiaCalc(aircraft); - components dont have locations
     % yet.
     %----------------------------------------------------------------------
 
-
-
     %% -| Landing Gear Updater |-------------------------------------------
-
+    aircraft = landingGear(aircraft);
     %----------------------------------------------------------------------
-
     
     %% -| Landing Gear Convergence Check |---------------------------------
 
     %----------------------------------------------------------------------
 
-
-    %% -| Fixed MTOW convergence Check |-----------------------------------
+    %% -| Fixed MTOW Convergence Check |-----------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance
       continue; % this should go back to the top of the while loop
     end % go on to time-iterated mission model
     %----------------------------------------------------------------------
 
-
     %% -| Time Iterated Mission Model |------------------------------------
     aircraft = TIMESTEP_CONVERGENCE_MASTER(aircraft, missionToRun);
     %----------------------------------------------------------------------
-
 
     %% -| Converged Solution Check |---------------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) < aircraft.weight.tolerance
@@ -149,7 +140,6 @@ while( not(exitFlag) && iteration < iterationMax )
     %----------------------------------------------------------------------
 
 end
-
 
 %% -| Display Results |----------------------------------------------------
 fprintf("\n Converged after %u iterations\n", iteration)
