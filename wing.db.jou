@@ -1,0 +1,713 @@
+$# Creating journal file I:\Senior Design\AircraftDesignGroup6\wing.db.jou at 
+$# 02-Mar-26 17:30:39
+uil_file_rebuild.start("C:\Program Files\MSC.Software\Patran_x64\20251/tem" // @
+"plate.db","I:\Senior Design\AircraftDesignGroup6\wing.db")
+$# Synchronizing the User Data Manager
+set_current_dir( "I:\Senior Design\AircraftDesignGroup6" )
+$# The current working directory has been changed to the database location 
+$# shown.                                                                     
+$#                                                                            
+$#                                   
+$# Appending to existing journal file I:\Senior 
+$# Design\AircraftDesignGroup6\wing.db.jou at 02-Mar-26 21:42:55
+$# Synchronizing the User Data Manager
+set_current_dir( "I:\Senior Design\AircraftDesignGroup6" )
+$# The current working directory has been changed to the database location 
+$# shown.                                                                     
+$#                                                                            
+$#                                   
+ga_viewport_location_set( "default_viewport", 0.000000, 0.000000, 1 )
+p3_express_options_file( "express.opt", FALSE, 3, 1, 52054, TRUE, [39.370079,  @
+0., 0., 0., 39.370079, 0., 0., 0., 39.370079, 0., 0., 0.], 0, ["0"], [[-1]], [ @
+[-1]], [[-1]], TRUE, [0], TRUE, [0], TRUE, [0], 3, 1, 3 )
+INTEGER uil_file_import_ps_tr_xmt_count(5)
+INTEGER uil_file_import_ps_patran_count(4)
+INTEGER uil_file_import_ps_tra_n_layers
+INTEGER uil_file_import_ps_tr_layer_ids(5,256)
+REAL uil_file_import_ps_tr_model_tol(2)
+p3_ug_xmt_import_v2( "I:\Senior Design\AircraftDesignGroup6\AERO 4720 Airc" // @
+"arft Geometry\nacawing.x_t", "", "express.opt", TRUE, 0,  @
+uil_file_import_ps_tr_xmt_count, uil_file_import_ps_patran_count,  @
+uil_file_import_ps_tra_n_layers, uil_file_import_ps_tr_layer_ids,  @
+uil_file_import_ps_tr_model_tol, TRUE, "", FALSE )
+$# The Global Model Tolerance has been changed from 0.005 to the newly 
+$# calculated Global Model Tolerance of 0.0001.
+$# The Global Model Tolerance has been changed from 0.0001 to the newly 
+$# calculated Global Model Tolerance of 0.205873.
+$# The Global Model Tolerance has been reset to the original value of 0.005.
+$# MSC.Patran Analysis Manager NOT licensed or installed!
+ga_view_center_set( 5.688517, -0.471972 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 10.744970, -0.929355 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 14.465723, -0.332129 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 17.788008, 0.198740 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 20.758883, 0.670623 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 25.661154, 1.425635 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 36.671726, -0.760287 )
+ga_view_center_set( 38.094318, -0.865839 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 39.358841, -0.959663 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 40.482868, -1.043062 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 41.481998, -1.117195 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 42.527477, -1.234233 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 43.456795, -1.338267 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 44.282848, -1.430742 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 45.017117, -1.510179 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 45.486832, -1.534125 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 45.904362, -1.555411 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 46.572395, -1.589468 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 46.871632, -1.603828 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 47.169357, -1.606243 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 47.434006, -1.608389 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 47.669239, -1.610298 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 47.878345, -1.611994 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.073261, -1.617378 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.251488, -1.624844 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.414677, -1.633863 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.563068, -1.642788 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.703033, -1.678150 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.827454, -1.709583 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.938046, -1.737524 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 49.036354, -1.762360 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.964390, -1.716465 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.919418, -1.687781 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.868820, -1.655511 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.811905, -1.619208 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.746861, -1.578703 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.600517, -1.487566 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.509045, -1.430605 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.406147, -1.366525 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.290382, -1.294434 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.160149, -1.213332 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 47.867119, -1.030852 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 47.500835, -0.802753 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 47.271908, -0.660191 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 46.756821, -0.339426 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 46.112965, 0.061530 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 45.710548, 0.312127 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 45.758511, 0.458352 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 45.815102, 0.620224 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 45.942425, 0.984433 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 46.101585, 1.439697 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 46.201054, 1.724236 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 48.977917, 1.752863 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 52.195580, 1.755791 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 59.606586, 1.775555 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 64.781952, 1.787905 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 0.037156, 1.153151 )
+$# UNDO: Transform Curve Translate for Curve 1
+STRING sgm_transform_curve_created_ids[VIRTUAL]
+sgm_transform_rotate( "2", "curve", "Coord 0.3", 90., 0., "Coord 0", 1, FALSE, @
+ "Curve 1", sgm_transform_curve_created_ids )
+$# 1 Curve Created: Curve 2
+ga_view_aa_set( 180., 90., 180. )
+sgm_transform_rotate( "3", "curve", "Coord 0.3", 90., 0., "Coord 0", 1, FALSE, @
+ "Curve 2", sgm_transform_curve_created_ids )
+$# 1 Curve Created: Curve 3
+$# UNDO:
+STRING asm_delete_any_deleted_ids[VIRTUAL]
+asm_delete_curve( "Curve 2", asm_delete_any_deleted_ids )
+$# 1 Curve Deleted: Curve 2
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( -176.384094, 71.017021, -174.541153 )
+asm_delete_point( "Point 1 2 Curve 1", asm_delete_any_deleted_ids )
+$# 2 Points Deleted: Point 1 2
+asm_delete_curve( "Point 1 2 Curve 1", asm_delete_any_deleted_ids )
+$# 1 Curve Deleted: Curve 1
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( 127.643974, 81.031303, -133.679245 )
+ga_view_aa_set( 180., 90., 180. )
+STRING sgm_transform_curve_created_ids[VIRTUAL]
+sgm_transform_rotate( "4", "curve", "Coord 0.3", 90., 0., "Coord 0", 1, FALSE, @
+ "Curve 3", sgm_transform_curve_created_ids )
+$# 1 Curve Created: Curve 4
+ga_view_aa_set( 169.854752, 64.118973, -178.910080 )
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( -176.844620, 76.003036, -174.135132 )
+sgm_transform_rotate( "5", "curve", "Coord 0.3", 90., 0., "Coord 0", 1, FALSE, @
+ "Curve 3", sgm_transform_curve_created_ids )
+$# Question in application SGM by application Geometry
+$#     Curve 4 already exists at the specified location to create the next 
+$# Curve. Do you wish to create a duplicate Curve?
+$? YESFORALL 1000034 
+$# 1 Curve Created: Curve 5
+ga_view_aa_set( 179.135010, 46.018085, -171.914032 )
+sgm_transform_rotate( "6", "curve", "Coord 0.3", 90., 0., "Coord 0", 1, FALSE, @
+ "Curve 3", sgm_transform_curve_created_ids )
+$# Question in application SGM by application Geometry
+$#     Curve 4 already exists at the specified location to create the next 
+$# Curve. Do you wish to create a duplicate Curve?
+$? NOFORALL 1000034 
+$# No Geometry Created.
+asm_delete_curve( "Curve 3", asm_delete_any_deleted_ids )
+$# 1 Curve Deleted: Curve 3
+asm_delete_curve( "Curve 3", asm_delete_any_deleted_ids )
+$# No Geometry Deleted.
+ga_view_aa_set( 164.432037, 20.201878, -174.700317 )
+ga_view_aa_set( 180., 90., 180. )
+ga_view_center_set( -0.322714, 10.022657 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -0.892782, 14.999182 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -1.534109, 20.597769 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -2.255575, 26.896185 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -3.067251, 33.981903 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_aa_set( 173.650024, 38.071819, 174.657028 )
+ga_view_aa_set( 174.446228, -40.673386, 167.725845 )
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( 161.813751, -2.407233, 86.437248 )
+ga_view_aa_set( 160.720871, -27.773781, 76.724609 )
+sgm_transform_rotate( "6", "curve", "Coord 0.3", 180., 0., "Coord 0", 1, TRUE, @
+ "Curve 4 5", sgm_transform_curve_created_ids )
+$# Question in application SGM by application Geometry
+$#     Curve 6 already exists at the specified location to create the next 
+$# Curve. Do you wish to create a duplicate Curve?
+$? YESFORALL 1000034 
+$# 2 Curves Created: Curves 6,7
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 2 Curves Deleted: Curve 4 5
+ga_view_aa_set( 180., 90., 180. )
+ga_view_center_set( -0.291721, 0.099816 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -1.095978, 0.328959 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -1.980530, 0.637294 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -2.952919, 1.063783 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -4.046852, 1.543582 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -4.197983, 3.062140 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -4.384209, 4.851478 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -5.021812, 9.023232 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -5.511391, 11.630582 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -5.498573, 15.255532 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -5.311241, 19.448887 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -4.419594, 24.393372 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -3.015251, 30.101818 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -0.655739, 38.944889 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 1.998711, 48.893349 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 4.985008, 60.085373 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_aa_set( -179.655899, 63.006840, 178.596008 )
+sgm_transform_rotate( "8", "curve", "Coord 0.3", 180., 0., "Coord 0", 1, TRUE, @
+ "Curve 6 7", sgm_transform_curve_created_ids )
+$# Question in application SGM by application Geometry
+$#     Curve 8 already exists at the specified location to create the next 
+$# Curve. Do you wish to create a duplicate Curve?
+$? YESFORALL 1000034 
+$# 2 Curves Created: Curves 8,9
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 2 Curves Deleted: Curve 6 7
+ga_view_aa_set( 180., 90., 180. )
+sgm_transform_rotate( "10", "curve", "Coord 0.3", 0., 90., "Coord 0", 1, TRUE, @
+ "Curve 8 9", sgm_transform_curve_created_ids )
+$# Question in application SGM by application Geometry
+$#     Curve 10 already exists at the specified location to create the next 
+$# Curve. Do you wish to create a duplicate Curve?
+$? YESFORALL 1000034 
+$# 2 Curves Created: Curves 10,11
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 2 Curves Deleted: Curve 8 9
+ga_view_aa_set( -180.000000, 60.000000, 180.000000 )
+ga_view_aa_set( 180., -90., 180. )
+ga_view_aa_set( -0.000000, -75.000008, 2.000000 )
+ga_view_aa_set( 12.863441, -87.966927, 10.882341 )
+sgm_transform_rotate( "12", "curve", "Coord 0.1", 90., 0., "Coord 0", 1, TRUE, @
+ "Curve 10 11", sgm_transform_curve_created_ids )
+$# Question in application SGM by application Geometry
+$#     Curve 12 already exists at the specified location to create the next 
+$# Curve. Do you wish to create a duplicate Curve?
+$? YESFORALL 1000034 
+$# 2 Curves Created: Curves 12,13
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 2 Curves Deleted: Curve 10 11
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( 178.366501, 79.010452, -178.358856 )
+ga_view_center_set( -0.211882, 0.240470 )
+ga_view_aa_set( 178.366501, 79.010468, -178.358856 )
+ga_view_center_set( -0.496983, 0.491699 )
+ga_view_aa_set( 178.366501, 79.010452, -178.358856 )
+ga_view_center_set( -0.817723, 0.774330 )
+ga_view_aa_set( 178.366501, 79.010468, -178.358856 )
+ga_view_center_set( -1.178555, 1.092291 )
+ga_view_aa_set( 178.366501, 79.010452, -178.358856 )
+ga_view_center_set( -1.557697, 1.433921 )
+ga_view_aa_set( 178.366501, 79.010468, -178.358856 )
+ga_view_center_set( -1.978202, 1.818254 )
+ga_view_aa_set( 178.366501, 79.010452, -178.358856 )
+ga_view_center_set( -2.451272, 2.250628 )
+ga_view_aa_set( 178.366501, 79.010468, -178.358856 )
+ga_view_aa_set( -178.757675, 64.978386, -178.307526 )
+ga_view_aa_set( 177.016739, 67.976486, -178.062225 )
+ga_view_aa_set( 180., -90., 180. )
+sgm_transform_rotate( "14", "curve", "Coord 0.1", 90., 0., "Coord 0", 1, TRUE, @
+ "Curve 12 13", sgm_transform_curve_created_ids )
+$# Question in application SGM by application Geometry
+$#     Curve 14 already exists at the specified location to create the next 
+$# Curve. Do you wish to create a duplicate Curve?
+$? NO 1000034 
+$# 1 Curve Created: Curve 14
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? NO 38000217 
+ga_view_center_set( 0.397943, -2.191611 )
+ga_view_aa_set( 180.000000, -90.000000, 180.000000 )
+ga_view_center_set( 0.845625, -2.554660 )
+ga_view_aa_set( 180.000000, -90.000000, 180.000000 )
+ga_view_center_set( 1.339245, -2.948056 )
+ga_view_aa_set( 180.000000, -90.000000, 180.000000 )
+asm_delete_point( "Point 15:18 Curve 12:14", asm_delete_any_deleted_ids )
+$# 4 Points Deleted: Point 15:18
+asm_delete_curve( "Point 15:18 Curve 12:14", asm_delete_any_deleted_ids )
+$# 3 Curves Deleted: Curve 12:14
+$# UNDO: Delete for entities Point 15:18 Curve 12:14
+p3_express_options_file( "express.opt", FALSE, 3, 1, 52054, TRUE, [39.370079,  @
+0., 0., 0., 39.370079, 0., 0., 0., 39.370079, 0., 0., 0.], 0, ["0"], [[-1]], [ @
+[-1]], [[-1]], TRUE, [0], TRUE, [0], TRUE, [0], 3, 1, 3 )
+p3_ug_xmt_import_v2( "I:\Senior Design\AircraftDesignGroup6\AERO 4720 Airc" // @
+"arft Geometry\nacawing.x_t", "", "express.opt", TRUE, 0,  @
+uil_file_import_ps_tr_xmt_count, uil_file_import_ps_patran_count,  @
+uil_file_import_ps_tra_n_layers, uil_file_import_ps_tr_layer_ids,  @
+uil_file_import_ps_tr_model_tol, TRUE, "", FALSE )
+$# The Global Model Tolerance has been changed from 0.005 to the newly 
+$# calculated Global Model Tolerance of 0.0001.
+$# The Global Model Tolerance has been changed from 0.0001 to the newly 
+$# calculated Global Model Tolerance of 0.205873.
+$# The Global Model Tolerance has been reset to the original value of 0.005.
+ga_view_aa_set( 0., 0., 0. )
+ga_view_center_set( 0.924574, 0.647399 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 1.964718, 1.375724 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 3.134884, 2.195089 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 4.451315, 3.105597 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 5.894247, 4.110893 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 7.517546, 5.241851 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 9.343760, 6.514178 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 13.452742, 9.376917 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 19.170309, 11.041956 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 25.602575, 12.915124 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 32.838882, 15.022439 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 33.803242, 12.143634 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 34.977940, 10.067276 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 36.101139, 8.334507 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 37.310246, 7.376247 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 38.385014, 6.524462 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 39.340363, 5.767319 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 40.189560, 5.094302 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 43.033146, 6.013974 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 46.232178, 7.048605 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 53.429996, 9.376523 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 57.928619, 10.831470 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 62.989586, 12.468287 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 80.070343, 17.992546 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 87.899033, 20.524500 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 72.309570, 16.944843 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 59.193863, 14.332050 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 47.535458, 11.886928 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 37.172432, 9.713485 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 27.960854, 7.781539 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 19.255978, 7.237823 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 11.518314, 6.754517 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( 4.640392, 6.324912 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -1.473316, 5.943042 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -6.907726, 5.603601 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -11.403728, 4.961315 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -15.384243, 4.337286 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -18.913036, 3.777873 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -22.049736, 3.280616 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -38.630501, 2.993088 )
+ga_view_center_set( -39.867001, 2.513782 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -40.939590, 2.041315 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -41.892998, 1.618396 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -42.740475, 1.237229 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -43.489132, 0.870470 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -44.237396, 0.521694 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -44.902519, 0.211671 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.966721, -0.278479 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -46.427921, -0.468847 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -46.833225, -0.645041 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -47.193497, -0.801659 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -47.513737, -0.940874 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -47.782879, -1.050735 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.022114, -1.148389 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.234768, -1.235193 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.423790, -1.312352 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.586716, -1.354931 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.731537, -1.392780 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.860264, -1.426423 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.974693, -1.456327 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -49.076405, -1.482909 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -49.169361, -1.512197 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -49.251991, -1.539740 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -49.325665, -1.564894 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -49.391151, -1.587848 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -49.322483, -1.556745 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -49.245235, -1.521754 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -49.074444, -1.442018 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.864727, -1.342347 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.741516, -1.280839 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.602898, -1.211643 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.291019, -1.055951 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -47.901169, -0.861337 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -47.658287, -0.739703 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -47.111805, -0.466025 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -46.770252, -0.294977 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -46.386009, -0.102548 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.953732, 0.113935 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.924938, 0.303012 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.892551, 0.515723 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.856113, 0.755023 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.815121, 1.028668 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.773994, 1.336517 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.764183, 1.702479 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.773651, 2.525891 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -45.943226, 3.523609 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -46.078785, 4.132394 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -46.414299, 5.066829 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -46.810455, 6.118069 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -48.379128, 9.666004 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -49.156006, 11.282491 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -51.425133, 14.789301 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -54.478661, 19.172815 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -56.471939, 21.912510 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -58.714371, 24.994667 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -17.032238, 9.792948 )
+ga_view_center_set( -15.037899, 7.474176 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -13.333012, 5.650539 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -12.134228, 4.316032 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -11.524364, 3.317455 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -12.137943, 4.419540 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -12.683361, 5.399168 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_center_set( -13.168175, 6.269949 )
+ga_view_aa_set( 0.000000, 0.000000, 0.000000 )
+ga_view_aa_set( -8.005170, 2.994212, 0.139596 )
+ga_view_center_set( -13.210526, 6.321725 )
+ga_view_aa_set( -8.005171, 2.994212, 0.139596 )
+ga_view_center_set( -13.311153, 6.401153 )
+ga_view_aa_set( -8.005170, 2.994212, 0.139596 )
+ga_view_center_set( -13.472008, 6.490511 )
+ga_view_aa_set( -8.005171, 2.994212, 0.139596 )
+ga_view_center_set( -13.706573, 6.591040 )
+ga_view_aa_set( -8.005170, 2.994212, 0.139596 )
+ga_view_center_set( -20.198154, 9.810438 )
+ga_view_aa_set( -8.005171, 2.994212, 0.139596 )
+ga_view_center_set( -27.518158, 13.432266 )
+ga_view_aa_set( -8.005170, 2.994212, 0.139595 )
+ga_view_center_set( -35.753139, 17.506823 )
+ga_view_aa_set( -8.005171, 2.994212, 0.139595 )
+ga_view_center_set( -29.121254, 17.249176 )
+ga_view_aa_set( -8.005170, 2.994212, 0.139595 )
+ga_view_center_set( -23.192318, 17.037127 )
+ga_view_aa_set( -8.005171, 2.994212, 0.139595 )
+ga_view_center_set( -17.545166, 16.516895 )
+ga_view_aa_set( -8.005170, 2.994212, 0.139595 )
+ga_view_aa_set( 13.118587, 12.921298, -0.360367 )
+STRING sgm_transform_curve_created_ids[VIRTUAL]
+sgm_transform_rotate( "2", "curve", "Coord 0.1", 90., 0., "Coord 0", 1, TRUE,  @
+"Curve 1", sgm_transform_curve_created_ids )
+$# 1 Curve Created: Curve 2
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 1 Curve Deleted: Curve 1
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( -174.884476, 81.002235, -179.107880 )
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( -3.500076, 88.000023, -1.500076 )
+sgm_transform_rotate( "3", "curve", "Coord 0.1", -90., 0., "Coord 0", 1, TRUE, @
+ "Curve 2", sgm_transform_curve_created_ids )
+$# 1 Curve Created: Curve 3
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 1 Curve Deleted: Curve 2
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( 179.148026, 77.002098, 177.838821 )
+ga_view_aa_set( -179.275864, 46.003159, 177.207108 )
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( -160.082855, 15.778642, 172.644409 )
+ga_view_center_set( -0.351991, -0.654284 )
+ga_view_aa_set( -160.082855, 15.778644, 172.644409 )
+ga_view_center_set( -0.007005, -0.103885 )
+ga_view_aa_set( -160.082855, 15.778644, 172.644409 )
+ga_view_center_set( 0.381102, 0.515313 )
+ga_view_aa_set( -160.082855, 15.778644, 172.644409 )
+ga_view_center_set( 0.817728, 1.211911 )
+ga_view_aa_set( -160.082855, 15.778644, 172.644409 )
+ga_view_center_set( 1.308932, 1.995584 )
+ga_view_aa_set( -160.082855, 15.778644, 172.644409 )
+ga_view_center_set( 1.861537, 2.877217 )
+ga_view_aa_set( -160.082855, 15.778644, 172.644409 )
+ga_view_aa_set( -160.082855, 15.778644, 172.644409 )
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( 0., 0., 0. )
+sgm_transform_rotate( "4", "curve", "Coord 0.1", 90., 0., "Coord 0", 1, TRUE,  @
+"Curve 3", sgm_transform_curve_created_ids )
+$# 1 Curve Created: Curve 4
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 1 Curve Deleted: Curve 3
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( 3.500230, 88.000610, 7.500228 )
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( -174.747528, 86.003746, -178.249573 )
+sgm_transform_rotate( "5", "curve", "Coord 0.2", 90., 0., "Coord 0", 1, TRUE,  @
+"Curve 4", sgm_transform_curve_created_ids )
+$# 1 Curve Created: Curve 5
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 1 Curve Deleted: Curve 4
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( -164.178268, 85.986237, -158.819626 )
+sgm_transform_rotate( "6", "curve", "Coord 0.3", 90., 0., "Coord 0", 1, TRUE,  @
+"Curve 5", sgm_transform_curve_created_ids )
+$# 1 Curve Created: Curve 6
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 1 Curve Deleted: Curve 5
+ga_view_aa_set( 180., 90., 180. )
+$# UNDO: Transform Curve Rotate for Curve 6
+sgm_transform_rotate( "7", "curve", "Coord 0.2", 180., 0., "Coord 0", 1, TRUE, @
+ "Curve 6", sgm_transform_curve_created_ids )
+$# 1 Curve Created: Curve 7
+$# Question from application SGM
+$#     Do you wish to delete the original curves?
+$? YES 38000217 
+$# 1 Curve Deleted: Curve 6
+ga_view_center_set( 5.597012, -0.991096 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 10.535583, -1.908625 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 14.925423, -2.724206 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 18.798618, -3.443391 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 22.092556, -3.928622 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 24.874435, -4.054138 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 27.351284, -4.157593 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 29.560139, -4.224309 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+STRING asm_line_2point_created_ids[VIRTUAL]
+asm_const_line_2point( "8", "Point 13", "Point 14", 0, "", 50., 1,  @
+asm_line_2point_created_ids )
+$# 1 Line created: Line 8
+ga_view_center_set( 29.331135, -4.626410 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 29.073509, -5.078775 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 28.783680, -5.587686 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 28.457630, -6.160209 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 28.749348, -6.983373 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 29.077526, -7.909431 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 29.446732, -8.951247 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 34.846352, -10.723704 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( 40.920929, -12.717723 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_center_set( -4.490279, 2.498602 )
+ga_view_aa_set( 174.908768, 82.119423, -160.871933 )
+STRING sgm_create_plane_3p_created_ids[VIRTUAL]
+sgm_const_plane_3point( "1", "[0 0 0]", "[0 0 1]", "[0 1 0]",  @
+sgm_create_plane_3p_created_ids )
+$# 1 Plane Created: Plane 1
+ga_view_aa_set( -175.306320, 76.102859, -163.737106 )
+ga_view_aa_set( 180., 90., 180. )
+STRING asm_delete_plane_deleted_ids[VIRTUAL]
+asm_delete_plane( "Plane 1", asm_delete_plane_deleted_ids )
+$# 1 Plane Deleted: Plane 1
+$# UNDO: Create Plane 3 Points for [0 0 0][1 0 0][0 1 0]
+sgm_const_plane_3point( "1", "[0 0 0]", "[1 0 0]", "[0 1 0]",  @
+sgm_create_plane_3p_created_ids )
+$# 1 Plane Created: Plane 1
+ga_view_center_set( -8.445926, 1.272584 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+ga_view_aa_set( 180.000000, 90.000000, 180.000000 )
+uil_primary_file.db_save(  )
+uil_file_saveas.copy( "I:\Senior Design\AircraftDesignGroup6\wing2.db", FALSE )
+$# Flushing the User Data Manager
+$# Journal file stopped recording at 02-Mar-26 22:10:15
