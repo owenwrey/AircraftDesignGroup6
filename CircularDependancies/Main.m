@@ -114,7 +114,8 @@ while( not(exitFlag) && iteration < iterationMax )
 
 
     %% -| CG and Inertia Calculator |--------------------------------------
-
+    % aircraft = CgInertiaCalc(aircraft); - components dont have locations
+    % yet.
     %----------------------------------------------------------------------
 
 
