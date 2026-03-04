@@ -7,8 +7,8 @@ clc; clear; close all
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
 %% Mission Select
-% missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
-missionToRun = "A2A";
+missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
+% missionToRun = "A2A";
 
 %% -| Aircraft Struct (iterated variables)|--------------------------------
 % All variables that may change with each iteration should be defined here
@@ -143,6 +143,9 @@ while( not(exitFlag) && iteration <= iterationMax )
       exitFlag = true;
     end
     %----------------------------------------------------------------------
+    
+    aircraft.constants.fuelVolume = aircraft.weight.fuel/6.7;
+    aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
 
 end
 

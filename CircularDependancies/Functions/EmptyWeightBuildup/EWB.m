@@ -79,8 +79,8 @@ aircraft.vt.weight = .452*K_rht * (W0*Nz)^(.488) * vt.area^(.718) * M^(.341)...
 % fuselage
 K_dwf = 1;                                  % delta wing multiplier
 L = aircraft.fuselage.length;
-D = 6;
-W = 6;
+D = 6;      % fuselage structural depth, ft
+W = 6;      % fuselage structural width, ft
 
 aircraft.fuselage.weight = .499*K_dwf * W0^(.35) * Nz^(.25) * L^(.5) * D^(.849)...
     * W^(.685);
@@ -89,7 +89,7 @@ aircraft.fuselage.weight = .499*K_dwf * W0^(.35) * Nz^(.25) * L^(.5) * D^(.849).
 N_gear = 5.5;
 K_cb = 1;                                   % cross-beam gear (we are not cross-beam)
 K_tpg = .826;                               % tripod gear (we are tripod)
-W_l = aircraft.weight.totalOnLanding;     % landing design gross weight, lb
+W_l = aircraft.weight.totalOnLanding;       % landing design gross weight, lb
 N_l = 1.5*N_gear;                           % ultimate landing load factor
 L_m = aircraft.gear.mg.extendedLength;      % extended length of main gear, in
 
@@ -112,7 +112,7 @@ L_d = 8;                % duct length
 K_vsh = 1.425;          % Variable sweep, 1 otherwise
 K_mc = 1.45;            % if mission completion required after failure, otherwise = 1
 W_uav = 800;            % uninstalled avionics weight (800 lbs maybe)
-S_fw = ((46.5/12)*(182/12))*3 + (47/12)^2-(pi*(46.5/12)^2)*2;        % firewall surface area, ft^2
+S_fw = ((46.5/12)*(182/12))*3 + (47/12)^2-(pi*(46.5/12)^2)*2;       % firewall surface area, ft^2
 S_cs = S_csw + ht.area + aircraft.vt.rudderArea;        % total control surface area
 
 N_en = 2;               % number of engines
