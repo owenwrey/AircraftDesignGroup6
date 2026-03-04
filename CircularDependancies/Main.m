@@ -49,7 +49,7 @@ aircraft.fuelSys.Nt = 4;
 
 % Geometry
 aircraft.fuselage.length   = 48;
-aircraft.fuselage.diameter = 5.4;
+aircraft.fuselage.diameter = 6;
 
 aircraft.wing.AR          = 4;
 aircraft.wing.taper_ratio = 0.25;

@@ -43,8 +43,8 @@ comp(1).k = k_default;
 
 % fuselage 
 comp(2).name = 'fuselage';
-comp(2).l    = Aircraft.fuselage.l;       % ft fuselage length (board)
-comp(2).d    = Aircraft.fuselage.d;       % ft max diameter (board)
+comp(2).l    = Aircraft.fuselage.length;       % ft fuselage length (board)
+comp(2).d    = Aircraft.fuselage.diameter;     % ft max diameter (board)
 comp(2).swet = Aircraft.fuselage.swet;      % ft^2 computed wetted area from board dims
 comp(2).f    = Aircraft.fuselage.f; %l/d % l 
 comp(2).ff   = 0.9 + 5/comp(2).f^1.5 + comp(2).f/400;
