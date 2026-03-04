@@ -43,15 +43,18 @@ T2C = aircraft.wing.T2C;
 CHT = aircraft.ht.VolCoeff;
 ARh = aircraft.ht.AR;
 TRh = aircraft.ht.TaperRatio;
+T2Cht = Aircraft.ht.T2C;
 
 CVT = aircraft.vt.VolCoeff;
 ARv = aircraft.vt.AR;
 TRv = aircraft.vt.TaperRatio;
+T2Cvt = Aircraft.vt.left.T2C;
 
 Lh = aircraft.ht.leverArm_frac * Lf;
 Lv = aircraft.vt.leverArm_frac * Lf;
 
 %% Fuselage 
+aircraft.fuselage.swet = 2 * pi * (df/2) * ((df/2) * Lf);
 aircraft.fuselage.volume = pi*(df/2)^2 * Lf;
 
 %% Wing 
@@ -74,7 +77,7 @@ aircraft.wing.chord.tip  = Ctip_w;
 %% Horizontal Tail 
 S_HT = (CHT * MAC_w * S_ref) / Lh;
 b_HT = sqrt(ARh * S_HT);
-
+S_wetht = 2* S_HT *(1 + 0.25 * T2Cht);
 
 Croot_HT = (2 * S_HT) / (b_HT * (1 + TRh));
 Ctip_HT  = TRh * Croot_HT;
@@ -87,6 +90,7 @@ aircraft.ht.span     = b_HT;
 aircraft.ht.MAC      = MAC_HT;
 aircraft.ht.chord.root = Croot_HT;
 aircraft.ht.chord.tip  = Ctip_HT;
+aircraft.ht.swet = S_wetht;
 
 %% Vertical Tail 
 S_VT_total = (CVT * b_w * S_ref) / Lv;   
@@ -98,6 +102,7 @@ else
 end
 
 b_VT_each = sqrt(ARv * S_VT_each);
+S_wetvt = 2*S_VT_each*(1 + 0.25 * T2Cvt);
 
 Croot_VT_each = (2 * S_VT_each) / (b_VT_each * (1 + TRv));
 Ctip_VT_each  = TRv * Croot_VT_each;
@@ -108,6 +113,7 @@ aircraft.vt.leverArm  = Lv;
 aircraft.vt.Area      = S_VT_total;   
 aircraft.vt.Area_each = S_VT_each;
 aircraft.vt.span_each = b_VT_each;
+aircraft.vt.swet = S_wetvt;
 aircraft.vt.MAC_each  = MAC_VT_each;
 aircraft.vt.chord.root_each = Croot_VT_each;
 aircraft.vt.chord.tip_each  = Ctip_VT_each;
