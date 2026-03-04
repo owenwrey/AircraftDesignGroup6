@@ -49,19 +49,22 @@ aircraft.fuelSys.Nt = 4;
 
 % Geometry
 aircraft.fuselage.length   = 48;
-aircraft.fuselage.diameter = 5.4;
+aircraft.fuselage.diameter = 6;
 
 aircraft.wing.AR          = 4;
 aircraft.wing.taper_ratio = 0.25;
 aircraft.wing.sweep = 30;
 aircraft.wing.T2C = .055;   % thickness to chord
 aircraft.wing.l = 50;
+aircraft.wing.x_c = .24;
 
 aircraft.ht.VolCoeff      = 0.40;
 aircraft.ht.AR            = 4.0;
 aircraft.ht.TaperRatio    = 0.40;
 aircraft.ht.leverArm_frac = 0.45;
 aircraft.ht.sweep = 30;
+aircraft.ht.T2C = .05;
+aircraft.ht.x_c = .24;
 
 aircraft.vt.VolCoeff      = 0.04;
 aircraft.vt.AR            = 1.8;
@@ -69,6 +72,8 @@ aircraft.vt.TaperRatio    = 0.30;
 aircraft.vt.leverArm_frac = 0.40;
 aircraft.vt.twinTail      = true;
 aircraft.vt.sweep = 35;
+aircraft.vt.T2C = .05;
+aircraft.vt.x_c = .24;
 
 % Empty Weight Buildup
 aircraft.constants.limitLoad = 8;
