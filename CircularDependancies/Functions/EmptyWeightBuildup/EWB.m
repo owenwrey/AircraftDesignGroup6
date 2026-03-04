@@ -191,13 +191,17 @@ aircraft.enginesystems.efcpDistance = L_ec;         % engine front to cockpit di
 aircraft.enginesystems.numberOfFlightControlSystem = N_s; 
 
 
-prevWeight = aircraft.weight.empty;
+% prevWeight = aircraft.weight.empty;
 
-aircraft.weight.empty = aircraft.wing.weight + aircraft.ht.weight ... 
+aircraft.weight.empty = aircraft.wing.weight + aircraft.ht.weight + aircraft.engine.weight*2 ... 
     + aircraft.vt.weight + aircraft.fuselage.weight + aircraft.gear.mg.weight ...
     + aircraft.gear.ng.weight + sum(cell2mat(struct2cell(engine))) + sum(cell2mat(struct2cell(misc)));
 
-weightDiff = prevWeight - aircraft.weight.empty;
+
+aircraft.engine.structures = engine;
+aircraft.weight.misc = misc;
+
+% weightDiff = prevWeight - aircraft.weight.empty;
 
 % weights = [weightDiff;aircraft.weight.empty];
 

@@ -7,8 +7,8 @@ clc; clear; close all
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
 %% Mission Select
-missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
-% missionToRun = "A2A";
+% missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
+missionToRun = "A2A";
 
 %% -| Aircraft Struct (iterated variables)|--------------------------------
 % All variables that may change with each iteration should be defined here
@@ -145,6 +145,13 @@ while( not(exitFlag) && iteration <= iterationMax )
     %----------------------------------------------------------------------
 
 end
+
+
+% ignore this, just helps with report writing
+% cell2mat(struct2cell(aircraft.engine.structures))
+% cell2mat(struct2cell(aircraft.weight.misc))
+% enginePerc = cell2mat(struct2cell(aircraft.engine.structures))./aircraft.weight.total
+% miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
 
 %% -| Display Results |----------------------------------------------------
 fprintf("\n Converged after %u iterations\n", iteration)
