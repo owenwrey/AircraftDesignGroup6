@@ -161,8 +161,18 @@ while( not(exitFlag) && iteration <= iterationMax )
         end
     end
     %----------------------------------------------------------------------
+    
+    aircraft.constants.fuelVolume = aircraft.weight.fuel/6.7;
+    aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
 
 end
+
+
+% ignore this, just helps with report writing
+% cell2mat(struct2cell(aircraft.engine.structures))
+% cell2mat(struct2cell(aircraft.weight.misc))
+% enginePerc = cell2mat(struct2cell(aircraft.engine.structures))./aircraft.weight.total
+% miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
 
 %% -| Display Results |----------------------------------------------------
 fprintf("\n Converged after %u iterations\n", iteration)
