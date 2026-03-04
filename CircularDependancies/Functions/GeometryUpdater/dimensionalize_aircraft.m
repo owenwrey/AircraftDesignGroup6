@@ -57,7 +57,7 @@ aircraft.fuselage.volume = pi*(df/2)^2 * Lf;
 %% Wing 
 S_ref = W0 / WS;
 b_w = sqrt(ARw * S_ref);
-S_wet = 2*S_ref( 1 + 0.25 * T2C);
+S_wet = 2*S_ref*(1 + 0.25 * T2C);
 
 Croot_w = (2 * S_ref) / (b_w * (1 + TRw));
 Ctip_w  = TRw * Croot_w;
@@ -66,7 +66,7 @@ MAC_w = ((2/3) * Croot_w * (1 + TRw + TRw^2)) / (1 + TRw);
 
 aircraft.wing.Area = S_ref;
 aircraft.wing.span = b_w;
-aircraft.wing.swet = S_wet
+aircraft.wing.swet = S_wet;
 aircraft.wing.MAC  = MAC_w;
 aircraft.wing.chord.root = Croot_w;
 aircraft.wing.chord.tip  = Ctip_w;
