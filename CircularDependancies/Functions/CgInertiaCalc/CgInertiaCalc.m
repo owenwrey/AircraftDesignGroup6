@@ -55,7 +55,7 @@ aircraft.wing.poly = polyshape([rt rl tl tt],[0 0 span/2 span/2]);
 taper = aircraft.wing.taper_ratio;
 ybar = (span/6)*((1 + 2*taper)/(1 + taper));
 
-xglobcent = centX - aircraft.wing.chord.root/4 - ybar*tand(aircraft.wing.sweep) - aircraft.wing.MAC/2 + aircraft.cg.x;
+xglobcent = centX - aircraft.wing.chord.root/4 - ybar*tand(aircraft.wing.sweep) - aircraft.wing.MAC*(0.05) + aircraft.cg.x;
 
 aircraft.wing.cg.x = xglobcent;
 aircraft.wing.cg.y = 0;
@@ -65,7 +65,7 @@ temp = aircraft.cg.x + aircraft.wing.MAC;
 
 
 %% calc ordinance cg
-aircraft.ordinance.cg.x = aircraft.cg.x - aircraft.wing.chord.root/4 - ybar*tand(aircraft.wing.sweep) - aircraft.wing.MAC/2 + aircraft.wing.chord.root/4;
+aircraft.ordinance.cg.x = aircraft.cg.x - aircraft.wing.chord.root/4 - ybar*tand(aircraft.wing.sweep) - aircraft.wing.MAC*(0.05) + aircraft.wing.chord.root/4;
 aircraft.ordinance.cg.y = 0;
 aircraft.ordinance.cg.z = aircraft.wing.cg.z - 1;
 

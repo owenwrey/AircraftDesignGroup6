@@ -16,11 +16,11 @@ CGxloc = zeros(1,length(time));
 
 for j = 1 : length(time)
 
-    aircraft.fuel2.weight = aircraft.fuel2.weight - dfuel(j);
+    aircraft.fuel1.weight = aircraft.fuel1.weight - dfuel(j);
 
-    if aircraft.fuel2.weight <= 0
-        aircraft.fuel1.weight = aircraft.fuel1.weight + aircraft.fuel2.weight;
-        aircraft.fuel2.weight = 0;
+    if aircraft.fuel1.weight <= 0
+        aircraft.fuel2.weight = aircraft.fuel1.weight + aircraft.fuel2.weight;
+        aircraft.fuel1.weight = 0;
     end
 
     % initialize variables
@@ -68,9 +68,9 @@ CGxloc(j) = xsum./weightsum;
 
 end
 
-forwardLimit = aircraft.cg.x-aircraft.wing.MAC/2;
+forwardLimit = aircraft.cg.x-aircraft.wing.MAC*(0.05);
 
-statMarg = 0.05;
+statMarg = 0.15;
 aftLimit = aircraft.cg.x + aircraft.wing.MAC*statMarg;
 plot(CGxloc,weight)
 hold on
