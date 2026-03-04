@@ -2,7 +2,7 @@ function [Aircraft] = landingGear(Aircraft)
 
 tipBackAngle = 20;
 
-WB = 0.8.* Aircraft.fuselage.length;
+WB = 0.5.* Aircraft.fuselage.length;
 
 J = WB./10; % main gear moment arm
 K = WB.*(9/10); % front gear moment arm
@@ -10,7 +10,7 @@ K = WB.*(9/10); % front gear moment arm
 Aircraft.gear.mg.x = Aircraft.cg.x + J;
 Aircraft.gear.ng.x = Aircraft.cg.x - K;
 
-Aircraft.gear.mg.height = (Aircraft.fuselage.length - Aircraft.gear.mg.x).*tand(tipBackAngle);
+Aircraft.gear.mg.height = (Aircraft.fuselage.length - Aircraft.gear.mg.cg.x).*tand(tipBackAngle);
 Aircraft.gear.ng.height = Aircraft.gear.mg.height; 
 
 h_wingtip = Aircraft.cg.z;  

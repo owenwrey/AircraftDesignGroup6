@@ -20,9 +20,9 @@ aircraft = struct;
 % Empty Weight Buildup
 
 % CG and Inertia
-aircraft.cg.x = 0;
+aircraft.cg.x = 20;
 aircraft.cg.y = 0;
-aircraft.cg.z = 0;
+aircraft.cg.z = 10;
 
 % Landing Gear
 
@@ -50,6 +50,9 @@ aircraft.fuelSys.Nt = 4;
 % Geometry
 aircraft.fuselage.length   = 48;
 aircraft.fuselage.diameter = 6;
+aircraft.fuselage.cg.x = 24;
+aircraft.fuselage.cg.y = 0;
+aircraft.fuselage.cg.z = 10;
 
 aircraft.wing.AR          = 4;
 aircraft.wing.taper_ratio = 0.25;
@@ -61,7 +64,7 @@ aircraft.wing.x_c = .24;
 aircraft.ht.VolCoeff      = 0.40;
 aircraft.ht.AR            = 4.0;
 aircraft.ht.TaperRatio    = 0.40;
-aircraft.ht.leverArm_frac = 0.45;
+aircraft.ht.leverArm_frac = 0.35;
 aircraft.ht.sweep = 30;
 aircraft.ht.T2C = .05;
 aircraft.ht.x_c = .24;
@@ -69,11 +72,15 @@ aircraft.ht.x_c = .24;
 aircraft.vt.VolCoeff      = 0.04;
 aircraft.vt.AR            = 1.8;
 aircraft.vt.TaperRatio    = 0.30;
-aircraft.vt.leverArm_frac = 0.40;
+aircraft.vt.leverArm_frac = 0.30;
 aircraft.vt.twinTail      = true;
 aircraft.vt.sweep = 35;
 aircraft.vt.T2C = .05;
 aircraft.vt.x_c = .24;
+
+aircraft.ordinance.weight = 4380;
+
+aircraft.avionics.weight = 2500;
 
 % Empty Weight Buildup
 aircraft.constants.limitLoad = 8;
@@ -83,13 +90,19 @@ aircraft.constants.maxMach = 1.6;
 % CG and Inertia
 aircraft.engine.cg.x = 45;
 aircraft.cockpit.cg.x = 8;
+aircraft.cockpit.weight = 300; % undefined? %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Landing Gear
 aircraft.gear.mg.extendedLength = 40;   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% fixxxxxxxxxxxxxxxxxxxx
 aircraft.gear.ng.extendedLength = 40;
+aircraft.gear.mg.x = 40;
+aircraft.gear.ng.x = 8;
+aircraft.gear.mg.height = 5;
+aircraft.gear.ng.height = 5; 
 
 % Time-Step Mission
-aircraft.weight.tolerance = 250; % GO TO getConfig to uncomment
+aircraft.weight.tolerance = 5; % GO TO getConfig to uncomment
+aircraft.cg.tolerance = 0.005;
 % -------------------------------------------------------------------------
 
 %% Calculation Loop
@@ -102,7 +115,7 @@ while( not(exitFlag) && iteration <= iterationMax )
     iteration = iteration + 1;
     fprintf("   Iteration: %u\n", iteration);
     aircraftOld = aircraft;
-    
+
     %% -| Geometry Updater |-----------------------------------------------
     aircraft = dimensionalize_aircraft(aircraft);
     %----------------------------------------------------------------------
@@ -116,8 +129,7 @@ while( not(exitFlag) && iteration <= iterationMax )
     %----------------------------------------------------------------------
 
     %% -| CG and Inertia Calculator |--------------------------------------
-    % aircraft = CgInertiaCalc(aircraft); - components dont have locations
-    % yet.
+     aircraft = CgInertiaCalc(aircraft);
     %----------------------------------------------------------------------
 
     %% -| Landing Gear Updater |-------------------------------------------
@@ -128,9 +140,13 @@ while( not(exitFlag) && iteration <= iterationMax )
 
     %----------------------------------------------------------------------
 
+  
+
     %% -| Fixed MTOW Convergence Check |-----------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance
+
       continue; % this should go back to the top of the while loop
+     
     end % go on to time-iterated mission model
     %----------------------------------------------------------------------
 
@@ -140,7 +156,9 @@ while( not(exitFlag) && iteration <= iterationMax )
 
     %% -| Converged Solution Check |---------------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) < aircraft.weight.tolerance
+        if abs(aircraftOld.cg.x - aircraft.cg.x) < aircraft.cg.tolerance
       exitFlag = true;
+        end
     end
     %----------------------------------------------------------------------
 
@@ -148,7 +166,15 @@ end
 
 %% -| Display Results |----------------------------------------------------
 fprintf("\n Converged after %u iterations\n", iteration)
-fprintf(" MTOW: %.0f lb\n", aircraft.weight.total)
+fprintf("  MTOW: %.0f lb\n", aircraft.weight.total)
 fprintf("  EOW: %.0f lb\n", aircraft.weight.empty)
+fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
+fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
+fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
 %--------------------------------------------------------------------------
 
+% plot cg envelope
+
+if true
+CGenvelope(aircraft, "Strike, No Drop")
+end
