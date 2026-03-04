@@ -56,6 +56,7 @@ aircraft.wing.taper_ratio = 0.25;
 aircraft.wing.sweep = 30;
 aircraft.wing.T2C = .055;   % thickness to chord
 aircraft.wing.l = 50;
+aircraft.wing.x_c = .24;
 
 aircraft.ht.VolCoeff      = 0.40;
 aircraft.ht.AR            = 4.0;

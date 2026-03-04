@@ -30,10 +30,10 @@ cd_l_p = 0;              % landing gear + protuberance drag (if used)
 
 % wing
 comp(1).name = 'wing';
-comp(1).l    = Aircraft.wing.l;        % ft (updated MAC from board)
-comp(1).swet = Aircraft.wing.swet;      % ft^2 wetted area from board geometry
-comp(1).t_c  = Aircraft.wing.T2C;        % thickness ratio t/c 
-comp(1).x_c  = Aircraft.wing.x_c;         % x/c location of max thickness
+comp(1).l    = Aircraft.wing.MAC;           % ft (updated MAC from board)
+comp(1).swet = Aircraft.wing.swet;          % ft^2 wetted area from board geometry
+comp(1).t_c  = Aircraft.wing.T2C;           % thickness ratio t/c 
+comp(1).x_c  = Aircraft.wing.x_c;           % x/c location of max thickness
 comp(1).sweep_angle_deg = Aircraft.wing.sweep;    % degrees  (F/A-18 style LE sweep)
 comp(1).sweep_angle = deg2rad(comp(1).sweep_angle_deg);
 comp(1).ff = (1 + (0.6/comp(1).x_c)*comp(1).t_c + 100*(comp(1).t_c)^4) .* ...
@@ -53,7 +53,7 @@ comp(2).k    = k_default;
 
 % horizontal tail
 comp(3).name = 'horizontal tail';
-comp(3).l    = Aircraft.ht.l;       % ft MAC from board
+comp(3).l    = Aircraft.ht.MAC;       % ft MAC from board
 comp(3).swet = Aircraft.ht.swet;      % ft^2 wetted area from board geometry
 comp(3).t_c  = Aircraft.ht.T2C;
 comp(3).x_c  = Aircraft.ht.x_c;
