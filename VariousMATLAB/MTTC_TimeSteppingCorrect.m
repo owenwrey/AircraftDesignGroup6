@@ -160,77 +160,167 @@ bestAlt = bestAlt(idx);
 bestV   = bestV(idx);
 bestPs  = bestPs(idx);
 
-%% Integrate time using Ps = dHe/dt
+% ---- REMOVE DUPLICATE ENERGY HEIGHTS ----
+[EnHt, uniqueIdx] = unique(EnHt, 'stable');
 
-dHe = diff(EnHt);             
-Ps_mid = bestPs(1:end-1);     
-dt = dHe ./ Ps_mid;           
+bestAlt = bestAlt(uniqueIdx);
+bestV   = bestV(uniqueIdx);
+bestPs  = bestPs(uniqueIdx);
 
-TTC = sum(dt)/60;   % minutes
+%% TIME MARCH SIMULATION (FIXED dt)
 
-% cumulative time
-t_profile = [0; cumsum(dt)];
+g = 32.2;                 % ft/s^2
+dt = 1.0;                 % time step (sec) — small for stability
 
-%% Store climb schedule for plotting
+% Initial state
+t = 0;
+Alt = initAlt;
+V   = initV;
+W   = W0;
+He  = Alt + V^2/(2*g);
 
-Alt_profile  = bestAlt;
-KTAS_profile = bestV / kts2fps;
+% Storage arrays
+t_hist   = t;
+Alt_hist = Alt;
+V_hist   = V;
+W_hist   = W;
 
-%% Plotting
+% Convert TSFC to 1/sec (from 1/hr)
+TSFC = SFC_climb / 3600;
 
-figure(1);
-plot(KTAS_profile, Alt_profile, 'b', 'LineWidth', 2);
-xlabel('KTAS');
-ylabel('Altitude (ft)');
-grid on; hold on;
-title('Minimum-Time Climb Schedule');
+while Alt < finalAlt
 
-He_bands = [ ...
-    EnHt_start; ...
-    EnHt_start + 0.25*(EnHt_end - EnHt_start); ...
-    EnHt_start + 0.50*(EnHt_end - EnHt_start); ...
-    EnHt_start + 0.75*(EnHt_end - EnHt_start); ...
-    EnHt_end ...
-];
+    % Interpolate optimal Ps at current energy height
+    Ps_cmd = interp1(EnHt, bestPs, He, 'linear', 'extrap');
 
-V_span = linspace(min(KTAS), max(KTAS), 500);
-V_fps_span = V_span*kts2fps;
+    % Atmospheric properties at current altitude
+    [~,~,~,rho_now] = atmosisa(Alt*ft2m);
+    rho_now = rho_now * 0.00194032;
 
-for k = 1:length(He_bands)
-    He_val = He_bands(k);
+    thrust_now = fullThrust * TLapse(Alt);
+    
+    q = 0.5 * rho_now * V^2;
+    CL = W/(q*S);
+    CD = CD0 + K1*CL + K2*CL^2;
+    D = q*S*CD;
 
-    % altitude for each V on this energy-height line
-    Alt_band = He_val - (V_fps_span.^2)/(2*32.2);
+    Ps_actual = (thrust_now - D)*V/W;
 
-    % restrict to physical
-    valid = Alt_band >= 0;
-    V_valid = V_span(valid);
-    Alt_valid = Alt_band(valid);
+    % Use commanded Ps but limit to actual available
+    Ps = min(Ps_cmd, Ps_actual);
 
-    plot(V_valid, Alt_valid, '--','Color',[0.4 0.4 0.4],'LineWidth',0.8);
+    % Energy integration
+    He_dot = Ps;
+    He_next = He + He_dot*dt;
 
-    % Label at rightmost side
-    if ~isempty(V_valid)
-        text(V_valid(end)+5, Alt_valid(end), ...
-             sprintf('H_e = %5.0f ft',He_val), ...
-             'Color',[0.3 0.3 0.3], 'FontSize',8);
+    if He_next >= EnHt_final
+        % compute fractional time step to land exactly on target
+        dt_final = (EnHt_final - He) / He_dot;
+        
+        He = EnHt_final;
+        t  = t + dt_final;
+        
+        % update V and Alt exactly at final energy
+        V = interp1(EnHt, bestV, He, 'linear', 'extrap');
+        Alt = He - V^2/(2*g);
+        
+        % burn fuel during fractional step
+        mdot = TSFC * thrust_now;
+        W = W - mdot*dt_final;
+        
+        % store final state
+        t_hist(end+1,1)   = t;
+        Alt_hist(end+1,1) = Alt;
+        V_hist(end+1,1)   = V;
+        W_hist(end+1,1)   = W;
+        
+        break
+    else
+        He = He_next;
     end
+
+
+    % Assume optimal schedule splits energy correctly
+    % Recompute V and Alt from He and commanded V schedule
+    V_cmd = interp1(EnHt, bestV, He, 'linear', 'extrap');
+    V_cmd = max(min(V_cmd, max(bestV)), min(bestV));
+
+    V = V_cmd;
+    Alt = He - V^2/(2*g);
+
+    % Prevent negative altitude
+    Alt = max(0, Alt);
+
+    % Fuel burn
+    mdot = TSFC * thrust_now;     % lb/sec
+    W = W - mdot*dt;
+    W = max(W, 0.7*W0);           % safety floor (avoid negative weight)
+
+    % Time update
+    t = t + dt;
+
+    % Store history
+    t_hist(end+1,1)   = t;
+    Alt_hist(end+1,1) = Alt;
+    V_hist(end+1,1)   = V;
+    W_hist(end+1,1)   = W;
+
+    
 end
 
+while V < finalV
+    
+    [~,~,~,rho_now] = atmosisa(Alt*ft2m);
+    rho_now = rho_now * 0.00194032;
 
-hold off;
+    thrust_now = fullThrust * TLapse(Alt);
+    
+    q = 0.5 * rho_now * V^2;
+    CL = W/(q*S);
+    CD = CD0 + K1*CL + K2*CL^2;
+    D = q*S*CD;
 
+    accel = (thrust_now - D)/W * g;   % ft/s^2
+    
+    V = V + accel*dt;
 
+    mdot = TSFC * thrust_now;
+    W = W - mdot*dt;
+
+    t = t + dt;
+
+    t_hist(end+1,1)   = t;
+    Alt_hist(end+1,1) = Alt;
+    V_hist(end+1,1)   = V;
+    W_hist(end+1,1)   = W;
+end
+
+TTC = t/60;
+
+%% ================================
+%% Plotting
+%% ================================
+
+figure(1)
+plot(V_hist/kts2fps, Alt_hist,'b','LineWidth',2)
+xlabel('KTAS')
+ylabel('Altitude (ft)')
+title('Minimum-Time Climb Schedule (Time Marched)')
+grid on
 
 figure(2)
-plot(t_profile,Alt_profile,'b','LineWidth',2)
-grid on
-hold on
+plot(t_hist, Alt_hist,'b','LineWidth',2)
 xlabel('Time (s)')
 ylabel('Altitude (ft)')
-title('Cimb Profile')
-hold off
+title('Climb Profile')
+grid on
 
-% Print TTC
+figure(3)
+plot(t_hist, W_hist,'LineWidth',2)
+xlabel('Time (s)')
+ylabel('Weight (lb)')
+title('Fuel Burn During Climb')
+grid on
+
 fprintf('Total Time to Climb = %.2f minutes\n', TTC);
-
+fprintf('Fuel Burned = %.0f lb\n', W0 - W);
