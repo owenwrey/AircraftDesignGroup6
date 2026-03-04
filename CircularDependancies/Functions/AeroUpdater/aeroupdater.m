@@ -46,7 +46,7 @@ comp(2).name = 'fuselage';
 comp(2).l    = Aircraft.fuselage.length;       % ft fuselage length (board)
 comp(2).d    = Aircraft.fuselage.diameter;     % ft max diameter (board)
 comp(2).swet = Aircraft.fuselage.swet;      % ft^2 computed wetted area from board dims
-comp(2).f    = Aircraft.fuselage.f; %l/d % l 
+comp(2).f    = comp(2).l/comp(2).d;         %l/d % l 
 comp(2).ff   = 0.9 + 5/comp(2).f^1.5 + comp(2).f/400;
 comp(2).q    = 1.0;      % pg 429, the fuselage usually has negligible q
 comp(2).k    = k_default;
@@ -66,11 +66,11 @@ comp(3).k = k_default;
 
 % vertical tail LEFT   (twin-tail configuration)
 comp(4).name = 'vertical tail L';
-comp(4).l    = Aircraft.vt.left.l;      % ft MAC (from board VT geometry)
-comp(4).swet = Aircraft.vt.left.swet;     % ft^2 wetted area per tail (from board)
-comp(4).t_c  = Aircraft.vt.left.T2C;
-comp(4).x_c  = Aircraft.vt.left.x_c;
-comp(4).sweep_angle_deg = Aircraft.vt.left.sweep;
+comp(4).l    = Aircraft.vt.MAC;      % ft MAC (from board VT geometry)
+comp(4).swet = Aircraft.vt.swet;     % ft^2 wetted area per tail (from board)
+comp(4).t_c  = Aircraft.vt.T2C;
+comp(4).x_c  = Aircraft.vt.x_c;
+comp(4).sweep_angle_deg = Aircraft.vt.sweep;
 comp(4).sweep_angle = deg2rad(comp(4).sweep_angle_deg);
 comp(4).ff = (1 + (0.6/comp(4).x_c)*comp(4).t_c + 100*(comp(4).t_c)^4) .* ...
               (1.34*m.^0.18 .* cos(comp(4).sweep_angle).^0.28);
@@ -79,52 +79,51 @@ comp(4).k = k_default;
 
 % vertical tail RIGHT  (twin-tail configuration)
 comp(5).name = 'vertical tail R';
-comp(5).l    = Aircraft.vt.right.l;      % ft MAC
-comp(5).swet = Aircraft.vt.right.swet;     % ft^2 wetted area
-comp(5).t_c  = Aircraft.vt.right.T2C;
-comp(5).x_c  = Aircraft.vt.right.x_c;
-comp(5).sweep_angle_deg = Aircraft.vt.right.sweep;
-comp(5).sweep_angle = deg2rad(comp(5).sweep_angle_deg);
-comp(5).ff = (1 + (0.6/comp(5).x_c)*comp(5).t_c + 100*(comp(5).t_c)^4) .* ...
-              (1.34*m.^0.18 .* cos(comp(5).sweep_angle).^0.28);
-comp(5).q = 1.08;         % pg 429
-comp(5).k = k_default;
+comp(5).l    = comp(4).l;      % ft MAC
+comp(5).swet = comp(4).swet;     % ft^2 wetted area
+comp(5).t_c  =comp(4).t_c;
+comp(5).x_c  = comp(4).x_c;
+comp(5).sweep_angle_deg = comp(4).sweep_angle_deg;
+comp(5).sweep_angle = comp(4).sweep_angle;
+comp(5).ff = comp(4).ff;
+comp(5).q = comp(4).q;        % pg 429
+comp(5).k = comp(4).k;
 
-% strut
-comp(6).name = 'strut';
-comp(6).l    = Aircraft.strut.l;        % ft
-comp(6).swet = Aircraft.strut.swet;        % ft^2
-comp(6).t_c  = Aircraft.strut.T2C;
-comp(6).x_c  = Aircraft.strut.x_c;
-comp(6).sweep_angle_deg = Aircraft.strut.sweep;
-comp(6).sweep_angle = deg2rad(comp(6).sweep_angle_deg);
-comp(6).ff = (1 + (0.6/comp(6).x_c)*comp(6).t_c + 100*(comp(6).t_c)^4) .* ...
-              (1.34*m.^0.18 .* cos(comp(6).sweep_angle).^0.28);
-comp(6).q = 1.3;         % pg 429, wing strut has < drag than pylon
-comp(6).k = k_default;
+% % strut
+% comp(6).name = 'strut';
+% comp(6).l    = Aircraft.strut.l;        % ft
+% comp(6).swet = Aircraft.strut.swet;        % ft^2
+% comp(6).t_c  = Aircraft.strut.T2C;
+% comp(6).x_c  = Aircraft.strut.x_c;
+% comp(6).sweep_angle_deg = Aircraft.strut.sweep;
+% comp(6).sweep_angle = deg2rad(comp(6).sweep_angle_deg);
+% comp(6).ff = (1 + (0.6/comp(6).x_c)*comp(6).t_c + 100*(comp(6).t_c)^4) .* ...
+%               (1.34*m.^0.18 .* cos(comp(6).sweep_angle).^0.28);
+% comp(6).q = 1.3;         % pg 429, wing strut has < drag than pylon
+% comp(6).k = k_default;
 
-% pylon 
-comp(7).name = 'pylon';
-comp(7).l    = Aircraft.pylon.l;        % ft
-comp(7).swet = Aircraft.pylon.swet;        % ft^2
-comp(7).t_c  = Aircraft.pylon.T2C;
-comp(7).x_c  = Aircraft.pylon.x_c;
-comp(7).sweep_angle_deg = Aircraft.pylon.sweep;
-comp(7).sweep_angle = deg2rad(comp(7).sweep_angle_deg);
-comp(7).ff = (1 + (0.6/comp(7).x_c)*comp(7).t_c + 100*(comp(7).t_c)^4) .* ...
-              (1.34*m.^0.18 .* cos(comp(7).sweep_angle).^0.28);
-comp(7).q = 1.4;         % pg 429
-comp(7).k = k_default;
+% pylon
+% comp(7).name = 'pylon';
+% comp(7).l    = Aircraft.pylon.l;        % ft
+% comp(7).swet = Aircraft.pylon.swet;        % ft^2
+% comp(7).t_c  = Aircraft.pylon.T2C;
+% comp(7).x_c  = Aircraft.pylon.x_c;
+% comp(7).sweep_angle_deg = Aircraft.pylon.sweep;
+% comp(7).sweep_angle = deg2rad(comp(7).sweep_angle_deg);
+% comp(7).ff = (1 + (0.6/comp(7).x_c)*comp(7).t_c + 100*(comp(7).t_c)^4) .* ...
+%               (1.34*m.^0.18 .* cos(comp(7).sweep_angle).^0.28);
+% comp(7).q = 1.4;         % pg 429
+% comp(7).k = k_default;
 
 % nacelle 
-comp(8).name = 'nacelle';
-comp(8).l    = Aircraft.nacelle.l;       % ft
-comp(8).d    = Aircraft.nacelle.d;      % ft
-comp(8).swet = Aircraft.nacelle.swet;      % ft^2
-comp(8).f    = comp(8).l / comp(8).d;
-comp(8).ff   = 1 + 0.35/comp(8).f;
-comp(8).q    = 1.5;      % pg 425 - nacelle mounted directly on wing
-comp(8).k    = k_default;
+% comp(7).name = 'nacelle';
+% comp(7).l    = Aircraft.nacelle.l;       % ft
+% comp(7).d    = Aircraft.nacelle.d;      % ft
+% comp(7).swet = Aircraft.nacelle.swet;      % ft^2
+% comp(7).f    = comp(7).l / comp(7).d;
+% comp(7).ff   = 1 + 0.35/comp(7).f;
+% comp(7).q    = 1.5;      % pg 425 - nacelle mounted directly on wing
+% comp(7).k    = k_default;
 
 %% cd0 combined (subsonic + supersonic) @ sea level
 % (keeps your component definitions unchanged)
@@ -260,7 +259,8 @@ for k = 1:length(m)
 end
 
 %% plots @ sea level
-figure; hold on; grid on;
+clf
+figure(1); hold on; grid on;
 % scatter(m, cd0_sum_vec,   'LineWidth', 1.5);
 % plot(m, cd0_misc_vec,  'LineWidth', 1.5);
 % plot(m, cd0_wave_vec,  'LineWidth', 1.5);

@@ -63,6 +63,8 @@ aircraft.ht.AR            = 4.0;
 aircraft.ht.TaperRatio    = 0.40;
 aircraft.ht.leverArm_frac = 0.45;
 aircraft.ht.sweep = 30;
+aircraft.ht.T2C = .05;
+aircraft.ht.x_c = .24;
 
 aircraft.vt.VolCoeff      = 0.04;
 aircraft.vt.AR            = 1.8;
@@ -70,6 +72,8 @@ aircraft.vt.TaperRatio    = 0.30;
 aircraft.vt.leverArm_frac = 0.40;
 aircraft.vt.twinTail      = true;
 aircraft.vt.sweep = 35;
+aircraft.vt.T2C = .05;
+aircraft.vt.x_c = .24;
 
 % Empty Weight Buildup
 aircraft.constants.limitLoad = 8;

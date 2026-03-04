@@ -43,12 +43,12 @@ T2C = aircraft.wing.T2C;
 CHT = aircraft.ht.VolCoeff;
 ARh = aircraft.ht.AR;
 TRh = aircraft.ht.TaperRatio;
-T2Cht = Aircraft.ht.T2C;
+T2Cht = aircraft.ht.T2C;
 
 CVT = aircraft.vt.VolCoeff;
 ARv = aircraft.vt.AR;
 TRv = aircraft.vt.TaperRatio;
-T2Cvt = Aircraft.vt.left.T2C;
+T2Cvt = aircraft.vt.T2C;
 
 Lh = aircraft.ht.leverArm_frac * Lf;
 Lv = aircraft.vt.leverArm_frac * Lf;
@@ -114,7 +114,7 @@ aircraft.vt.Area      = S_VT_total;
 aircraft.vt.Area_each = S_VT_each;
 aircraft.vt.span_each = b_VT_each;
 aircraft.vt.swet = S_wetvt;
-aircraft.vt.MAC_each  = MAC_VT_each;
+aircraft.vt.MAC = MAC_VT_each;
 aircraft.vt.chord.root_each = Croot_VT_each;
 aircraft.vt.chord.tip_each  = Ctip_VT_each;
 
