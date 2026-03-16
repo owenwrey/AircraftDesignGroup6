@@ -72,6 +72,8 @@ forwardLimit = aircraft.cg.x-aircraft.wing.MAC*(0.05);
 
 statMarg = 0.15;
 aftLimit = aircraft.cg.x + aircraft.wing.MAC*statMarg;
+
+
 plot(CGxloc,weight)
 hold on
 xline(forwardLimit)
