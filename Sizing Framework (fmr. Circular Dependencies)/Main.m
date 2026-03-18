@@ -105,6 +105,9 @@ aircraft.weight.tolerance = 5; % GO TO getConfig to uncomment
 aircraft.cg.tolerance = 0.005;
 % -------------------------------------------------------------------------
 
+% Add script settings (edit these in the function):
+aircraft.settings = getSettingsStruct(aircraft);
+
 %% Calculation Loop
 
 exitFlag = false; 
@@ -137,17 +140,30 @@ while( not(exitFlag) && iteration <= iterationMax )
     %----------------------------------------------------------------------
     
     %% -| Landing Gear Convergence Check |---------------------------------
+    % these statements evaulate as "true" if the cg in that axis has converged
+    isCGconverged.x = abs(aircraftOld.cg.x - aircraft.cg.x) <= aircraft.cg.tolerance;
+    isCGconverged.y = abs(aircraftOld.cg.y - aircraft.cg.y) <= aircraft.cg.tolerance;
+    isCGconverged.z = abs(aircraftOld.cg.z - aircraft.cg.z) <= aircraft.cg.tolerance;
+
+    if ~isCGconverged.x && ~isCGconverged.y && ~isCGconverged.z % If cg hasn't converged...
+
+        continue; % ...go back to top of while loop.
+
+    end % If cg has converged, go to MTOW convergence check
 
     %----------------------------------------------------------------------
 
   
 
     %% -| Fixed MTOW Convergence Check |-----------------------------------
-    if abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance
+    % Evaluates "true" if MTOW has converged
+    isMTOWconverged = abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance;
 
-      continue; % this should go back to the top of the while loop
+    if ~isMTOWconverged % If MTOW hasn't converged...
+
+      continue; % ...go back to top of while loop.
      
-    end % go on to time-iterated mission model
+    end % If MTOW has converged, go on to time-iterated mission model.
     %----------------------------------------------------------------------
 
     %% -| Time Iterated Mission Model |------------------------------------
@@ -155,11 +171,13 @@ while( not(exitFlag) && iteration <= iterationMax )
     %----------------------------------------------------------------------
 
     %% -| Converged Solution Check |---------------------------------------
-    if abs(aircraftOld.weight.total - aircraft.weight.total) < aircraft.weight.tolerance
-        if abs(aircraftOld.cg.x - aircraft.cg.x) < aircraft.cg.tolerance
-      exitFlag = true;
+    isMTOWconverged = abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance;
+
+    if isMTOWconverged % If MTOW has converged...
+        if isCGconverged.x && isCGconverged.y && isCGconverged.z % ...and CG has converged...
+            exitFlag = true; % ... exit the loop.
         end
-    end
+    end % If either hasn't converged, do another iteration of the loop.
     %----------------------------------------------------------------------
     
     aircraft.constants.fuelVolume = aircraft.weight.fuel/6.7;
@@ -185,6 +203,6 @@ fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
 
 % plot cg envelope
 
-if true
-CGenvelope(aircraft, "Strike, No Drop")
+if aircraft.settings.CGenvelope.run
+    CGenvelope(aircraft, "Strike, No Drop")
 end
