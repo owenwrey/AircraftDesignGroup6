@@ -1,4 +1,4 @@
-function aircraft = aeroupdater(aircraft)
+function aircraft = aeroupdater(Aircraft)
 %% AEROUPDATER
 % Builds C_D0 as a function of:
 %   1) altitude, h [ft]
@@ -173,7 +173,7 @@ for j = 1:nAlt
             else
                 q_c = comp(i).q;
 
-                if length(comp(i).ff) == 1
+                if isscalar(comp(i).ff)
                     ff_i = comp(i).ff;
                 else
                     ff_i = comp(i).ff(k);
