@@ -292,7 +292,8 @@ Aircraft.aero.cd0 = @(alt_ft_query, mach_query) ...
 % view(135,30);
 % 
 % end
-
+end 
+end 
 %% =========================
 % LOCAL FUNCTION: SUTHERLAND VISCOSITY
 % =========================
@@ -310,5 +311,5 @@ T_ref  = 273.15;     % [K]
 S      = 110.4;      % [K]
 
 mu = mu_ref * (T / T_ref)^(3/2) * (T_ref + S) / (T + S);
-end
+
 end 
