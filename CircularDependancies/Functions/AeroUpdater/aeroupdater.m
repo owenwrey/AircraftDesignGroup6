@@ -260,36 +260,36 @@ Aircraft.aero.cd0_interp = griddedInterpolant( ...
 Aircraft.aero.cd0 = @(alt_ft_query, mach_query) ...
     Aircraft.aero.cd0_interp(alt_ft_query, mach_query);
 
-%% -------------------------
-% OPTIONAL PLOTS
-% --------------------------
-figure;
-hold on;
-grid on;
+% %% -------------------------
+% % OPTIONAL PLOTS
+% % --------------------------
+% figure;
+% hold on;
+% grid on;
+% 
+% plot_altitudes_ft = [0 10000 20000 30000 40000 50000];
+% 
+% for n = 1:length(plot_altitudes_ft)
+%     idx_alt = find(alt_ft == plot_altitudes_ft(n), 1);
+%     if ~isempty(idx_alt)
+%         plot(mach, cd0_total_grid(idx_alt,:), 'LineWidth', 1.6);
+%     end
+% end
+% 
+% xlabel('Mach number, M');
+% ylabel('Zero-lift drag coefficient, C_{D0}');
+% title('C_{D0} vs Mach at Selected Altitudes');
+% legend("0 ft","10,000 ft","20,000 ft","30,000 ft","40,000 ft","50,000 ft", ...
+%        'Location','best');
 
-plot_altitudes_ft = [0 10000 20000 30000 40000 50000];
-
-for n = 1:length(plot_altitudes_ft)
-    idx_alt = find(alt_ft == plot_altitudes_ft(n), 1);
-    if ~isempty(idx_alt)
-        plot(mach, cd0_total_grid(idx_alt,:), 'LineWidth', 1.6);
-    end
-end
-
-xlabel('Mach number, M');
-ylabel('Zero-lift drag coefficient, C_{D0}');
-title('C_{D0} vs Mach at Selected Altitudes');
-legend("0 ft","10,000 ft","20,000 ft","30,000 ft","40,000 ft","50,000 ft", ...
-       'Location','best');
-
-figure;
-surf(mach, alt_ft, cd0_total_grid, 'EdgeColor', 'none');
-xlabel('Mach number, M');
-ylabel('Altitude, h [ft]');
-zlabel('C_{D0}');
-title('C_{D0}(h,M)');
-colorbar;
-view(135,30);
+% figure;
+% surf(mach, alt_ft, cd0_total_grid, 'EdgeColor', 'none');
+% xlabel('Mach number, M');
+% ylabel('Altitude, h [ft]');
+% zlabel('C_{D0}');
+% title('C_{D0}(h,M)');
+% colorbar;
+% view(135,30);
 
 end
 
