@@ -1,4 +1,4 @@
-function Aircraft = aeroupdater(Aircraft)
+function aircraft = aeroupdater(aircraft)
 %% AEROUPDATER
 % Builds C_D0 as a function of:
 %   1) altitude, h [ft]
@@ -30,7 +30,7 @@ mach   = 0.1:0.1:2.0;       % Mach grid [-]
 % CONSTANTS
 % --------------------------
 k_default = 0.50e-5;              % equivalent roughness height [ft]
-sref      = Aircraft.wing.S_ref;  % reference wing area [ft^2]
+sref      = Aircraft.wing.Area;  % reference wing area [ft^2]
 
 %% -------------------------
 % COMPONENT BUILDUP
