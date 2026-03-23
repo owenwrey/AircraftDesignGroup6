@@ -251,7 +251,7 @@ for j = 1:nAlt
         % WAVE DRAG
         % --------------------------
         if M > 1
-            d_fus = Aircraft.fuselage.diameter;                    % fuselage max diameter [ft]
+            d_fus =comp(2).d;                    % fuselage max diameter [ft]
             ell   = comp(2).l * 0.50;       % effective length [ft]
             Amax  = pi * (d_fus/2)^2;       % max cross-sectional area [ft^2]
             Ewd   = 2.0;                    % empirical correction factor [-]
