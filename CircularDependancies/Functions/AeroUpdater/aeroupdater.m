@@ -290,8 +290,8 @@ Aircraft.aero.cd0 = @(alt_ft_query, mach_query) ...
 % title('C_{D0}(h,M)');
 % colorbar;
 % view(135,30);
-
-end
+% 
+% end
 
 %% =========================
 % LOCAL FUNCTION: SUTHERLAND VISCOSITY
