@@ -4,7 +4,7 @@ function f = getConfig(aircraft)
 % into the script as "cgf.exampleVar1", "cfg.exampleVar2", etc.
 
 f.wingLoading = aircraft.constants.wingLoading; % takeoff wing loading [psf]
-f.thrust = 58000; % [lb]
+f.thrust = 70000; % [lb]
 
 f.W.TOguess = 63738; % [lb]
 f.W.fuelReq = 16440; % [lb]
