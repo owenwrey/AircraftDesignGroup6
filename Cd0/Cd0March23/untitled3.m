@@ -1,50 +1,50 @@
 clear all; 
 close all; 
 clc;
-% 
-% Aircraft = struct();
-% 
-% %% -------------------------
-% % WING (REFERENCE COMPONENT)
-% % --------------------------
-% Aircraft.wing.S_ref = 580;     % [ft^2] reference area
-% Aircraft.wing.MAC   = 11;      % [ft]
-% Aircraft.wing.swet  = 2.1 * Aircraft.wing.S_ref;  % typical ~2x planform
-% Aircraft.wing.T2C   = 0.12;    % thickness-to-chord
-% Aircraft.wing.x_c   = 0.30;    % max thickness location
-% Aircraft.wing.sweep = 25;      % degrees
-% 
-% %% -------------------------
-% % FUSELAGE
-% % --------------------------
-% Aircraft.fuselage.length   = 60;   % [ft]
-% Aircraft.fuselage.diameter = 6;    % [ft]
-% 
-% % Wetted area approx cylinder + ends
-% Aircraft.fuselage.swet = pi * Aircraft.fuselage.diameter * Aircraft.fuselage.length;
-% 
-% %% -------------------------
-% % HORIZONTAL TAIL
-% % --------------------------
-% Aircraft.ht.MAC   = 5;        % [ft]
-% Aircraft.ht.swet  = 120;      % [ft^2]
-% Aircraft.ht.T2C   = 0.10;
-% Aircraft.ht.x_c   = 0.30;
-% Aircraft.ht.sweep = 30;       % degrees
-% 
-% %% -------------------------
-% % VERTICAL TAIL (PER FIN)
-% % --------------------------
-% Aircraft.vt.MAC   = 4;        % [ft]
-% Aircraft.vt.swet  = 100;      % [ft^2]
-% Aircraft.vt.T2C   = 0.10;
-% Aircraft.vt.x_c   = 0.30;
-% Aircraft.vt.sweep = 35;       % degrees
-% 
-% %% -------------------------
-% % RUN YOUR FUNCTION
-% % --------------------------
-% Aircraft = aeroupdater(Aircraft);
+
+Aircraft = struct();
+
+%% -------------------------
+% WING (REFERENCE COMPONENT)
+% --------------------------
+Aircraft.wing.S_ref = 580;     % [ft^2] reference area
+Aircraft.wing.MAC   = 11;      % [ft]
+Aircraft.wing.swet  = 2.1 * Aircraft.wing.S_ref;  % typical ~2x planform
+Aircraft.wing.T2C   = 0.12;    % thickness-to-chord
+Aircraft.wing.x_c   = 0.30;    % max thickness location
+Aircraft.wing.sweep = 25;      % degrees
+
+%% -------------------------
+% FUSELAGE
+% --------------------------
+Aircraft.fuselage.length   = 60;   % [ft]
+Aircraft.fuselage.diameter = 6;    % [ft]
+
+% Wetted area approx cylinder + ends
+Aircraft.fuselage.swet = pi * Aircraft.fuselage.diameter * Aircraft.fuselage.length;
+
+%% -------------------------
+% HORIZONTAL TAIL
+% --------------------------
+Aircraft.ht.MAC   = 5;        % [ft]
+Aircraft.ht.swet  = 120;      % [ft^2]
+Aircraft.ht.T2C   = 0.10;
+Aircraft.ht.x_c   = 0.30;
+Aircraft.ht.sweep = 30;       % degrees
+
+%% -------------------------
+% VERTICAL TAIL (PER FIN)
+% --------------------------
+Aircraft.vt.MAC   = 4;        % [ft]
+Aircraft.vt.swet  = 100;      % [ft^2]
+Aircraft.vt.T2C   = 0.10;
+Aircraft.vt.x_c   = 0.30;
+Aircraft.vt.sweep = 35;       % degrees
+
+%% -------------------------
+% RUN YOUR FUNCTION
+% --------------------------
+Aircraft = aeroupdater(Aircraft);
 
 function Aircraft = aeroupdater(Aircraft)
 %% AEROUPDATER

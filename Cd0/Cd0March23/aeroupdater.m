@@ -1,51 +1,3 @@
-clear all; 
-close all; 
-clc;
-% 
-% Aircraft = struct();
-% 
-% %% -------------------------
-% % WING (REFERENCE COMPONENT)
-% % --------------------------
-% Aircraft.wing.S_ref = 580;     % [ft^2] reference area
-% Aircraft.wing.MAC   = 11;      % [ft]
-% Aircraft.wing.swet  = 2.1 * Aircraft.wing.S_ref;  % typical ~2x planform
-% Aircraft.wing.T2C   = 0.12;    % thickness-to-chord
-% Aircraft.wing.x_c   = 0.30;    % max thickness location
-% Aircraft.wing.sweep = 25;      % degrees
-% 
-% %% -------------------------
-% % FUSELAGE
-% % --------------------------
-% Aircraft.fuselage.length   = 60;   % [ft]
-% Aircraft.fuselage.diameter = 6;    % [ft]
-% 
-% % Wetted area approx cylinder + ends
-% Aircraft.fuselage.swet = pi * Aircraft.fuselage.diameter * Aircraft.fuselage.length;
-% 
-% %% -------------------------
-% % HORIZONTAL TAIL
-% % --------------------------
-% Aircraft.ht.MAC   = 5;        % [ft]
-% Aircraft.ht.swet  = 120;      % [ft^2]
-% Aircraft.ht.T2C   = 0.10;
-% Aircraft.ht.x_c   = 0.30;
-% Aircraft.ht.sweep = 30;       % degrees
-% 
-% %% -------------------------
-% % VERTICAL TAIL (PER FIN)
-% % --------------------------
-% Aircraft.vt.MAC   = 4;        % [ft]
-% Aircraft.vt.swet  = 100;      % [ft^2]
-% Aircraft.vt.T2C   = 0.10;
-% Aircraft.vt.x_c   = 0.30;
-% Aircraft.vt.sweep = 35;       % degrees
-% 
-% %% -------------------------
-% % RUN YOUR FUNCTION
-% % --------------------------
-% Aircraft = aeroupdater(Aircraft);
-
 function Aircraft = aeroupdater(Aircraft)
 %% AEROUPDATER
 % Builds C_D0 as a function of:
@@ -73,7 +25,7 @@ function Aircraft = aeroupdater(Aircraft)
 % USER INPUTS
 % --------------------------
 alt_ft = 0:1000:50000;      % altitude grid [ft]
-mach   = 0.1:0.1:2.0;         % Mach grid [-]
+mach   = 0:0.1:2.0;         % Mach grid [-]
 
 %% -------------------------
 % CONSTANTS
@@ -303,18 +255,11 @@ Aircraft.constants.cd0_misc_grid  = cd0_misc_grid;
 Aircraft.constants.cd0_wave_grid  = cd0_wave_grid;
 Aircraft.constants.cd0_lp_grid    = cd0_lp_grid;
 Aircraft.constants.cd0_total_grid = cd0_total_grid;
-Aircraft.aero.cd0_interp = griddedInterpolant( ...
-    {Aircraft.constants.alt_grid_ft, Aircraft.constants.mach_grid}, ...
-    Aircraft.constants.cd0_total_grid, ...
-    'linear', ...
-    'nearest');
-
-Aircraft.aero.cd0 = @(alt_ft, mach) Aircraft.aero.cd0_interp(alt_ft, mach);%makes a function called cd0 that takes (alt,mach) and returns the interpolated drag value
 
 %% -------------------------
-% PLOTS
+% OPTIONAL PLOTS
 % --------------------------
-% C_D0 vs Mach at selected altitudes
+% Example 1: C_D0 vs Mach at selected altitudes
 figure;
 hold on; grid on;
 
@@ -333,10 +278,20 @@ title('C_{D0} vs Mach at Selected Altitudes');
 legend("0 ft","10,000 ft","20,000 ft","30,000 ft","40,000 ft","50,000 ft", ...
        'Location','best');
 
+% Example 2: surface plot
+figure;
+surf(mach, alt_ft, cd0_total_grid, 'EdgeColor', 'none');
+xlabel('Mach number, M');
+ylabel('Altitude, h [ft]');
+zlabel('C_{D0}');
+title('C_{D0}(h,M) Surface');
+colorbar;
+view(135,30);
+
 end
 
 %% =========================
-% SUTHERLVISCOSITY FXN 
+% LOCAL FUNCTION: SUTHERLAND VISCOSITY
 % ==========================
 function mu = sutherland_mu(T)
 % Computes dynamic viscosity of air using Sutherland's law
