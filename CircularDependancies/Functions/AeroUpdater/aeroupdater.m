@@ -1,4 +1,4 @@
-function aircraft = aeroupdater(Aircraft)
+function Aircraft = aeroupdater(Aircraft)
 %% AEROUPDATER
 % Builds C_D0 as a function of:
 %   1) altitude, h [ft]
