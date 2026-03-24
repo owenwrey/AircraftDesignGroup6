@@ -38,8 +38,9 @@ aircraft.weight.totalOnLanding = 42e3;
 
 % General
 aircraft.constants.wingLoading = 102; % [lbf/ft]
-aircraft.engine.weight = 3920;
-aircraft.engine.thrust = 29000;
+aircraft.engine.weight = 3900;
+aircraft.engine.nozzle.weight = 1100;
+aircraft.engine.thrust = 35000;
 aircraft.engine.TSFC = .67;
 
 aircraft.constants.fuelVolume = 3500;
