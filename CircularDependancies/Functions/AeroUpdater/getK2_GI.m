@@ -1,7 +1,6 @@
-function aircraft = getK2_GI(aircraft, M, CL)
+function aircraft = getK2_GI(aircraft, CL)
 % WORK IN PROGRESS
 %   Inputs: 
-%       M - Mach number
 %       CL - CL for current flight condition
 %       CLdesign - wing design CL, from aircraft.constants.CLdesign
 %   Outputs: K2 - K2 gridded interpolant
@@ -11,7 +10,6 @@ function aircraft = getK2_GI(aircraft, M, CL)
 
 arguments (Input)
     aircraft struct
-    M double
     CL double
 end
 
@@ -91,7 +89,7 @@ K100 = [
 func0 = griddedInterpolant(K0(:,1),K0(:,2));
 func100 = griddedInterpolant(K100(:,1),K100(:,2));
 
-K2 = (S*(func100(M) + (1-S)*func0(M)));
+K2 = (S*(func100 + (1-S)*func0));
 
 aircraft.aero.K2_GI = K2;
 end
