@@ -8,7 +8,6 @@ function aircraft = getK2_GI(aircraft, M, CL)
 %
 %   taken from P.446-449 in Raymer textbook.
 % 
-% This function assumes a CLdesign of 0.4
 
 arguments (Input)
     aircraft struct
