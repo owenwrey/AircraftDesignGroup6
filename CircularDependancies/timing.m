@@ -4,6 +4,8 @@
 %--------------------------------------------------------------------------
 clc; clear; close all
 
+total = tic;
+
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
 %% Mission Select
@@ -109,33 +111,52 @@ aircraft.cg.tolerance = 1/12;
 
 exitFlag = false; 
 iteration = 0;
-iterationMax = 1000;
+iterationMax = 100;
+
+
 
 while( not(exitFlag) && iteration <= iterationMax )
     iteration = iteration + 1;
     fprintf("   Iteration: %u\n", iteration);
     aircraftOld = aircraft;
 
+
+    tic
+    fprintf("Geometry\n")
     %% -| Geometry Updater |-----------------------------------------------
     aircraft = dimensionalize_aircraft(aircraft);
     %----------------------------------------------------------------------
+    toc
 
+        tic
+    fprintf("aero\n")
     %% -| Aero Updater |----------------------------------------------------
     aircraft = aeroupdater(aircraft);
     %----------------------------------------------------------------------
+    toc
 
+        tic
+    fprintf("EWB\n")
     %% -| Empty Weight Buildup |-------------------------------------------
     aircraft = EWB(aircraft); 
     %----------------------------------------------------------------------
+    toc
 
+        tic
+    fprintf("CGInertia\n")
     %% -| CG and Inertia Calculator |--------------------------------------
      aircraft = CgInertiaCalc(aircraft);
     %----------------------------------------------------------------------
+    toc
 
+        tic
+    fprintf("Landing Gear\n")
     %% -| Landing Gear Updater |-------------------------------------------
     aircraft = landingGear(aircraft);
     %----------------------------------------------------------------------
-    
+    toc
+    fprintf(" \n\n")
+
     %% -| Landing Gear Convergence Check |---------------------------------
 
     %----------------------------------------------------------------------
@@ -185,6 +206,10 @@ fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
 
 % plot cg envelope
 
-if true
+if false
 CGenvelope(aircraft, "Strike, No Drop")
 end
+
+runtime = toc(total);
+
+fprintf("\n\n The total runtime is : " + runtime)

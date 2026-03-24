@@ -8,7 +8,7 @@ function [aircraft] = CgInertiaCalc(aircraft)
 
 aircraft.fuselage.cg.x = 1 + aircraft.fuselage.length/2;
 aircraft.fuselage.cg.y = 0;
-aircraft.fuselage.cg.z = 1 + aircraft.gear.mg.height + aircraft.fuselage.diameter/6;
+aircraft.fuselage.cg.z = 1 + aircraft.gear.mg.height + aircraft.fuselage.diameter/2;
 
 
 %% calculate Engine cg's
