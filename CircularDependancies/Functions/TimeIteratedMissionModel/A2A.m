@@ -204,7 +204,7 @@ iend3 = sum(npts(1:3));
 SFC_climb = cfg.SFC.climb;
 
 for  i = istart3:iend3
-t_c
+
 Tbl.Alt(istart3:iend3) = linspace(0,cfg.cruise.altitude,npts(3,:)); % altitude (ft)
 
 [T, a, P, rho] = atmosisa(Tbl.Alt(i)*ft2m);

@@ -37,9 +37,10 @@ aircraft.weight.totalOnLanding = 42e3;
 % calculations in the loop (e.g. aircraft.constants.wingLoading, aircraft.weight.tolerance)
 
 % General
-aircraft.constants.wingLoading = 112; % [lbf/ft]
-aircraft.engine.weight = 3920;
-aircraft.engine.thrust = 29000;
+aircraft.constants.wingLoading = 102; % [lbf/ft]
+aircraft.engine.weight = 5000;
+aircraft.engine.thrust = 35000;
+aircraft.engine.thrustMil = 26000;
 aircraft.engine.TSFC = .67;
 
 aircraft.constants.fuelVolume = 3500;
@@ -176,8 +177,11 @@ end
 
 %% -| Display Results |----------------------------------------------------
 fprintf("\n Converged after %u iterations\n", iteration)
+fprintf("   W0/S:     %.0f psf\n", aircraft.constants.wingLoading)
+fprintf("  (T/W0)ab:  %.2f\n", 2*aircraft.engine.thrust/aircraft.weight.total)
+fprintf("  (T/W0)mil: %.2f\n", 2*aircraft.engine.thrustMil/aircraft.weight.total)
 fprintf("  MTOW: %.0f lb\n", aircraft.weight.total)
-fprintf("  EOW: %.0f lb\n", aircraft.weight.empty)
+fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
 fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
 fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
 fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
