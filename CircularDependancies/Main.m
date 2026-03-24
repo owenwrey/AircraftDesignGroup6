@@ -37,7 +37,7 @@ aircraft.weight.totalOnLanding = 42e3;
 % calculations in the loop (e.g. aircraft.constants.wingLoading, aircraft.weight.tolerance)
 
 % General
-aircraft.constants.wingLoading = 112; % [lbf/ft]
+aircraft.constants.wingLoading = 102; % [lbf/ft]
 aircraft.engine.weight = 3920;
 aircraft.engine.thrust = 29000;
 aircraft.engine.TSFC = .67;
