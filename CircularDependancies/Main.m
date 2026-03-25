@@ -2,7 +2,7 @@
 % Aircraft Design - Chakraborty
 % Group 6
 %--------------------------------------------------------------------------
-clc; clear; close all
+clc; clearvars; close all
 
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
@@ -102,9 +102,13 @@ aircraft.gear.mg.height = 5;
 aircraft.gear.ng.height = 5; 
 
 % Time-Step Mission
-aircraft.weight.tolerance = 5; % GO TO getConfig to uncomment
-aircraft.cg.tolerance = 1/12;
+
+% Tolerances
+aircraft.weight.tolerance = 150; % GO TO getConfig to uncomment
+aircraft.cg.tolerance = 3/12;
+aircraft.gear.tolerance = 3/12;
 % -------------------------------------------------------------------------
+
 
 %% Calculation Loop
 
@@ -138,10 +142,11 @@ while( not(exitFlag) && iteration <= iterationMax )
     %----------------------------------------------------------------------
     
     %% -| Landing Gear Convergence Check |---------------------------------
-
+    if abs(aircraftOld.gear.mg.x - aircraft.gear.mg.x) > aircraft.gear.tolerance ...
+            && abs(aircraftOld.gear.ng.x - aircraft.gear.ng.x) > aircraft.gear.tolerance
+        continue;
+    end
     %----------------------------------------------------------------------
-
-  
 
     %% -| Fixed MTOW Convergence Check |-----------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance
@@ -158,13 +163,15 @@ while( not(exitFlag) && iteration <= iterationMax )
     %% -| Converged Solution Check |---------------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) < aircraft.weight.tolerance
         if abs(aircraftOld.cg.x - aircraft.cg.x) < aircraft.cg.tolerance
-      exitFlag = true;
+            exitFlag = true;
         end
     end
     %----------------------------------------------------------------------
     
     aircraft.constants.fuelVolume = aircraft.weight.fuel/6.7;
     aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
+    aircraft.constants.thrustToWeight_TO.AB = 2*aircraft.engine.thrust/aircraft.weight.total;
+    aircraft.constants.thrustToWeight_TO.mil = 2*aircraft.engine.thrustMil/aircraft.weight.total;
 
 end
 
@@ -176,19 +183,23 @@ end
 % miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
 
 %% -| Display Results |----------------------------------------------------
-fprintf("\n Converged after %u iterations\n", iteration)
-fprintf("   W0/S:     %.0f psf\n", aircraft.constants.wingLoading)
-fprintf("  (T/W0)ab:  %.2f\n", 2*aircraft.engine.thrust/aircraft.weight.total)
-fprintf("  (T/W0)mil: %.2f\n", 2*aircraft.engine.thrustMil/aircraft.weight.total)
+fprintf("\n Converged after %u iterations\n\n", iteration)
+fprintf("  W0/S:      %.0f psf\n", aircraft.constants.wingLoading)
+fprintf("  (T/W0)ab:  %.2f\n", aircraft.constants.thrustToWeight_TO.AB)
+fprintf("  (T/W0)mil: %.2f\n", aircraft.constants.thrustToWeight_TO.mil)
+fprintf("---------------------\n")
 fprintf("  MTOW: %.0f lb\n", aircraft.weight.total)
 fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
 fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
 fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
 fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
+fprintf('---------------------\n\n')
 %--------------------------------------------------------------------------
+
+clear f k timerFields data tics iterationMax;
 
 % plot cg envelope
 
-if true
-CGenvelope(aircraft, "Strike, No Drop")
+if false
+    CGenvelope(aircraft, "Strike, No Drop")
 end
