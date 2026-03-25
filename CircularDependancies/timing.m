@@ -2,7 +2,9 @@
 % Aircraft Design - Chakraborty
 % Group 6
 %--------------------------------------------------------------------------
-clc; clearvars; close all
+% clc; 
+clearvars; 
+close all;
 tics.Script = tic;
 
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
