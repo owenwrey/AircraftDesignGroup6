@@ -2,9 +2,8 @@
 % Aircraft Design - Chakraborty
 % Group 6
 %--------------------------------------------------------------------------
-clc; clear; close all
-
-total = tic;
+clc; clearvars; close all
+ticScript = tic;
 
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
@@ -39,9 +38,10 @@ aircraft.weight.totalOnLanding = 42e3;
 % calculations in the loop (e.g. aircraft.constants.wingLoading, aircraft.weight.tolerance)
 
 % General
-aircraft.constants.wingLoading = 112; % [lbf/ft]
-aircraft.engine.weight = 3920;
-aircraft.engine.thrust = 29000;
+aircraft.constants.wingLoading = 102; % [lbf/ft]
+aircraft.engine.weight = 5000;
+aircraft.engine.thrust = 35000;
+aircraft.engine.thrustMil = 26000;
 aircraft.engine.TSFC = .67;
 
 aircraft.constants.fuelVolume = 3500;
@@ -103,89 +103,100 @@ aircraft.gear.mg.height = 5;
 aircraft.gear.ng.height = 5; 
 
 % Time-Step Mission
-aircraft.weight.tolerance = 5; % GO TO getConfig to uncomment
-aircraft.cg.tolerance = 1/12;
+
+% Tolerances
+aircraft.weight.tolerance = 150; % GO TO getConfig to uncomment
+aircraft.cg.tolerance = 3/12;
+aircraft.gear.tolerance = 3/12;
 % -------------------------------------------------------------------------
+
+
+%% Stopwatch initialization
+iterationMax = 1000;
+
+stopwatch.geometry      = NaN(iterationMax, 1);
+stopwatch.aero          = NaN(iterationMax, 1);
+stopwatch.EWB           = NaN(iterationMax, 1);
+stopwatch.CGinertia     = NaN(iterationMax, 1);
+stopwatch.landingGear   = NaN(iterationMax, 1);
+stopwatch.mission       = NaN(iterationMax, 1);
+stopwatch.loop          = NaN(iterationMax, 1);
 
 %% Calculation Loop
 
 exitFlag = false; 
-iteration = 0;
-iterationMax = 100;
-
-
+iteration = 0; % iterationMax defined above as 1000
 
 while( not(exitFlag) && iteration <= iterationMax )
+    ticLoop = tic;
+
     iteration = iteration + 1;
     fprintf("   Iteration: %u\n", iteration);
     aircraftOld = aircraft;
 
-
-    tic
-    fprintf("Geometry\n")
     %% -| Geometry Updater |-----------------------------------------------
+    ticGeom = tic;
     aircraft = dimensionalize_aircraft(aircraft);
+    stopwatch.geometry(iteration) = toc(ticGeom);
     %----------------------------------------------------------------------
-    toc
 
-        tic
-    fprintf("aero\n")
-    %% -| Aero Updater |----------------------------------------------------
+    %% -| Aero Updater |---------------------------------------------------
+    ticAero = tic;
     aircraft = aeroupdater(aircraft);
+    stopwatch.aero(iteration) = toc(ticAero);
     %----------------------------------------------------------------------
-    toc
 
-        tic
-    fprintf("EWB\n")
     %% -| Empty Weight Buildup |-------------------------------------------
+    ticEWB = tic;
     aircraft = EWB(aircraft); 
+    stopwatch.EWB(iteration) = toc(ticEWB);
     %----------------------------------------------------------------------
-    toc
 
-        tic
-    fprintf("CGInertia\n")
     %% -| CG and Inertia Calculator |--------------------------------------
-     aircraft = CgInertiaCalc(aircraft);
+    ticCG = tic;
+    aircraft = CgInertiaCalc(aircraft);
+    stopwatch.CGinertia(iteration) = toc(ticCG);
     %----------------------------------------------------------------------
-    toc
 
-        tic
-    fprintf("Landing Gear\n")
     %% -| Landing Gear Updater |-------------------------------------------
+    ticLG = tic;
     aircraft = landingGear(aircraft);
+    stopwatch.landingGear(iteration) = toc(ticLG);
     %----------------------------------------------------------------------
-    toc
-    fprintf(" \n\n")
-
+    
     %% -| Landing Gear Convergence Check |---------------------------------
-
+    if abs(aircraftOld.gear.mg.x - aircraft.gear.mg.x) > aircraft.gear.tolerance ...
+            && abs(aircraftOld.gear.ng.x - aircraft.gear.ng.x) > aircraft.gear.tolerance
+        continue;
+    end
     %----------------------------------------------------------------------
-
-  
 
     %% -| Fixed MTOW Convergence Check |-----------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) > aircraft.weight.tolerance
-
-      continue; % this should go back to the top of the while loop
-     
+      continue; % this should go back to the top of the while loop  
     end % go on to time-iterated mission model
     %----------------------------------------------------------------------
 
     %% -| Time Iterated Mission Model |------------------------------------
+    ticMission = tic;
     aircraft = TIMESTEP_CONVERGENCE_MASTER(aircraft, missionToRun);
+    stopwatch.mission(iteration) = toc(ticMission);
     %----------------------------------------------------------------------
 
     %% -| Converged Solution Check |---------------------------------------
     if abs(aircraftOld.weight.total - aircraft.weight.total) < aircraft.weight.tolerance
         if abs(aircraftOld.cg.x - aircraft.cg.x) < aircraft.cg.tolerance
-      exitFlag = true;
+            exitFlag = true;
         end
     end
     %----------------------------------------------------------------------
     
     aircraft.constants.fuelVolume = aircraft.weight.fuel/6.7;
     aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
+    aircraft.constants.thrustToWeight_TO.AB = 2*aircraft.engine.thrust/aircraft.weight.total;
+    aircraft.constants.thrustToWeight_TO.mil = 2*aircraft.engine.thrustMil/aircraft.weight.total;
 
+    stopwatch.loop(iteration) = toc(ticLoop);
 end
 
 
@@ -196,20 +207,41 @@ end
 % miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
 
 %% -| Display Results |----------------------------------------------------
-fprintf("\n Converged after %u iterations\n", iteration)
+fprintf("\n Converged after %u iterations\n\n", iteration)
+fprintf("  W0/S:      %.0f psf\n", aircraft.constants.wingLoading)
+fprintf("  (T/W0)ab:  %.2f\n", aircraft.constants.thrustToWeight_TO.AB)
+fprintf("  (T/W0)mil: %.2f\n", aircraft.constants.thrustToWeight_TO.mil)
+fprintf("---------------------\n")
 fprintf("  MTOW: %.0f lb\n", aircraft.weight.total)
-fprintf("  EOW: %.0f lb\n", aircraft.weight.empty)
+fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
 fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
 fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
 fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
 %--------------------------------------------------------------------------
+stopwatch.script = toc(ticScript);
+%% Print times
+
+timerFields = fieldnames(stopwatch);
+
+for k = 1:numel(timerFields) 
+    f = timerFields{k};
+
+    if ~strcmp(f, 'script')
+
+        stopwatch.(f) = stopwatch.(f)(1:iteration); % this line cleans the time storage array of the NaNs
+        data = stopwatch.(f);
+        
+        fprintf('%-15s | mean: %10.6f s | max: %10.6f s | min: %10.6f s\n', ...
+            f, ...
+            mean(data, 'omitnan'), ...
+            max(data, [], 'omitnan'), ...
+            min(data, [], 'omitnan'));
+    end
+end
+fprintf('TOTAL SCRIPT RUNTIME: %.6f seconds\n', stopwatch.script)
 
 % plot cg envelope
 
 if false
-CGenvelope(aircraft, "Strike, No Drop")
+    CGenvelope(aircraft, "Strike, No Drop")
 end
-
-runtime = toc(total);
-
-fprintf("\n\n The total runtime is : " + runtime)
