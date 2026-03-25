@@ -3,7 +3,7 @@
 % Group 6
 %--------------------------------------------------------------------------
 clc; clearvars; close all
-ticScript = tic;
+tics.Script = tic;
 
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
@@ -128,40 +128,40 @@ exitFlag = false;
 iteration = 0; % iterationMax defined above as 1000
 
 while( not(exitFlag) && iteration <= iterationMax )
-    ticLoop = tic;
+    tics.Loop = tic;
 
     iteration = iteration + 1;
     fprintf("   Iteration: %u\n", iteration);
     aircraftOld = aircraft;
 
     %% -| Geometry Updater |-----------------------------------------------
-    ticGeom = tic;
+    tics.Geom = tic;
     aircraft = dimensionalize_aircraft(aircraft);
-    stopwatch.geometry(iteration) = toc(ticGeom);
+    stopwatch.geometry(iteration) = toc(tics.Geom);
     %----------------------------------------------------------------------
 
     %% -| Aero Updater |---------------------------------------------------
-    ticAero = tic;
+    tics.Aero = tic;
     aircraft = aeroupdater(aircraft);
-    stopwatch.aero(iteration) = toc(ticAero);
+    stopwatch.aero(iteration) = toc(tics.Aero);
     %----------------------------------------------------------------------
 
     %% -| Empty Weight Buildup |-------------------------------------------
-    ticEWB = tic;
+    tics.EWB = tic;
     aircraft = EWB(aircraft); 
-    stopwatch.EWB(iteration) = toc(ticEWB);
+    stopwatch.EWB(iteration) = toc(tics.EWB);
     %----------------------------------------------------------------------
 
     %% -| CG and Inertia Calculator |--------------------------------------
-    ticCG = tic;
+    tics.CG = tic;
     aircraft = CgInertiaCalc(aircraft);
-    stopwatch.CGinertia(iteration) = toc(ticCG);
+    stopwatch.CGinertia(iteration) = toc(tics.CG);
     %----------------------------------------------------------------------
 
     %% -| Landing Gear Updater |-------------------------------------------
-    ticLG = tic;
+    tics.LG = tic;
     aircraft = landingGear(aircraft);
-    stopwatch.landingGear(iteration) = toc(ticLG);
+    stopwatch.landingGear(iteration) = toc(tics.LG);
     %----------------------------------------------------------------------
     
     %% -| Landing Gear Convergence Check |---------------------------------
@@ -178,9 +178,9 @@ while( not(exitFlag) && iteration <= iterationMax )
     %----------------------------------------------------------------------
 
     %% -| Time Iterated Mission Model |------------------------------------
-    ticMission = tic;
+    tics.Mission = tic;
     aircraft = TIMESTEP_CONVERGENCE_MASTER(aircraft, missionToRun);
-    stopwatch.mission(iteration) = toc(ticMission);
+    stopwatch.mission(iteration) = toc(tics.Mission);
     %----------------------------------------------------------------------
 
     %% -| Converged Solution Check |---------------------------------------
@@ -196,7 +196,7 @@ while( not(exitFlag) && iteration <= iterationMax )
     aircraft.constants.thrustToWeight_TO.AB = 2*aircraft.engine.thrust/aircraft.weight.total;
     aircraft.constants.thrustToWeight_TO.mil = 2*aircraft.engine.thrustMil/aircraft.weight.total;
 
-    stopwatch.loop(iteration) = toc(ticLoop);
+    stopwatch.loop(iteration) = toc(tics.Loop);
 end
 
 
@@ -217,10 +217,11 @@ fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
 fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
 fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
 fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
+fprintf('---------------------\n')
 %--------------------------------------------------------------------------
-stopwatch.script = toc(ticScript);
+stopwatch.script = toc(tics.Script);
 %% Print times
-
+fprintf('RUNTIMES:\n')
 timerFields = fieldnames(stopwatch);
 
 for k = 1:numel(timerFields) 
@@ -239,6 +240,8 @@ for k = 1:numel(timerFields)
     end
 end
 fprintf('TOTAL SCRIPT RUNTIME: %.6f seconds\n', stopwatch.script)
+
+clear f k timerFields data tics iterationMax;
 
 % plot cg envelope
 

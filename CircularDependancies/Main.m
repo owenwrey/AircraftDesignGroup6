@@ -193,7 +193,10 @@ fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
 fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
 fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
 fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
+fprintf('---------------------\n\n')
 %--------------------------------------------------------------------------
+
+clear f k timerFields data tics iterationMax;
 
 % plot cg envelope
 
