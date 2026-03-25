@@ -3,11 +3,11 @@ MODELNAME = "LowBPRTurbofan";
 
  //#################### Flight Conditions ####################
 Element FlightConditions AMBIENT {
-    alt = 0;          // flight altitude (ft)
-    MN = 0;               // flight Mach number
+    alt = 30000;          // flight altitude (ft)
+    MN = 0.8;               // flight Mach number
     //Ts = -58.47;            // ambient temperature, F (only needed for non-standard day)
     //Ps = 230.3;             // ambient pressure, psia (only needed for non-standard day)
-    W = 305;                       // mass flow rate, lbm/sec
+    W = 170;                       // mass flow rate, lbm/sec
    // Fl_O.switchTransport = "EQUIL";  // Equilibrium flow, need this for Janaf and CEA
 }
 
@@ -32,7 +32,7 @@ Element Compressor COMPRESSORBP {
 //Fl_I.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 //Fl_O.switchTransport = "EQUIL"; // Equilibrium flow, need this for Janaf and CEA
 S_map.effDes = 0.95; // Design Efficiency
-S_map.PRdes = 1.6;  // Design Pressure Ratio
+S_map.PRdes = 5;  // Design Pressure Ratio
 
 }
 
@@ -88,7 +88,7 @@ dPqP = 0.01;
  dPqPBase = 0.01; //duct friction pressure drop
  countFuelMax = 250; //fuel loop max counter
  switchBurn = "TEMPERATURE";
- TtCombOut = 3300; // exit temperature in R
+ TtCombOut = 3000; // exit temperature in R
  }
  
   //################# Engine Core Bleed 1 ##################
@@ -159,14 +159,16 @@ Element Bleed BLEEDEC3 {
  effChemBase = 0.96; //base chemical efficiency
  
  //Afterburner off
- //switchBurn = "WFUEL";
- //dPqPBase = 0.01; 
- //Wfuel = 0;
+switchBurn = "WFUEL";
+ dPqPBase = 0.01; 
+ Wfuel = 0;
  
  //Afterburner on
-switchBurn = "TEMPERATURE";
-dPqPBase = 0.07;
- TtCombOut = 3300;
+//switchBurn = "TEMPERATURE";
+//dPqPBase = 0.07;
+ //TtCombOut = 3700;
+ //switchBurn = "FAR";
+ //FAR = 0.04;
  }
 
  //############ Bleed #####################
