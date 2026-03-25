@@ -14,6 +14,9 @@ close all;
 % ...
 % x(n) = .......
 
+% x(1) = WingLoading;
+% x(2) = AspectRatio;
+
 nvars = 2;     % It should be equal to the number of design variables
 
 % lb refers to lower bound of the design variable and ub refers to the
@@ -21,8 +24,8 @@ nvars = 2;     % It should be equal to the number of design variables
 % wing loading in 10 units and that for aspect ratio is 10. The upper bound
 % of wing loading is 30 units and that for aspect ratio is 15. lb and ub
 % should be a row vector of 1xnvars
-lb = [10, 10];    
-ub = [30, 15];
+lb = [80, 2.5];    
+ub = [120, 6];
 
 % Population size is the total number of designs that the optimizer will
 % evaluate in each generation. A rule of thumb is to make populationSize =
@@ -50,13 +53,14 @@ options = optimoptions('gamultiobj', ...
 % OBJECTIVE FUNCTION
 %% ============================================================
 function f = objectiveFunction(x)
-    
-    Vehicle = dummySizingFramework(x);
+
+    try
+    aircraft = SizingFrameworkMar24(x);
 
     % Extract the necessary metrics that you want as objective functions to
     % minimize or maximize
-    obj1 = Vehicle.MTOM;
-    obj2 = Vehicle.PayloadMassFraction;
+    obj1 = aircraft.weight.total;
+    obj2 = aircraft.constants.fuelVolume;
     
     % If the objective function is to minimize (like MTOM), do not change
     % the sign. But, if the objective function is to maximize (like payload
@@ -64,30 +68,9 @@ function f = objectiveFunction(x)
     % was to minimize fuel weight, it would just be 0bj2, no change in sign. 
     % You can add one more objective function if there is any. This setup can handle only 3
     % objective functions
-    f = [obj1, -obj2];
+    f = [obj1, obj2];
+    catch ERRMSG
+    end
 end
 
-%% ============================================================
-% DUMMY SIZING FRAMEWORK
-%% ============================================================
-function Vehicle = dummySizingFramework(x)
-    % Extract the design variables sent by the optimizer
-    WL = x(1);
-    AR = x(2);
 
-    MTOM = 200 + (WL-20)^2 + (AR - 12)^2;
-
-    PayloadFrac = 0.3 - (WL - 20)^2 - (AR - 12)^2;
-
-
-
-
-    Vehicle.MTOM = MTOM;
-    Vehicle.PayloadMassFraction   = PayloadFrac;
-
-    % save Vehicle as .mat file
-    savename = strrep(sprintf('Veh_WL%0.4f_AR%0.4f',WL,AR),'.','_');
-
-    save(savename,'Vehicle')
-
-end

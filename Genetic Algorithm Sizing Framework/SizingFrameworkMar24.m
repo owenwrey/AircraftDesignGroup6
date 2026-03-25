@@ -1,12 +1,13 @@
-% Circular Dependancies Solver Main equation
+function aircraft = SizingFrameworkMar24(input)
+% Circular Dependancies Solver Main
 % Aircraft Design - Chakraborty
 % Group 6
 %--------------------------------------------------------------------------
-clc; clearvars; close all
 
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
 %% Mission Select
+displayResults = false;
 missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
 % missionToRun = "A2A";
 
@@ -37,7 +38,7 @@ aircraft.weight.totalOnLanding = 42e3;
 % calculations in the loop (e.g. aircraft.constants.wingLoading, aircraft.weight.tolerance)
 
 % General
-aircraft.constants.wingLoading = 102; % [lbf/ft]
+aircraft.constants.wingLoading = input(1); % [lbf/ft]
 aircraft.engine.weight = 5000;
 aircraft.engine.thrust = 35000;
 aircraft.engine.thrustMil = 26000;
@@ -55,7 +56,7 @@ aircraft.fuselage.cg.x = 24;
 aircraft.fuselage.cg.y = 0;
 aircraft.fuselage.cg.z = 10;
 
-aircraft.wing.AR          = 4;
+aircraft.wing.AR          = input(2);
 aircraft.wing.taper_ratio = 0.25;
 aircraft.wing.sweep = 30;
 aircraft.wing.T2C = .055;   % thickness to chord
@@ -118,7 +119,9 @@ iterationMax = 1000;
 
 while( not(exitFlag) && iteration <= iterationMax )
     iteration = iteration + 1;
-    fprintf("   Iteration: %u\n", iteration);
+    if displayResults == true
+        fprintf("   Iteration: %u\n", iteration);
+    end
     aircraftOld = aircraft;
 
     %% -| Geometry Updater |-----------------------------------------------
@@ -175,6 +178,13 @@ while( not(exitFlag) && iteration <= iterationMax )
 
 end
 
+savename = strrep(sprintf('Aircraft_WL%0.4f_AR%0.4f',aircraft.constants.wingLoading, aircraft.wing.AR),'.','_');
+
+aircraft.aero.cd0 = "A function was here but was replaced to make gamultiobj happy";
+
+save(savename,'aircraft')
+
+
 
 % ignore this, just helps with report writing
 % cell2mat(struct2cell(aircraft.engine.structures))
@@ -183,6 +193,7 @@ end
 % miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
 
 %% -| Display Results |----------------------------------------------------
+if displayResults == true
 fprintf("\n Converged after %u iterations\n\n", iteration)
 fprintf("  W0/S:      %.0f psf\n", aircraft.constants.wingLoading)
 fprintf("  (T/W0)ab:  %.2f\n", aircraft.constants.thrustToWeight_TO.AB)
@@ -194,12 +205,9 @@ fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
 fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
 fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
 fprintf('---------------------\n\n')
+end
 %--------------------------------------------------------------------------
 
-clear f k timerFields data tics iterationMax;
+% clear f k timerFields data tics iterationMax;
 
-% plot cg envelope
-
-if false
-    CGenvelope(aircraft, "Strike, No Drop")
 end

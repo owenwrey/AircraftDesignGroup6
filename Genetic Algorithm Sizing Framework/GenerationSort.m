@@ -33,7 +33,7 @@ for i = 1:NumGen
     for j = 1:1:height(b)
 
         % form vehicle file name
-        VehName0 =  strrep(sprintf('Veh_WL%0.4f_AR%0.4f',DV(j,1),DV(j,2)),'.','_');
+        VehName0 =  strrep(sprintf('Aircraft_WL%0.4f_AR%0.4f',DV(j,1),DV(j,2)),'.','_');
         VehName = sprintf('%s.mat',VehName0);
         try
         % move the file into the correct folder
