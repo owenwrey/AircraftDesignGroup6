@@ -2,8 +2,7 @@ function aircraft = EWB(aircraft)
 
 % initialize variables
 W0 = aircraft.weight.total;
-T2C = aircraft.wing.taper_ratio;            % thickness to chord ratio
-N_lim = aircraft.constants.limitLoad;       % limit load factor (8g)
+T2C = aircraft.wing.T2C;                    % thickness to chord ratio
 Nz = aircraft.constants.ultLoad;            % ultimate load factor
 M = aircraft.constants.maxMach;             % max Mach number
 
@@ -60,7 +59,7 @@ aircraft.vt.rudderArea = .5*(vt.chord0_20 + vt.chord90_20)*vt.span*.9;
 
 % main wing
 aircraft.wing.weight = .0103*(W0*Nz)^(.5) * (wing.area)^(.622) * (wing.AR)^(.785)...
-                        * T2C * (1+wing.TaperRatio)^(.05) * ...
+                        * T2C^(-.4) * (1+wing.TaperRatio)^(.05) * ...
                         (cosd(wing.QuarterChordSweep))^(-1) * (S_csw)^(.04);
 
 % horizontal tail
@@ -80,8 +79,8 @@ aircraft.vt.weight = .452*K_rht * (W0*Nz)^(.488) * vt.area^(.718) * M^(.341)...
 % fuselage
 K_dwf = 1;                                  % delta wing multiplier
 L = aircraft.fuselage.length;
-D = 6;
-W = 6;
+D = 6;      % fuselage structural depth, ft
+W = 6;      % fuselage structural width, ft
 
 aircraft.fuselage.weight = .499*K_dwf * W0^(.35) * Nz^(.25) * L^(.5) * D^(.849)...
     * W^(.685);
@@ -90,7 +89,7 @@ aircraft.fuselage.weight = .499*K_dwf * W0^(.35) * Nz^(.25) * L^(.5) * D^(.849).
 N_gear = 5.5;
 K_cb = 1;                                   % cross-beam gear (we are not cross-beam)
 K_tpg = .826;                               % tripod gear (we are tripod)
-W_l = aircraft.weight.totalOnLanding;     % landing design gross weight, lb
+W_l = aircraft.weight.totalOnLanding;       % landing design gross weight, lb
 N_l = 1.5*N_gear;                           % ultimate landing load factor
 L_m = aircraft.gear.mg.extendedLength;      % extended length of main gear, in
 
@@ -113,7 +112,7 @@ L_d = 8;                % duct length
 K_vsh = 1.425;          % Variable sweep, 1 otherwise
 K_mc = 1.45;            % if mission completion required after failure, otherwise = 1
 W_uav = 800;            % uninstalled avionics weight (800 lbs maybe)
-S_fw = ((46.5/12)*(182/12))*3 + (47/12)^2-(pi*(46.5/12)^2)*2;        % firewall surface area, ft^2
+S_fw = ((46.5/12)*(182/12))*3 + (47/12)^2-(pi*(46.5/12)^2)*2;       % firewall surface area, ft^2
 S_cs = S_csw + ht.area + aircraft.vt.rudderArea;        % total control surface area
 
 N_en = 2;               % number of engines
@@ -192,13 +191,17 @@ aircraft.enginesystems.efcpDistance = L_ec;         % engine front to cockpit di
 aircraft.enginesystems.numberOfFlightControlSystem = N_s; 
 
 
-prevWeight = aircraft.weight.empty;
+% prevWeight = aircraft.weight.empty;
 
-aircraft.weight.empty = aircraft.wing.weight + aircraft.ht.weight ... 
+aircraft.weight.empty = aircraft.wing.weight + aircraft.ht.weight + aircraft.engine.weight*2 ... 
     + aircraft.vt.weight + aircraft.fuselage.weight + aircraft.gear.mg.weight ...
     + aircraft.gear.ng.weight + sum(cell2mat(struct2cell(engine))) + sum(cell2mat(struct2cell(misc)));
 
-weightDiff = prevWeight - aircraft.weight.empty;
+
+aircraft.engine.structures = engine;
+aircraft.weight.misc = misc;
+
+% weightDiff = prevWeight - aircraft.weight.empty;
 
 % weights = [weightDiff;aircraft.weight.empty];
 

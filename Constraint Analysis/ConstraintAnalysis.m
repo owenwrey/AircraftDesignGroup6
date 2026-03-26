@@ -264,6 +264,7 @@ plot(102, 0.8, 'ko')
 
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
-ylim([0 2.5])
+xlim([0 225])
+ylim([0 2])
 
 legend("Cruise","Climb","Ceiling","Turn","Max Speed","Takeoff","SE Climb", "SE Approach", "Landing","Stall","Instantaneous Turn", "Point")

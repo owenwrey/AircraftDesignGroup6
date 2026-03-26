@@ -1,0 +1,40 @@
+OutFileStream case1 {
+    filename = "test.case1";
+}
+
+CaseColumnViewer Case1 {
+    outStreamHandle = "case1";
+    titleBody = "???????????????????? Run on ???????? at ????????";
+    titleVars = { "VERSION",                 "date",     "timeOfDay" }
+	variableList = { "AMBIENT.alt = ALT",
+				"AMBIENT.MN:??????.????=Mn",
+				"PERF.TSFC:???.??? = TSFC",
+				"PERF.Fn:??????.??? = Fn",
+				"PERF.OPR: ????.?? = OPR",
+				"PERF.W: ????.?? = W"
+				
+				}
+
+		}
+solver.postExecutionSequence.append( "Case1" );
+
+
+
+setOption( "switchDes", "DESIGN" );
+autoSolverSetup();
+CASE++;
+run();
+
+
+setOption( "switchDes", "OFFDESIGN" );
+autoSolverSetup();
+for (AMBIENT.alt = 0; AMBIENT.alt < 60000 ; AMBIENT.alt += 2000) {
+for (AMBIENT.MN = 0; AMBIENT.MN < 0.85 ; AMBIENT.MN += 0.3) {
+CASE++;
+run();
+}
+}
+
+
+ncpView.display();
+Case1.display();

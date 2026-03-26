@@ -2,10 +2,10 @@ clear
 close all
 clc
 %% Script Settings
-printStatsAtEachAltitude = true; % if ==1 your command window gets cluttered
+printStatsAtEachAltitude = false; % if ==1 your command window gets cluttered
 
 % This what defines what the service ceiling is:
-serviceCeilingClimbRate = 100; % [ft/min] (not [fps] here)
+serviceCeilingClimbRate = 500; % [ft/min] (not [fps] here)
 
 % you don't need to change these unless you're not reaching the abs ceiling
 altRange = 52000; % max altitude tested, if ceiling is below this the script stops
