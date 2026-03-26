@@ -15,7 +15,8 @@ k1 = 0; % drag polar constant 1
 k2 = .05; % drag polar constant 2
 CD_R = 0; % resultant drag coeficient
 TOP = 300; 
-
+v_stall = 131*0.514444;
+bump = 1.35;
 %% ISA + Delta T Setup
 
 DeltaT = 32-15;           % ISA deviation [K]
@@ -80,7 +81,7 @@ v = M.*a;
 ddt_h = 500*0.3048/60;
 ddt_v = 0;
 alpha = 1.11*(rho/rho_SL)-0.11;
-beta = 0.7;
+beta = 0.9;
 
 T2W_Ceiling = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
@@ -96,8 +97,8 @@ rho = rho_ISA .* (T_ISA ./ T);
 
 ddt_h = 0;
 ddt_v = 0;
-alpha = 1.11*(rho/rho_SL)-0.11;
-beta = 0.7;
+alpha = (1.11*(rho/rho_SL)-0.11)*bump;
+beta = 0.9;
 
 T2W_SustainedTurn = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
@@ -115,8 +116,8 @@ rho = rho_ISA .* (T_ISA ./ T);
 v = M.*a;
 ddt_h = 0;
 ddt_v = 0;
-alpha = 1.11*(rho/rho_SL)-0.11;
-beta = 0.7;
+alpha = (1.11*(rho/rho_SL)-0.11)*bump;
+beta = 0.85;
 
 T2W_MaxSpeed = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
@@ -134,7 +135,7 @@ T2W_Takeoff = TakeoffConstraintAnalysis(TOP,rho/1.225,Cl,W2S);
 
 alt = 0;
 n = 1;
-beta = 0.56;
+beta = 0.6;
 Cl = 1.8/cosd(24);
 k = 1.2;
 v = 131*1.1*0.514444;
@@ -149,7 +150,7 @@ W2S_Landing = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
 
 alt = 0; % Altitude {m}
 n = 1; % Load Factor
-beta = 0.56; % Weight Lapse
+beta = 0.6; % Weight Lapse
 Cl = 1.2; % Lift Coefficient
 k = 1.0; % Safety Factor
 v = 131*0.514444; % Velocity {m/s}
@@ -158,7 +159,21 @@ T = T_ISA + DeltaT;
 rho = rho_ISA .* (T_ISA ./ T);
 W2S_Stall = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
 
+%%%%%%% Instantaneous Turn %%%%%%%%
 
+alt = 30000 * 0.3048;   
+n = 7.5;
+v = 387;     
+Cl_max = 1.2;
+
+
+[T_ISA,~,~,rho_ISA] = atmosisa(alt,"extended","on");
+T = T_ISA + DeltaT;
+rho = rho_ISA .* (T_ISA ./ T);
+
+W2S_InstTurn = 0.5 * rho * v^2 * (Cl_max / n);
+
+%% Single-Engine
 %%%%%%% Single-Engine Climb %%%%%%%%
 
 alt = 0;
@@ -173,30 +188,48 @@ rho = rho_ISA .* (T_ISA ./ T);
 v = M.*a;
 ddt_h = 500*0.3048/60;
 ddt_v = 0;
-alpha = 0.5*(1.11*(rho/rho_SL)-0.11);
+alpha = 0.5*(1.11*(rho/rho_SL)-0.11)*bump;
 beta = 1.0;
 
 T2W_SEClimb = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
 
-%%%%%%% Single-Engine Ceiling %%%%%%%%
+% %%%%%%% Single-Engine Ceiling %%%%%%%%
+% 
+% alt = 38700*0.3048;
+% n = 1;
+% M = 0.9;
+% 
+% [T_ISA,a_ISA,~,rho_ISA] = atmosisa(alt,"extended","on");
+% T = T_ISA + DeltaT;
+% a = sqrt(gamma*R*T);
+% rho = rho_ISA .* (T_ISA ./ T);
+% 
+% v = M.*a;
+% ddt_h = 500*0.3048/60;
+% ddt_v = 0;
+% alpha = 0.5*(1.11*(rho/rho_SL)-0.11);
+% beta = 0.9;
+% 
+% T2W_SECeiling = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
-alt = 38700*0.3048;
+%%%%%%% Single-Engine Landing %%%%%%%%
+
+alt = 30000 * 0.3048;
 n = 1;
-M = 0.9;
 
 [T_ISA,a_ISA,~,rho_ISA] = atmosisa(alt,"extended","on");
 T = T_ISA + DeltaT;
 a = sqrt(gamma*R*T);
 rho = rho_ISA .* (T_ISA ./ T);
 
-v = M.*a;
-ddt_h = 500*0.3048/60;
+v = 131*1.1*0.514444;
+ddt_h = -1000 * 0.3048 / 60;
 ddt_v = 0;
-alpha = 0.5*(1.11*(rho/rho_SL)-0.11);
-beta = 0.7;
+alpha = (1.11*0.5*(rho/rho_SL)-0.11)*bump;
+beta = 0.6;
 
-T2W_SECeiling = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
+T2W_SELanding = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
 %% Plotting
 
@@ -207,6 +240,7 @@ ax.ColorOrder = lines(13);
 set(ax,'DefaultLineLineWidth',1.2)
 box on
 purple = [0.35 0 0.757];
+maroon = [0.1 0.1 0.1];
 colors = jet(8);   % Generate 8 colors from jet colormap
 
 plot(W2S.*0.02088547, T2W_Cruise,        'Color', colors(1,:), 'LineWidth', 1.5)
@@ -216,18 +250,20 @@ plot(W2S.*0.02088547, T2W_SustainedTurn, 'Color', colors(4,:), 'LineWidth', 1.5)
 plot(W2S.*0.02088547, T2W_MaxSpeed,      'Color', colors(5,:), 'LineWidth', 1.5)
 plot(W2S.*0.02088547, T2W_Takeoff,       'Color', colors(6,:), 'LineWidth', 1.5)
 plot(W2S.*0.02088547, T2W_SEClimb,       'Color', colors(7,:), 'LineWidth', 1.5)
-plot(W2S.*0.02088547, T2W_SECeiling,     'Color', colors(8,:), 'LineWidth', 1.5)
+plot(W2S.*0.02088547, T2W_SELanding,     'Color', colors(8,:), 'LineWidth', 1.5)
+
 
 xline(W2S_Landing.*0.02088547,'-m','LineWidth',1.5)
 xline(W2S_Stall.*0.02088547,'Color',purple,'LineWidth',1.5)
+xline(W2S_InstTurn.*0.02088547,'Color', maroon,'LineWidth',1.5)
 
 colormap(jet)
    
 
-plot(112,0.82,'o')
+plot(102, 0.8, 'ko')
 
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
 ylim([0 2.5])
 
-legend("Cruise","Climb","Ceiling","Turn","Max Speed","Takeoff","SE Climb", "SE Ceiling", "Landing","Stall","Point")
+legend("Cruise","Climb","Ceiling","Turn","Max Speed","Takeoff","SE Climb", "SE Approach", "Landing","Stall","Instantaneous Turn", "Point")

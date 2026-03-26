@@ -4,7 +4,7 @@ clear all
 %% Constants %%
 A_D = 1.59;
 B_D = 0.302;
-W_Landing = (85301 +(0.10 * 85301))/2;
+W_Landing = (65000 +(0.10 * 65000));
 
 A_W = 0.098;
 B_W = 0.467;
@@ -16,15 +16,15 @@ V_stall = 131;
 P_oleo = 1800;
 %% Diameter
 D_main = A_D*(0.45*W_Landing)^B_D
-D_nose = A_D*(0.1*W_Landing)^B_D
+D_nose = A_D*((0.1/2)*W_Landing)^B_D
 
 %% Width %%
 W_main = A_W*(0.45*W_Landing)^B_W
-W_nose = A_W*(0.1*W_Landing)^B_W
+W_nose = A_W*((0.1/2)*W_Landing)^B_W
 
 %% Footprint Area %%
 A_p_mw = (W_Landing*0.45)/P
-A_p_nw = (W_Landing*0.1)/P
+A_p_nw = (W_Landing*(0.1/2))/P
 
 %% Radius From Footprint Area %%
 R_r_mw = (D_main/2)-A_p_mw/(2.3*sqrt(W_main*D_main))
@@ -36,4 +36,4 @@ KE_braking = (0.5*(W_Landing/g)*V_stall^2)
 
 %% Oleo Sizing %%
 D_oleo_main = 1.3*sqrt((4*0.45*W_Landing)/(P_oleo*pi))
-D_oleo_nose = 1.3*sqrt((4*0.1*W_Landing)/(P_oleo*pi))
+D_oleo_nose = 1.3*sqrt((4*(0.1/2)*W_Landing)/(P_oleo*pi))
