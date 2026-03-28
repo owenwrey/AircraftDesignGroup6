@@ -1,5 +1,7 @@
 % Minimum Time to Climb WITH fuel burn + Mach
-clear; clc; close all;
+% clear; clc; close all;
+
+% notes: no AB, going 30 kft & 400 kts
 
 %% Inputs
 TLapse = griddedInterpolant([0, 10000, 20000, 30000, 40000, 50000], ...
@@ -10,11 +12,11 @@ rho_SL = 0.0023769;
 kts2fps = 1/0.59248;
 ft2m = 0.305;
 
-W0 = 60000;             
-W = W0;                 
-W_S = 112;              
-S = W0/W_S;                     
-fullThrust = 34000;     
+W0 = aircraft.weight.total;             
+W = W0;
+W_S = aircraft.constants.wingLoading;              
+S = aircraft.wing.Area;
+fullThrust = aircraft.engine.thrustMil*2;
 targAlt = 30000;
 targSpeed = 400;
 
@@ -158,5 +160,6 @@ speed = dat(:,2);
 alt = dat(:,3);
 
 Results = table(time, speed, alt);
-disp(Results)
+% disp(Results)
 
+fprintf('Total time to climb is %.0f seconds',time(end))

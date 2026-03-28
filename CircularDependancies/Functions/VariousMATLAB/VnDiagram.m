@@ -1,6 +1,6 @@
 % V-n diagram 
 % based on notes from V-n Diagram Construction Document, 4.3.4.2
-clear; clc; close all;
+% clear; clc; close all;
 
 %% Update checklist, MAKE SURE TO DO THIS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -11,35 +11,35 @@ clear; clc; close all;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Inputs
-n_lim_p = 8;            % positive limit load
-n_lim_n = -3;           % negative limit load
-M = 1.7;                % max Mach number
+n_lim_p = aircraft.constants.limitLoad;         % positive limit load
+n_lim_n = aircraft.constants.negLimitLoad;      % negative limit load
+M = aircraft.constants.maxMach;                 % max Mach number
 
 % aero characteristics 
-CL_max = 1.1;           % CL_max
-CL_min = -1;            % negative CL_max
+CL_max = 1;             % CL_max
+CL_min = -.6;           % negative CL_max
+CL_alpha = (1--.4)/deg2rad(8--3);       % from NACA 64-206 airfoil tools
 
-beta = .7;              % mid mission weight fraction
-WL = 115;               % wing loading, lbf/ft^2
-TW = .75;               % thrust to weight
-rho_sl = .002377;       % air density, slug/ft^3
+beta = .7;                              % mid mission weight fraction
+WL = aircraft.constants.wingLoading;    % wing loading, lbf/ft^2
+TW = aircraft.constants.thrustToWeight_TO.mil;  % thrust to weight
+rho_sl = .002377;                       % air density, slug/ft^3
 
 % gust line inputs
-mac = 13.47;            % mean aerodynamic chord
-g = 32.2;               % gravity, ft/s^2
-CL_alpha = 4.9;         % from 1/K
+mac = aircraft.wing.MAC;                % mean aerodynamic chord, ft
+g = 32.2;                               % gravity, ft/s^2
 U_de = [66,-66,50,-50,25,-25];        % derived gust velocity, ft/s
 
 % max sea-level level flight speed, KEAS
 VH = M*sqrt(1.4*1716*518.67)/1.68781;
 VD = 1.25*VH;           % design dive speed, KEAS
-VC = 573;               % cruise speed 
+% VC = 573;               % cruise speed 
 
 
 %% Calculations
 % Calc Positive load limits
-%Vs_pos = sqrt(2*beta*WL/(rho_sl*CL_max));       % positive stall speed
-Vs_pos = 131;
+Vs_pos = sqrt(2*beta*WL/(rho_sl*CL_max));       % positive stall speed
+% Vs_pos = 131;
 Vs_pos_line = [Vs_pos;Vs_pos];
 V = linspace(Vs_pos,VD,100)';                   % create span of V values
 q_bar = .5*rho_sl*V.^2;                         % calc q_bar
@@ -52,12 +52,10 @@ for i = 1:length(V)
     end
 end
 
-% VA = Vs_pos*sqrt(n_lim_p);
-VA = 710.2;
+VA = sqrt(2*n_lim_p*beta*WL/(rho_sl*CL_max));
 
 % Calc Negative load limits
-%Vs_neg = sqrt(2*beta*WL/(rho_sl*abs(CL_min)));       % negative stall speed
-Vs_neg = Vs_pos*1.1;
+Vs_neg = sqrt(2*beta*WL/(rho_sl*abs(CL_min)));       % negative stall speed
 Vs_neg_line = [Vs_neg;Vs_neg];
 V_neg = linspace(Vs_neg,VD,100)';
 q_bar = .5*rho_sl*V_neg.^2;
@@ -95,12 +93,12 @@ yline(0, 'k', 'LineWidth',1)
 xlabel('Airspeed (KEAS)')
 ylabel('Load Factor')
 title('Load Factor v. Airspeed')
-plot(V_neg,n_minaero,'b', 'LineWidth',2)        % negative load factor
+plot(V_neg,n_minaero,'b', 'LineWidth',2)                % negative load factor
 plot(Vs_pos_line,[0;n_maxaero(1)],'b', 'LineWidth',2)   % positive stall line
 plot(Vs_neg_line,[0;n_minaero(1)],'b', 'LineWidth',2)   % negtaive stall line
 plot([VD;VD],[n_lim_n;n_lim_p],'b', 'LineWidth',2)      % VD line at back
-plot([VH;VH],[0;n_lim_p],'k', 'LineStyle','--')         % VA line
-plot([VA;VA],[0;n_lim_p],'k', 'LineStyle','--')         % VH line
+plot([VH;VH],[0;n_lim_p],'k', 'LineStyle','--')         % VH line
+plot([VA;VA],[0;n_lim_p],'k', 'LineStyle','--')         % VA line
 plot(V_gust,n_gust,'k', 'LineStyle','--')
 
 

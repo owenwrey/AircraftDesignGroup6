@@ -85,6 +85,7 @@ aircraft.avionics.weight = 2500;
 
 % Empty Weight Buildup
 aircraft.constants.limitLoad = 8;
+aircraft.constants.negLimitLoad = -3;
 aircraft.constants.ultLoad = 1.5 * aircraft.constants.limitLoad;
 aircraft.constants.maxMach = 1.6;
 
@@ -134,7 +135,7 @@ while( not(exitFlag) && iteration <= iterationMax )
     %----------------------------------------------------------------------
 
     %% -| CG and Inertia Calculator |--------------------------------------
-     aircraft = CgInertiaCalc(aircraft);
+    aircraft = CgInertiaCalc(aircraft);
     %----------------------------------------------------------------------
 
     %% -| Landing Gear Updater |-------------------------------------------
@@ -203,3 +204,7 @@ clear f k timerFields data tics iterationMax;
 if false
     CGenvelope(aircraft, "Strike, No Drop")
 end
+
+
+% VnDiagram       % generate Vn diagram for converged aircraft
+% New             % generate Min TTC graph for converged aircraft  
