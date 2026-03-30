@@ -15,22 +15,35 @@ wing.span = aircraft.wing.span;
 rootChord = aircraft.wing.chord.root;
 tipChord = aircraft.wing.chord.tip;
 chordFrac = .2;                             % control surface chord fraction
+slatFrac = .1;
 
 % calculate wing control surface areas
 % ailerons: 20% local chord, going from 50% to 90% span
 % flaps: 20% local chord, going from 0% to 50% span
+chord15 = (rootChord-tipChord)*.15 + tipChord;      % chord @ 15% span
 chord50 = (rootChord-tipChord)*.5 + tipChord;       % chord @ 50% span
 chord90 = (rootChord-tipChord)*.9 + tipChord;       % chord @ 90% span
+chord15_10 = chord15*slatFrac;                      % 10% chord @ 15% span
+chordtip_10 = tipChord*slatFrac;                    % 10% chord @ tip
 chord0_20 = rootChord*chordFrac;                    % 20% chord @ root
 chord50_20 = chord50*chordFrac;                     % 20% chord @ 50% span
 chord90_20 = chord90*chordFrac;                     % 20% chord @ 90% span
+span85 = wing.span*.85;                             % 85% wingpspan
 span50 = wing.span*.5;                              % 50% wingspan
 span40 = wing.span*.4;                              % 40% wingspan
 aircraft.wing.flapArea = .5*(chord0_20 + chord50_20)*span50;        % flap area, ft^2
-aircraft.wing.aileronArea = .5*(chord90_20 + chord50_20)*span40;    % aileron area, ft^2
-S_csw = aircraft.wing.flapArea + aircraft.wing.aileronArea;         % total control surface area
+aircraft.wing.flaperonArea = .5*(chord90_20 + chord50_20)*span40;   % flaperon area, ft^2
+aircraft.wing.slatArea = .5*(chord15_10 + chordtip_10)*span85;      % leading edge slat area, ft^2
+S_csw = aircraft.wing.flapArea + aircraft.wing.flaperonArea + aircraft.wing.slatArea;        % total control surface area
 
 aircraft.wing.controlSurfaceArea = S_csw;
+
+% .5*(chord15 + tipChord)*span85
+% .5*(rootChord + chord90)*wing.span.90
+
+aircraft.wing.dCLmax = .9*.4*slatFrac*(.5*(chord15 + tipChord)*span85/aircraft.wing.Area)*cosd(aircraft.wing.sweep) ...    % slat delta CL
+       + .9*.9*(.5*(rootChord + chord90)*wing.span*.90/aircraft.wing.Area)*cosd(aircraft.wing.sweep);                % flap and flaperon delta CL
+
 
 % horizontal tail
 ht.area = aircraft.ht.Area;

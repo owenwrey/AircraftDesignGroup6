@@ -1,4 +1,4 @@
-% Minimum Time to Climb WITH fuel burn + Mach
+% Minimum Time to Climb with fuel burn + Mach
 % clear; clc; close all;
 
 % notes: no AB, going 30 kft & 400 kts
