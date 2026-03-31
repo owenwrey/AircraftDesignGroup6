@@ -3,6 +3,7 @@ function CGenvelope(aircraft, Title)
 
 figure
 
+drop = true;
 time = aircraft.TimeStepTable.Time;
 dfuel = aircraft.TimeStepTable.dFuel;
 weight = aircraft.TimeStepTable.Weight;
@@ -16,16 +17,19 @@ CGxloc = zeros(1,length(time));
 
 for j = 1 : length(time)
 
-
     aircraft.fuel1.weight = aircraft.fuel1.weight - dfuel(j)/2;
     aircraft.fuel2.weight = aircraft.fuel2.weight - dfuel(j)/2;
 
-    % aircraft.fuel1.weight = aircraft.fuel1.weight - dfuel(j);
-    % 
     % if aircraft.fuel1.weight <= 0
     %     aircraft.fuel2.weight = aircraft.fuel1.weight + aircraft.fuel2.weight;
     %     aircraft.fuel1.weight = 0;
     % end
+
+    if drop == true && j == 42
+
+        aircraft.ordinance.weight = 0;
+
+    end
 
     % initialize variables
 xsum = 0;

@@ -202,7 +202,7 @@ clear f k timerFields data tics iterationMax;
 % plot cg envelope
 
 if true
-    CGenvelope(aircraft, "Strike, No Drop")
+    CGenvelope(aircraft, "Strike, With Drop")
 end
 
 
