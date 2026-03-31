@@ -19,6 +19,7 @@ function Aircraft = aeroupdater(Aircraft)
 %
 % So later Jordan can call:
 %   cd0_val = Aircraft.aero.cd0(alt_ft, mach)
+
 %% -------------------------
 % USER INPUTS
 % --------------------------
