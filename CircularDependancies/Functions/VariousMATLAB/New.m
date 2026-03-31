@@ -20,8 +20,8 @@ fullThrust = aircraft.engine.thrustMil*2;
 targAlt = 30000;
 targSpeed = 400;
 
-CD0_sub = 0.02;         
-CD0_sup = 0.06;         
+CD0_sub = 0.02;
+CD0_sup = 0.06;
 K2 = 0.05;
 CDR = 0;
 
@@ -31,12 +31,12 @@ THROT = 1;
 step = .5;               
 
 %% Storage
-dat = zeros(5000,5); % [time, V(kts), h(ft), W(lb), Mach]
+dat = zeros(1000,5); % [time, V(kts), h(ft), W(lb), Mach]
 dat(1,:) = [0, 150, 0, W0, 0];
 
 i = 1;
 
-while dat(i,3) < targAlt || dat(i,2) < targSpeed
+while dat(i,3) ~= targAlt || dat(i,2) ~= targSpeed
     
     t = dat(i,1);
     V = dat(i,2);
@@ -84,7 +84,20 @@ while dat(i,3) < targAlt || dat(i,2) < targSpeed
         
         Ps = (thrust - D)*V_fps / W;
         
+
+        
         % --- Scoring function ---
+
+        alt_error = targAlt - h;
+        speed_error = targSpeed - V;
+        
+        if abs(alt_error) < 2000 && abs(speed_error) < 150
+            terminal_mode = 1;
+        else
+            terminal_mode = 0;
+        end
+
+
 
         speed_error = V_try - targSpeed;
         speed_penalty = speed_error^2;
@@ -92,7 +105,7 @@ while dat(i,3) < targAlt || dat(i,2) < targSpeed
         blend = max(0, min(1, alt_error / 2000)); % 2000 ft transition band
 
         % Final score
-        score = blend*Ps - (1-blend)*0.01*speed_penalty;
+        score = blend*Ps - (1-blend)*0.1*speed_penalty;
         
 
         if score > best_score
@@ -100,6 +113,12 @@ while dat(i,3) < targAlt || dat(i,2) < targSpeed
             V_best = V_try;
             Ps_best = Ps;
         end
+
+
+
+
+
+
     end
     
     %% --- State update ---

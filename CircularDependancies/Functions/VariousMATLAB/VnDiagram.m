@@ -16,7 +16,7 @@ n_lim_n = aircraft.constants.negLimitLoad;      % negative limit load
 M = aircraft.constants.maxMach;                 % max Mach number
 
 % aero characteristics 
-CL_max = 3.7;             % CL_max
+CL_max = 2;             % CL_max
 CL_min = -.6;           % negative CL_max
 CL_alpha = (1--.4)/deg2rad(8--3);       % from NACA 64-206 airfoil tools
 
@@ -39,7 +39,7 @@ VD = 1.25*VH;           % design dive speed, KEAS
 %% Calculations
 % Calc Positive load limits
 % Vs_pos = sqrt(2*beta*WL/(rho_sl*CL_max));       % positive stall speed
-Vs_pos = 131;
+Vs_pos = 145;
 
 cl_theory = beta*WL/(.5*rho_sl*145^2)
 
