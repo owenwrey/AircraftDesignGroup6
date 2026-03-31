@@ -29,7 +29,7 @@ ncpView.display();
 setOption( "switchDes", "OFFDESIGN" );
 autoSolverSetup();
 
-for (AMBIENT.MN = 0.9; AMBIENT.MN < 2.02 ; AMBIENT.MN += 0.02) {
+for (AMBIENT.MN = 1.2; AMBIENT.MN < 2.02 ; AMBIENT.MN += 0.02) {
 AMBIENT.alt = 50000;
 CASE++;
 run();

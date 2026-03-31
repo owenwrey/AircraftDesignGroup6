@@ -52,6 +52,7 @@ plot(Mn_50, Fn_50)
 xlabel("Mach Number")
 ylabel("Thrust (lb)")
 legend("0 kft","10 kft", "20 kft", "30 kft", "40 kft", "50 kft")
+title("Military Power Thrust vs. Mach Number")
 
 % plot TSFC vs. Mach number
 figure;
@@ -63,5 +64,6 @@ plot(Mn_30, TSFC_30)
 plot(Mn_40, TSFC_40)
 plot(Mn_50, TSFC_50)
 xlabel("Mach Number")
-ylabel("Thrust (lb)")
+ylabel("TSFC (lbm/hr/lbf)")
 legend("0 kft","10 kft", "20 kft", "30 kft", "40 kft", "50 kft")
+title("Military Power TSFC vs. Mach Number")
