@@ -16,12 +16,16 @@ CGxloc = zeros(1,length(time));
 
 for j = 1 : length(time)
 
-    aircraft.fuel1.weight = aircraft.fuel1.weight - dfuel(j);
 
-    if aircraft.fuel1.weight <= 0
-        aircraft.fuel2.weight = aircraft.fuel1.weight + aircraft.fuel2.weight;
-        aircraft.fuel1.weight = 0;
-    end
+    aircraft.fuel1.weight = aircraft.fuel1.weight - dfuel(j)/2;
+    aircraft.fuel2.weight = aircraft.fuel2.weight - dfuel(j)/2;
+
+    % aircraft.fuel1.weight = aircraft.fuel1.weight - dfuel(j);
+    % 
+    % if aircraft.fuel1.weight <= 0
+    %     aircraft.fuel2.weight = aircraft.fuel1.weight + aircraft.fuel2.weight;
+    %     aircraft.fuel1.weight = 0;
+    % end
 
     % initialize variables
 xsum = 0;
