@@ -89,7 +89,7 @@ T2W_Ceiling = Master_Eqn(CD_0,k1,k2,CD_R,n,v,rho,ddt_h,ddt_v,alpha,beta,W2S);
 
 alt = 20000*0.3048;
 n = 4.32;
-v = 295;
+v = 295; 
 
 [T_ISA,a_ISA,~,rho_ISA] = atmosisa(alt,"extended","on");
 T = T_ISA + DeltaT;
@@ -161,10 +161,10 @@ W2S_Stall = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
 
 %%%%%%% Instantaneous Turn %%%%%%%%
 
-alt = 30000 * 0.3048;   
-n = 7.5;
-v = 387;     
-Cl_max = 1.2;
+alt = 20000 * 0.3048;   
+n = 6;
+v = 295; 
+Cl_max = 1.15;
 
 
 [T_ISA,~,~,rho_ISA] = atmosisa(alt,"extended","on");
@@ -267,4 +267,25 @@ ylabel("Thrust-to-Weight")
 xlim([0 225])
 ylim([0 2])
 
-legend("Cruise","Climb","Ceiling","Turn","Max Speed","Takeoff","SE Climb", "SE Approach", "Landing","Stall","Instantaneous Turn", "Point")
+legend("Cruise","Climb","Ceiling","Sustained Turn","Max Speed","Takeoff","SE Climb", "SE Approach", "Landing","Stall","Instantaneous Turn", "Point")
+
+%% Genetic Algorithm Optimization
+% Define the objective: Minimize Thrust-to-Weight (x(2))
+objective = @(x) x(2);
+
+% Setup variables for the constraint function
+W2S_lbft2 = W2S .* 0.02088547; % Convert your X-axis to lb/ft^2
+WS_limit = W2S_InstTurn * 0.02088547;
+
+% Solver Bounds [Wing Loading, T/W]
+lb = [min(W2S_lbft2), 0.1]; 
+ub = [WS_limit, 2.0]; % GA won't even look past the Grey Line (Inst. Turn)
+
+% Run GA
+options = optimoptions('ga', 'Display', 'iter', 'PlotFcn', @gaplotbestf);
+[best_design, min_tw] = ga(objective, 2, [], [], [], [], lb, ub, ...
+    @(x) aircraft_constraints(x, W2S_lbft2, T2W_Ceiling, T2W_MaxSpeed, WS_limit), options);
+
+% Plot the result
+plot(best_design(1), best_design(2), 'r*', 'MarkerSize', 12, 'LineWidth', 2)
+fprintf('GA Optimal Point: W/S = %.2f, T/W = %.2f\n', best_design(1), best_design(2));
