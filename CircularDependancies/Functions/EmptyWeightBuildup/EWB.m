@@ -34,7 +34,7 @@ span40 = wing.span*.4;                              % 40% wingspan
 aircraft.wing.flapArea = .5*(chord0_20 + chord50_20)*span50;        % flap area, ft^2
 aircraft.wing.flaperonArea = .5*(chord90_20 + chord50_20)*span40;   % flaperon area, ft^2
 aircraft.wing.slatArea = .5*(chord15_10 + chordtip_10)*span85;      % leading edge slat area, ft^2
-S_csw = aircraft.wing.flapArea + aircraft.wing.flaperonArea + aircraft.wing.slatArea;        % total control surface area
+S_csw = aircraft.wing.flapArea + aircraft.wing.flaperonArea + aircraft.wing.slatArea;        % total wing control surface area
 
 aircraft.wing.controlSurfaceArea = S_csw;
 
@@ -59,8 +59,9 @@ vt.TaperRatio = aircraft.vt.TaperRatio;
 
 % 25% chord and 90% span
 % calculate rudder area, 25% local chord, going from 0% to 90% span
-vt.rootChord = 1;
-vt.chord90 = 1;
+vt.rootChord = aircraft.vt.chord.root_each;
+vt.tipChord = aircraft.vt.chord.tip_each;
+vt.chord90 = (vt.rootChord-vt.tipChord)*.9 + vt.tipChord;
 vt.chord0_20 = vt.rootChord*.2;
 vt.chord90_20 = vt.chord90*.2;
 vt.span = sqrt(vt.AspectRatio*vt.area);
@@ -76,7 +77,7 @@ aircraft.wing.weight = .0103*(W0*Nz)^(.5) * (wing.area)^(.622) * (wing.AR)^(.785
                         (cosd(wing.QuarterChordSweep))^(-1) * (S_csw)^(.04);
 
 % horizontal tail
-Fw = 3.2;   % fuselage width at ht intersection
+Fw = 10;   % fuselage width at ht intersection
 Bh = sqrt(wing.AR*wing.area);
 
 aircraft.ht.weight = 3.316*(1+Fw/Bh)^(-2) * (W0*Nz/1000)^(.26) * ht.area^(.806);
@@ -92,8 +93,8 @@ aircraft.vt.weight = .452*K_rht * (W0*Nz)^(.488) * vt.area^(.718) * M^(.341)...
 % fuselage
 K_dwf = 1;                                  % delta wing multiplier
 L = aircraft.fuselage.length;
-D = 6;      % fuselage structural depth, ft
-W = 6;      % fuselage structural width, ft
+D = 60/12;  % fuselage structural depth, ft
+W = 10;     % fuselage structural width, ft
 
 aircraft.fuselage.weight = .499*K_dwf * W0^(.35) * Nz^(.25) * L^(.5) * D^(.849)...
     * W^(.685);
@@ -125,7 +126,7 @@ L_d = 8;                % duct length
 K_vsh = 1.425;          % Variable sweep, 1 otherwise
 K_mc = 1.45;            % if mission completion required after failure, otherwise = 1
 W_uav = 800;            % uninstalled avionics weight (800 lbs maybe)
-S_fw = ((46.5/12)*(182/12))*3 + (47/12)^2-(pi*(46.5/12)^2)*2;       % firewall surface area, ft^2
+S_fw = ((48/12)*(196/12))*3 + (pi*(50/12)^2)-(pi*(48/12)^2)*2;       % firewall surface area, ft^2
 S_cs = S_csw + ht.area + aircraft.vt.rudderArea;        % total control surface area
 
 N_en = 2;               % number of engines
@@ -138,7 +139,7 @@ N_gen = N_en;           % number of generators
 W_en = aircraft.engine.weight;
 T_e = aircraft.engine.thrust;               % thrust per engine
 T = T_e * N_en;                             % total thrust
-D_e = 46.5/12;          % engine diameter, ft
+D_e = 48/12;            % engine diameter, ft
 L_tp = 0;               % length of tailpipe, ft. 0 bc engine has nozzle???
 L_sh = 3;               % length of cooling shroud, ft, just a guess
 L_ec = (aircraft.engine.cg.x - aircraft.cockpit.cg.x) * N_en;     % dist from engine to cockpit, total if mult engines, ft
