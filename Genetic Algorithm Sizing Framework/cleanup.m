@@ -3,7 +3,7 @@
 %--------------------------------------------------------------------------
 clc; clear; close all
 
-files1 = dir('Veh_WL*');
+files1 = dir('Aircraft_WL*');
 if ~isempty(files1)
 delete(files1.name)
 end
