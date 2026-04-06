@@ -103,6 +103,8 @@ aircraft.gear.mg.height = 5;
 aircraft.gear.ng.height = 5; 
 
 % Time-Step Mission
+aircraft = getMIL_SIs(aircraft);
+aircraft = getAB_SIs(aircraft);
 
 % Tolerances
 aircraft.weight.tolerance = 150; % GO TO getConfig to uncomment
