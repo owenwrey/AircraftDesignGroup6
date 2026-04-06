@@ -471,6 +471,8 @@ Genetic Algorithm Sizing Framework/Attempt1/Generation99/Aircraft_WL119_2153_AR2
 Genetic Algorithm Sizing Framework/Attempt1/Generation99/Aircraft_WL119_2154_AR2_5968.mat
 Genetic Algorithm Sizing Framework/Attempt1/Generation99/Aircraft_WL119_2155_AR2_5968.mat
 
+*/*.asv
+
 Aircraft_WL*.mat
 Generation*.mat
 Genetic Algorithm Sizing Framework/generation*/
