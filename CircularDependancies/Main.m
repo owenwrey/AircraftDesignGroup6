@@ -176,6 +176,25 @@ while( not(exitFlag) && iteration <= iterationMax )
 
 end
 
+%% Wing Loading---Thrust-to-Weight check
+WL_polyPoints = [   50,     62,     74,     75,    106,   106,    50];
+TW_polyPoints = [1.211, 0.9784, 0.8216, 0.8149, 0.7379, 1.211, 1.211];
+
+[inWL_TWdesignSpace, onWL_TWdesignSpace] = inpolygon(aircraft.constants.wingLoading, aircraft.constants.thrustToWeight_TO.mil,...
+                                                WL_polyPoints, TW_polyPoints); % this checks if the W/S-T/W combo is valid
+
+if inWL_TWdesignSpace || onWL_TWdesignSpace
+     % saves converged weight in case we really want to know
+    aircraft.warnings.totalWeight = aircraft.weight.total;
+
+    % makes weight 1 trillion pounds (bad)
+    aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
+
+    % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
+
+    % save a wanring in the ac struct
+    aircraft.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements'
+end
 
 % ignore this, just helps with report writing
 % cell2mat(struct2cell(aircraft.engine.structures))
