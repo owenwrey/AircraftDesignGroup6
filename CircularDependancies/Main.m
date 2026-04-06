@@ -136,6 +136,7 @@ while( not(exitFlag) && iteration <= iterationMax )
 
     %% -| CG and Inertia Calculator |--------------------------------------
     aircraft = CgInertiaCalc(aircraft);
+    aircraft = inertia(aircraft); 
     %----------------------------------------------------------------------
 
     %% -| Landing Gear Updater |-------------------------------------------
