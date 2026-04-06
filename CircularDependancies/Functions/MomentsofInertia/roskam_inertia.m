@@ -113,7 +113,7 @@ function aircraft = roskam_inertia(aircraft)
     aircraft.inertia.reference_b_ft = ref.b_ft;
     aircraft.inertia.reference_L_ft = ref.L_ft;
 
-    aircraft.tinertia.Rx_bar = ref.Rx_bar;
+    aircraft.inertia.Rx_bar = ref.Rx_bar;
     aircraft.inertia.Ry_bar = ref.Ry_bar;
     aircraft.inertia.Rz_bar = ref.Rz_bar;
 
