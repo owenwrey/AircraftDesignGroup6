@@ -57,12 +57,13 @@ options = optimoptions('gamultiobj', ...
 function f = objectiveFunction(x)
 
     try
-    aircraft = SizingFrameworkMar24(x);
+    aircraft = SizingFrameworkApr06(x);
 
     % Extract the necessary metrics that you want as objective functions to
     % minimize or maximize
     obj1 = aircraft.weight.total;
-    obj2 = aircraft.constants.fuelVolume;
+    obj2 = aircraft.constants.EWF;
+    obj3 = aircraft.aero.cd0_strike_interp(1.2, 30000)
     
     % If the objective function is to minimize (like MTOM), do not change
     % the sign. But, if the objective function is to maximize (like payload

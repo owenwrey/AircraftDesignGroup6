@@ -138,6 +138,7 @@ while( not(exitFlag) && iteration <= iterationMax )
 
     %% -| CG and Inertia Calculator |--------------------------------------
     aircraft = CgInertiaCalc(aircraft);
+    aircraft = roskam_inertia(aircraft); 
     %----------------------------------------------------------------------
 
     %% -| Landing Gear Updater |-------------------------------------------
@@ -175,9 +176,35 @@ while( not(exitFlag) && iteration <= iterationMax )
     aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
     aircraft.constants.thrustToWeight_TO.AB = 2*aircraft.engine.thrust/aircraft.weight.total;
     aircraft.constants.thrustToWeight_TO.mil = 2*aircraft.engine.thrustMil/aircraft.weight.total;
+    aircraft.constants.EWF = aircraft.weight.empty/aircraft.weight.total;
 
 end
 
+%% Wing Loading---Thrust-to-Weight check
+WL_polyPoints = [   50,     62,     74,     75,    106,   106,    50];
+TW_polyPoints = [1.211, 0.9784, 0.8216, 0.8149, 0.7379, 1.211, 1.211];
+
+% figure;
+% plot(WL_polyPoints, TW_polyPoints); hold on; % check the shape of the design space
+% plot(aircraft.constants.wingLoading, aircraft.constants.thrustToWeight_TO.mil, 'Marker','o')
+
+[inWL_TWdesignSpace, onWL_TWdesignSpace] = inpolygon(aircraft.constants.wingLoading, aircraft.constants.thrustToWeight_TO.mil,...
+                                                WL_polyPoints, TW_polyPoints); % this checks if the W/S-T/W combo is valid
+
+if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border of the W/S T/W design space...
+    % saves converged weight (+other obj funcs) in case we want to know what the bad design looked like anyway
+    aircraft.constants.warnings.totalWeight = aircraft.weight.total;
+    aircraft.constants.warnings.EWF = aircraft.constants.EWF;
+
+    % makes weight 1 trillion pounds (bad)
+    aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
+    aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
+
+    % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
+
+    % save a wanring in the ac struct
+    aircraft.constants.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements'
+end
 
 % ignore this, just helps with report writing
 % cell2mat(struct2cell(aircraft.engine.structures))
@@ -203,7 +230,7 @@ clear f k timerFields data tics iterationMax;
 
 % plot cg envelope
 
-if true
+if ~true
     CGenvelope(aircraft, "Strike, With Drop")
 end
 
