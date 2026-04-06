@@ -141,7 +141,7 @@ aircraft.gear.ng.cg.z = aircraft.gear.mg.height/2 + 1;
 
 %% calculate Center of Gravity
 % place fields that shouldnt be iterated over here.
-blacklist = ["flightcond","cg","constants","aero","enginesystems","weight","fuelSys","gear","TimeStepTable"];
+blacklist = ["flightcond","cg","constants","aero","enginesystems","weight","fuelSys","gear","TimeStepTable","inertia"];
 
 % initialize variables
 xsum = 0;
