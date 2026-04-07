@@ -417,7 +417,7 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 % solve for throttle setting 
 Tbl.THROT(i) = 1.25; % throttle setting
 Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i)); % thrust laps
-[Tbl.Thrust(i), SFC(i) = f119perf(Tbl.Alt(i), Tbl.MACH(i), true); % thrust (lbf)
+Tbl.Thrust(i), SFC(i) = f119perf(Tbl.Alt(i), Tbl.MACH(i), true); % thrust (lbf)\
 Tbl.FF(i) = SFC*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
