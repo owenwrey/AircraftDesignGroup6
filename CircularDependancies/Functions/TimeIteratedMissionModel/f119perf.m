@@ -161,9 +161,6 @@ end
 end
 
 
-afterBurn
-
-ThrustInt
 
 Thrustout = ThrustInt(alt,M);
 TSFCout = TSFCInt(alt,M);
