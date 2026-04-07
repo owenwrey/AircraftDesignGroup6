@@ -63,7 +63,7 @@ function f = objectiveFunction(x)
     % minimize or maximize
     obj1 = aircraft.weight.total;
     obj2 = aircraft.constants.EWF;
-    obj3 = aircraft.aero.cd0_strike_interp(1.2, 30000)
+    obj3 = aircraft.aero.cd0_strike_interp(1.2, 30000);
     
     % If the objective function is to minimize (like MTOM), do not change
     % the sign. But, if the objective function is to maximize (like payload
@@ -71,7 +71,8 @@ function f = objectiveFunction(x)
     % was to minimize fuel weight, it would just be 0bj2, no change in sign. 
     % You can add one more objective function if there is any. This setup can handle only 3
     % objective functions
-    f = [obj1, obj2];
+    
+    f = [obj1, obj2, obj3];
     catch ERRMSG
     end
 end
