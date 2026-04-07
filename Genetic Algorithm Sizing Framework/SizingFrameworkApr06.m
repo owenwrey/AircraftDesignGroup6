@@ -198,6 +198,7 @@ if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border o
     % makes weight 1 trillion pounds (bad)
     aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
     aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
+    aircraft.aero.cd0_strike_interp = griddedInterpolant([1,2], [1,50000], [100, 100; 100, 100], 'linear', 'none')
 
     % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
 
