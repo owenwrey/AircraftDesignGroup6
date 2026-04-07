@@ -10,7 +10,6 @@ b_half = b/2;                            % [ft]
 
 theta_tipback   = 18;    % [deg]
 theta_tailstrike= 12;    % [deg]
-theta_min       = 15;    % [deg]
 phi_roll        = 5;     % [deg]
 clearance_req   = 6/12;  % [ft]
 f_nose          = 0.12;  
@@ -28,7 +27,7 @@ iter = 0;
 iter_max = 100;
 
 %% Governing pitch constraint
-theta_design = max([theta_tipback, theta_tailstrike, theta_min]);
+theta_design = max([theta_tipback, theta_tailstrike]);
 
 %% -------------------------
 % Iteration loop
