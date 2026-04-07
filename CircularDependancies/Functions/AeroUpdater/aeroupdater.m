@@ -146,9 +146,10 @@ for j = 1:nAlt
             d_q = (0.139 + 0.419*(M - 0.161)^2) .* A_base;  % drag area [ft^2]
         end
 
-        CD0_misc_air_to_air = (6*d_q(1) + 2*d_q(2)) / sref;
-        CD0_misc_strike     = (4*d_q(3) + 2*d_q(2)) / sref;
-
+        % CD0_misc_air_to_air = (6*d_q(1) + 2*d_q(2)) / sref;
+        % CD0_misc_strike     = (4*d_q(3) + 2*d_q(2)) / sref;
+CD0_misc_air_to_air = 0;
+CD0_misc_strike = 0;
         %% -------------------------
         % COMPONENT FRICTION + FORM / INTERFERENCE BUILDUP
         % --------------------------
