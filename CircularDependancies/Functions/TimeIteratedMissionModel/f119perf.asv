@@ -21,17 +21,13 @@ if or(and(afterBurn,isfile('ThrustIntAB.mat')),and(~afterBurn,isfile('ThrustIntN
 
 if afterBurn
 
-    data1 = load('ThrustIntAB.mat');
-    ThrustInt = data1.ThrustInt;
-    data2 = load('TSFCIntAB.mat');
-    TSFCInt = data2.TSFCInt;
+    ThrustInt = load('ThrustIntAB.mat');
+    TSFCInt = load('TSFCIntAB.mat');
 
 else
     
-    data1 = load('ThrustIntNAB.mat');
-    ThrustInt = data1.ThrustInt;
-    data2 = load('TSFCIntNAB.mat');
-    TSFCInt = data2.TSFCInt;
+    ThrustInt = load('ThrustIntNAB.mat');
+    TSFCInt = load('TSFCIntNAB.mat');
 
 
 end
@@ -161,6 +157,9 @@ end
 end
 
 
+afterBurn
+
+ThrustInt
 
 Thrustout = ThrustInt(alt,M);
 TSFCout = TSFCInt(alt,M);

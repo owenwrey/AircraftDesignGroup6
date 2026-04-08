@@ -220,7 +220,7 @@ for  i = istart:iend
 
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.9; % Mach number
+Tbl.MACH(i) = 0.85; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
@@ -280,7 +280,7 @@ Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.9; % Mach number
+Tbl.MACH(i) = 1.2; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
@@ -337,13 +337,13 @@ for  i = istart:iend
 
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.9; % Mach number
+Tbl.MACH(i) = 0.8; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
 Tbl.THROT(i) = 1; % throttle setting
 Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i)); % thrust laps
-[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), 0); % thrust (lbf)
+[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = -3000; % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
@@ -409,7 +409,7 @@ Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % li
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.05; % drag polar
-Tbl.CDR(i) = 0.3; % drag polar
+Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
 Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); % drag (lbf)
@@ -417,8 +417,8 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 % solve for throttle setting 
 Tbl.THROT(i) = 1.25; % throttle setting
 Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i)); % thrust laps
-[Tbl.Thrust(i), SFC(i) = f119perf(Tbl.Alt(i), Tbl.MACH(i), true); % thrust (lbf)
-Tbl.FF(i) = SFC*Tbl.Thrust(i); % fuel flow (lb/h)
+[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), true); % thrust (lbf)
+Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 
@@ -466,14 +466,14 @@ Tbl.CL(i) = 0; % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 
 Tbl.K1(i) = 0; % drag polar
 Tbl.K2(i) = 0.05; % drag polar
-Tbl.CDR(i) = 0.3; % drag polar
+Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
 Tbl.Drag(i) = 0; % drag (lbf)
 Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 Tbl.THROT(i) = 0; % throttle setting
-[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt, Tbl.MACH, true); % thrust (lbf)
+[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), true); % thrust (lbf)
 Tbl.FF(i) = 0; % fuel flow (lb/h)
 Tbl.dFuel(i) = 0; % delta fuel (lb)
 Tbl.FuelBurn(i) = Tbl.FuelBurn(i-1) + Tbl.dFuel(i); % fuel burned (lb)
@@ -504,7 +504,7 @@ for  i = istart:iend
 
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.9; % Mach number
+Tbl.MACH(i) = 0.85; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
@@ -621,7 +621,7 @@ for  i = istart:iend
 
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.9; % Mach number
+Tbl.MACH(i) = 0.8; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
