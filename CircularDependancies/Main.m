@@ -160,6 +160,8 @@ while( not(exitFlag) && iteration <= iterationMax )
     end % go on to time-iterated mission model
     %----------------------------------------------------------------------
 
+
+    
     %% -| Time Iterated Mission Model |------------------------------------
     aircraft = TIMESTEP_CONVERGENCE_MASTER(aircraft, missionToRun);
     %----------------------------------------------------------------------
