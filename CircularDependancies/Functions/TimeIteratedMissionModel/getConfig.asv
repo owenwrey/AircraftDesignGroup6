@@ -18,17 +18,17 @@ f.fuelBufferPercent = 0.06;
 f.cruise.altitude = 30000; % [ft]
 
 f.cruise.distance.out.A2A = 700; % [nmi]
-f.cruise.speed.out.A2A = 800; % [KTAS] not yet implemented
+f.cruise.speed.out.A2A = 468; % [KTAS] not yet implemented
 f.cruise.distance.in.A2A = 700; % [nmi]
-f.cruise.speed.in.A2A = 800; % not yet implemented
+f.cruise.speed.in.A2A = 414; % not yet implemented
 f.loiter1.speed.A2A = 212; % KTAS
 f.loiter1.time.A2A = 45; % not yet implemented
 f.loiter2.time.A2A = 0; % not yet implemented
 
 f.cruise.distance.out.STK = 700; % [nmi]
-f.cruise.speed.out.STK = 800; % [KTAS] not yet implemented
+f.cruise.speed.out.STK = 530; % [KTAS] not yet implemented
 f.cruise.distance.in.STK = 700; % [nmi]
-f.cruise.speed.in.STK = 800; % not yet implemented
+f.cruise.speed.in.STK = 414; % not yet implemented
 f.loiter1.speed.STK = 212; % KTAS
 f.loiter1.time.STK = 45; % not yet implemented
 f.loiter2.time.STK = 0; % not yet implemented
