@@ -28,7 +28,7 @@ rho_sl = .002377;                       % air density, slug/ft^3
 % gust line inputs
 mac = aircraft.wing.MAC;                % mean aerodynamic chord, ft
 g = 32.2;                               % gravity, ft/s^2
-U_de = [66,-66,50,-50,25,-25];        % derived gust velocity, ft/s
+U_de = [66,-66,50,-50,25,-25];          % derived gust velocity, ft/s
 
 % max sea-level level flight speed, KEAS
 VH = M*sqrt(1.4*1716*518.67)/1.68781;
