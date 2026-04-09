@@ -87,7 +87,7 @@ aircraft.avionics.weight = 2500;
 aircraft.constants.limitLoad = 8;
 aircraft.constants.negLimitLoad = -3;
 aircraft.constants.ultLoad = 1.5 * aircraft.constants.limitLoad;
-aircraft.constants.maxMach = 1.6;
+aircraft.constants.maxMach = 1.8;
 
 % CG and Inertia
 aircraft.engine.cg.x = 45;
