@@ -7,7 +7,7 @@ clearvars;
 close all;
 tics.Script = tic;
 
-addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
+addpath(genpath('FunctionsMar24')); % lets matlab see all the functions within Functions folder
 
 %% Mission Select
 missionToRun = "Strike"; % either 'A2A', or 'Strike', or 'Both' to use the constraining mission
