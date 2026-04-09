@@ -9,7 +9,7 @@ close all
 CD_0 = 0.02; 
 k1 = 0; 
 k2 = 0.05; 
-CD_R = 0; 
+CD_R = 0.3; 
 CD_0 = 0.02; % zero-lift drag coeficient
 k1 = 0; % drag polar constant 1
 k2 = .05; % drag polar constant 2
@@ -150,8 +150,8 @@ W2S_Landing = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
 
 alt = 0; % Altitude {m}
 n = 1; % Load Factor
-beta = 0.6; % Weight Lapse
-Cl = 1.2; % Lift Coefficient
+beta = 1; % Weight Lapse
+Cl = 2; % Lift Coefficient
 k = 1.0; % Safety Factor
 v = 131*0.514444; % Velocity {m/s}
 [T_ISA,~,~,rho_ISA] = atmosisa(alt,"extended","on");
@@ -162,16 +162,16 @@ W2S_Stall = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
 %%%%%%% Instantaneous Turn %%%%%%%%
 
 alt = 20000 * 0.3048;   
-n = 6;
+n = 7;
 v = 295; 
-Cl_max = 1.15;
-
+Cl = 1.2;
+beta = 0.9
 
 [T_ISA,~,~,rho_ISA] = atmosisa(alt,"extended","on");
 T = T_ISA + DeltaT;
 rho = rho_ISA .* (T_ISA ./ T);
 
-W2S_InstTurn = 0.5 * rho * v^2 * (Cl_max / n);
+W2S_InstTurn = verticalConstraintAnalysis(n,beta,Cl,k,v,rho);
 
 %% Single-Engine
 %%%%%%% Single-Engine Climb %%%%%%%%
@@ -262,30 +262,12 @@ colormap(jet)
 
 plot(102, 0.8, 'ko')
 
+plot(102, 0.64, 'ko')
+
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
 xlim([0 225])
 ylim([0 2])
 
-legend("Cruise","Climb","Ceiling","Sustained Turn","Max Speed","Takeoff","SE Climb", "SE Approach", "Landing","Stall","Instantaneous Turn", "Point")
+legend("Cruise (AB Off)","Climb (AB Off)","Ceiling (AB Off)","Sustained Turn (AB Off)","Max Speed (AB On)","Takeoff (AB On)","SE Climb (AB On)", "SE Approach (AB Off)", "Landing (AB Off)","Stall (AB Off)","Instantaneous Turn (AB On)", "Point")
 
-%% Genetic Algorithm Optimization
-% Define the objective: Minimize Thrust-to-Weight (x(2))
-objective = @(x) x(2);
-
-% Setup variables for the constraint function
-W2S_lbft2 = W2S .* 0.02088547; % Convert your X-axis to lb/ft^2
-WS_limit = W2S_InstTurn * 0.02088547;
-
-% Solver Bounds [Wing Loading, T/W]
-lb = [min(W2S_lbft2), 0.1]; 
-ub = [WS_limit, 2.0]; % GA won't even look past the Grey Line (Inst. Turn)
-
-% Run GA
-options = optimoptions('ga', 'Display', 'iter', 'PlotFcn', @gaplotbestf);
-[best_design, min_tw] = ga(objective, 2, [], [], [], [], lb, ub, ...
-    @(x) aircraft_constraints(x, W2S_lbft2, T2W_Ceiling, T2W_MaxSpeed, WS_limit), options);
-
-% Plot the result
-plot(best_design(1), best_design(2), 'r*', 'MarkerSize', 12, 'LineWidth', 2)
-fprintf('GA Optimal Point: W/S = %.2f, T/W = %.2f\n', best_design(1), best_design(2));
