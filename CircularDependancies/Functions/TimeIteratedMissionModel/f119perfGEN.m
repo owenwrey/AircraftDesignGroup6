@@ -1,47 +1,16 @@
-function [Thrustout,TSFCout] = f119perf(alt, M, afterBurn)
+function [f119perf] = f119perfGEN()
 %F119PERF F119 performance interpolant. 
-%   inputs are altitude and mach number, English system. will return null 
-% when values are out of bounds.
+%   Refactor for speed. produces gridded interpolants for Afterburning and
+%   non afterburn engine modes.
 arguments (Input)
-    alt 
-    M
-    afterBurn
 
 end
 
 arguments (Output)
-    Thrustout
-    TSFCout
+    f119perf
 end
 
 %% NPSS Data
-
-
-if or(and(afterBurn,isfile('ThrustIntAB.mat')),and(~afterBurn,isfile('ThrustIntNAB')))
-
-if afterBurn
-
-    data1 = load('ThrustIntAB.mat');
-    ThrustInt = data1.ThrustInt;
-    data2 = load('TSFCIntAB.mat');
-    TSFCInt = data2.TSFCInt;
-
-else
-    
-    data1 = load('ThrustIntNAB.mat');
-    ThrustInt = data1.ThrustInt;
-    data2 = load('TSFCIntNAB.mat');
-    TSFCInt = data2.TSFCInt;
-
-
-end
-
-
-else
-
-if afterBurn
-
-    
 
 % Max power
 % 0 kft
@@ -91,16 +60,12 @@ Fn = [Fn_0 Fn_10 Fn_20 Fn_30 Fn_40 Fn_50];
 TSFCq = griddata(ALT,Mn,TSFC,ALTq,Mnq);
 Thrustq = griddata(ALT,Mn,Fn,ALTq,Mnq);
 
-ThrustInt = griddedInterpolant(ALTq',Mnq',Thrustq');
-TSFCInt = griddedInterpolant(ALTq',Mnq',TSFCq');
-
-save("ThrustIntAB.mat","ThrustInt")
-save("TSFCIntAB.mat","TSFCInt")
-    
+ThrustAB = griddedInterpolant(ALTq',Mnq',Thrustq');
+TSFCAB = griddedInterpolant(ALTq',Mnq',TSFCq');
 
 
-else
-
+f119perf.max.fn = ThrustAB;
+f119perf.max.tsfc = TSFCAB;
     
 
 % Mil power
@@ -150,21 +115,12 @@ Fn = [Fn_0 Fn_10 Fn_20 Fn_30 Fn_40 Fn_50];
 TSFCq = griddata(ALT,Mn,TSFC,ALTq,Mnq);
 Thrustq = griddata(ALT,Mn,Fn,ALTq,Mnq);
 
-ThrustInt = griddedInterpolant(ALTq',Mnq',Thrustq');
-TSFCInt = griddedInterpolant(ALTq',Mnq',TSFCq');
+f119perf.mil.fn = griddedInterpolant(ALTq',Mnq',Thrustq');
+f119perf.mil.tsfc = griddedInterpolant(ALTq',Mnq',TSFCq');
 
-save("ThrustIntNAB.mat","ThrustInt")
-save("TSFCIntNAB.mat","TSFCInt")
+
     
-end
-
-end
 
 
 
-Thrustout = ThrustInt(alt,M);
-TSFCout = TSFCInt(alt,M);
 
-
-
-end

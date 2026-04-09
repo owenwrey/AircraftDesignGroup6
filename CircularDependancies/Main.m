@@ -29,7 +29,7 @@ aircraft.cg.z = 10;
 % Time-Step Mission
 aircraft.weight.total = 60e3;
 aircraft.weight.fuel = 20e3;
-aircraft.weight.empty = 40e3;
+aircraft.weight.empty = 40e3;s
 aircraft.weight.totalOnLanding = 42e3;
 
 %% -| Aircraft Struct (constant "variables")|------------------------------
@@ -106,7 +106,7 @@ aircraft.gear.ng.height = 5;
 
 
 % Tolerances
-aircraft.weight.tolerance = 150; % GO TO getConfig to uncomment
+aircraft.weight.tolerance = 15; % GO TO getConfig to uncomment
 aircraft.cg.tolerance = 3/12;
 aircraft.gear.tolerance = 3/12;
 % -------------------------------------------------------------------------
