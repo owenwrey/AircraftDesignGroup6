@@ -208,7 +208,8 @@ TW_polyPoints = [1.211, 0.9784, 0.8216, 0.8149, 0.7379, 1.211, 1.211];
 %     aircraft.constants.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements';
 % end
 
-savename = strrep(sprintf('Veh%0.4f_AR%0.4f',aircraft.constants.wingLoading, aircraft.wing.AR),'.','_');
+aircraftNumber = randi([1e9, 1e10 - 1]);
+savename = sprintf('Aircraft%.0f', aircraftNumber);
 
 aircraft.aero.cd0 = "A function was here but was replaced to make gamultiobj happy";
 
