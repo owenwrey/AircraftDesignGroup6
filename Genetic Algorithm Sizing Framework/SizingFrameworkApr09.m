@@ -1,9 +1,9 @@
-function aircraft = SizingFrameworkApr09(input)
+function f = SizingFrameworkApr09(x)
 % Circular Dependancies Solver Main equation
 % Aircraft Design - Chakraborty
 % Group 6
 %--------------------------------------------------------------------------
-clc; clearvars; close all
+
 
 addpath(genpath('FunctionsApr09')); % lets matlab see all the functions within Functions folder
 
@@ -121,7 +121,7 @@ iterationMax = 1000;
 
 while( not(exitFlag) && iteration <= iterationMax )
     iteration = iteration + 1;
-    fprintf("   Iteration: %u\n", iteration);
+    %fprintf("   Iteration: %u\n", iteration);
     aircraftOld = aircraft;
 
     %% -| Geometry Updater |-----------------------------------------------
@@ -222,17 +222,17 @@ save(savename,'aircraft')
 % miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
 
 %% -| Display Results |----------------------------------------------------
-fprintf("\n Converged after %u iterations\n\n", iteration)
-fprintf("  W0/S:      %.0f psf\n", aircraft.constants.wingLoading)
-fprintf("  (T/W0)ab:  %.2f\n", aircraft.constants.thrustToWeight_TO.AB)
-fprintf("  (T/W0)mil: %.2f\n", aircraft.constants.thrustToWeight_TO.mil)
-fprintf("---------------------\n")
-fprintf("  MTOW: %.0f lb\n", aircraft.weight.total)
-fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
-fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
-fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
-fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
-fprintf('---------------------\n\n')
+% fprintf("\n Converged after %u iterations\n\n", iteration)
+% fprintf("  W0/S:      %.0f psf\n", aircraft.constants.wingLoading)
+% fprintf("  (T/W0)ab:  %.2f\n", aircraft.constants.thrustToWeight_TO.AB)
+% fprintf("  (T/W0)mil: %.2f\n", aircraft.constants.thrustToWeight_TO.mil)
+% fprintf("---------------------\n")
+% fprintf("  MTOW: %.0f lb\n", aircraft.weight.total)
+% fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
+% fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
+% fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
+% fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
+% fprintf('---------------------\n\n')
 %--------------------------------------------------------------------------
 
 clear f k timerFields data tics iterationMax;
@@ -246,5 +246,7 @@ end
 
 % VnDiagram       % generate Vn diagram for converged aircraft
 % New             % generate Min TTC graph for converged aircraft  
+
+f = aircraft;
 
 end
