@@ -29,7 +29,7 @@ aircraft.cg.z = 10;
 % Time-Step Mission
 aircraft.weight.total = 60e3;
 aircraft.weight.fuel = 20e3;
-aircraft.weight.empty = 40e3;s
+aircraft.weight.empty = 40e3;
 aircraft.weight.totalOnLanding = 42e3;
 
 %% -| Aircraft Struct (constant "variables")|------------------------------
