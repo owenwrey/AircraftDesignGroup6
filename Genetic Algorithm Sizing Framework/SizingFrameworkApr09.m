@@ -208,7 +208,8 @@ if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border o
     aircraft.constants.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements'
 end
 
-savename = strrep(sprintf('Veh%0.4f_AR%0.4f',aircraft.constants.wingLoading, aircraft.wing.AR),'.','_');
+aircraftNumber = randi([1e9, 1e10 - 1]);
+savename = sprintf('Aircraft%.0f', aircraftNumber);
 
 aircraft.aero.cd0 = "A function was here but was replaced to make gamultiobj happy";
 
