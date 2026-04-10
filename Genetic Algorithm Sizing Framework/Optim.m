@@ -16,16 +16,18 @@ close all;
 
 % x(1) = WingLoading;
 % x(2) = AspectRatio;
+% x(3) = TaperRatio;
+% x(4) = sweepAngle;
 
-nvars = 2;     % It should be equal to the number of design variables
+nvars = 4;     % It should be equal to the number of design variables
 
 % lb refers to lower bound of the design variable and ub refers to the
 % upper bound of the design variables. In this example the lower bound of
 % wing loading in 10 units and that for aspect ratio is 10. The upper bound
 % of wing loading is 30 units and that for aspect ratio is 15. lb and ub
 % should be a row vector of 1xnvars
-lb = [80, 2.5];    
-ub = [120, 6];
+lb = [80, 2.5, 0.18, 25];    
+ub = [105, 6, 0.45, 65];
 
 % Population size is the total number of designs that the optimizer will
 % evaluate in each generation. A rule of thumb is to make populationSize =
@@ -37,10 +39,12 @@ crossoverFraction = 0.95;
 
 %% ---------------- OPTIONS ----------------
 options = optimoptions('gamultiobj', ...
+    'FunctionTolerance', 1e-3, ...
+    'MaxStallGenerations', 20, ...
     'UseParallel', true, ...
     'PopulationSize',    populationSize, ...
     'CrossoverFraction', crossoverFraction, ...
-    'MaxGenerations',    100, ...
+    'MaxGenerations',    300, ...
     'FunctionTolerance', 1e-4, ...
     'MutationFcn',       @mutationadaptfeasible, ...
     'Display',           'iter', ...
@@ -57,7 +61,7 @@ options = optimoptions('gamultiobj', ...
 function f = objectiveFunction(x)
 
     try
-    aircraft = SizingFrameworkApr06(x);
+    aircraft = SizingFrameworkApr09(x);
 
     % Extract the necessary metrics that you want as objective functions to
     % minimize or maximize
