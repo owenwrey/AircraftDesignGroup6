@@ -4,10 +4,10 @@ MODELNAME = "LowBPRTurbofan";
  //#################### Flight Conditions ####################
 Element FlightConditions AMBIENT {
     alt = 30000;          // flight altitude (ft)
-    MN = 0.8;               // flight Mach number
+    MN = 1.5;               // flight Mach number
     //Ts = -58.47;            // ambient temperature, F (only needed for non-standard day)
     //Ps = 230.3;             // ambient pressure, psia (only needed for non-standard day)
-    W = 170;                       // mass flow rate, lbm/sec
+    W = 250;                       // mass flow rate, lbm/sec
    // Fl_O.switchTransport = "EQUIL";  // Equilibrium flow, need this for Janaf and CEA
 }
 
@@ -159,14 +159,14 @@ Element Bleed BLEEDEC3 {
  effChemBase = 0.96; //base chemical efficiency
  
  //Afterburner off
-//switchBurn = "WFUEL";
- //dPqPBase = 0.01; 
- //Wfuel = 0;
+switchBurn = "WFUEL";
+ dPqPBase = 0.01; 
+ Wfuel = 0;
  
  //Afterburner on
-switchBurn = "TEMPERATURE";
-dPqPBase = 0.07;
- TtCombOut = 3700;
+//switchBurn = "TEMPERATURE";
+//dPqPBase = 0.07;
+ //TtCombOut = 3700;
  //switchBurn = "FAR";
  //FAR = 0.04;
  }
