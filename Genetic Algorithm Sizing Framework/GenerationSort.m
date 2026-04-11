@@ -1,13 +1,11 @@
-
-numDV = 2;
+function [] = GenerationSort(NumGen)
+numDV = 4;
 
 
 % load Generation.mat
-load('Generation.mat')
+% load('Generation.mat')
 
 % 'c' is the number of generations evaluated
-NumGen = c;
-
 
 
 % start a for loop running over each generation
@@ -33,7 +31,7 @@ for i = 1:NumGen
     for j = 1:1:height(b)
 
         % form vehicle file name
-        VehName0 =  strrep(sprintf('Aircraft_WL%0.4f_AR%0.4f',DV(j,1),DV(j,2)),'.','_');
+        VehName0 =  strrep(sprintf('Aircraft_WL%0.4f_AR%0.4f_TR%0.4f_SA%0.4f', DV(j,1), DV(j,2)), DV(j,3), DV(j,4)),'.','_');
         VehName = sprintf('%s.mat',VehName0);
         try
         % move the file into the correct folder

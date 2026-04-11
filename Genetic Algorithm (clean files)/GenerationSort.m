@@ -1,9 +1,9 @@
-
+function [] = GenerationSort(c)
 numDV = 2;
 
 
 % load Generation.mat
-load('Generation.mat')
+% load('Generation.mat')
 
 % 'c' is the number of generations evaluated
 NumGen = c;
