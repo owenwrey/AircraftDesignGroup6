@@ -233,7 +233,7 @@ Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
 Tbl.THROT(i) = 1; % throttle setting
-Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i)); % thrust lapse
+Tbl.ThrustLapse(i) = 1; % thrust lapse
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
 Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i),Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
@@ -304,7 +304,7 @@ Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
 Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); % drag (lbf)
 
 % solve for throttle setting 
-Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i-1)); % thrust lapse
+Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
 Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false);
@@ -354,7 +354,7 @@ Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
 Tbl.THROT(i) = 1; % throttle setting
-Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i)); % thrust laps
+Tbl.ThrustLapse(i) = 1; % thrust laps
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
 Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
@@ -430,7 +430,7 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 
 % solve for throttle setting 
 Tbl.THROT(i) = 1.25; % throttle setting
-Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i)); % thrust laps
+Tbl.ThrustLapse(i) = 1; % thrust laps
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), true); % thrust (lbf)
 Tbl.Thrust(i) = f119perf.max.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.max.tsfc(Tbl.Alt(i), Tbl.MACH(i));
@@ -527,7 +527,7 @@ Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
 Tbl.THROT(i) = 1; % throttle setting
-Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i)); % thrust laps
+Tbl.ThrustLapse(i) = 1; % thrust laps
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
 Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
@@ -600,7 +600,7 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 
 % solve for throttle setting 
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
-Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i-1)); % thrust laps
+Tbl.ThrustLapse(i) = 1; % thrust laps
 Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false);
 Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
@@ -648,7 +648,7 @@ Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
 Tbl.THROT(i) = 1; % throttle setting
-Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i)); % thrust laps
+Tbl.ThrustLapse(i) = 1; % thrust laps
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
 Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
@@ -722,7 +722,7 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 
 % solve for throttle setting 
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
-Tbl.ThrustLapse(i) = TLapse(Tbl.Alt(i), Tbl.MACH(i), Tbl.THROT(i-1)); % thrust laps
+Tbl.ThrustLapse(i) = 1; % thrust laps
 Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false);
 Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
