@@ -204,7 +204,7 @@ if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border o
     % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
 
     % save a wanring in the ac struct
-    aircraft.constants.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements'
+    aircraft.constants.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements';
 end
 
 % ignore this, just helps with report writing
