@@ -27,9 +27,9 @@ aircraft.cg.z = 10;
 % Landing Gear
 
 % Time-Step Mission
-aircraft.weight.total = 60e3;
-aircraft.weight.fuel = 20e3;
-aircraft.weight.empty = 40e3;
+aircraft.weight.total = 80e3;
+aircraft.weight.fuel = 30e3;
+aircraft.weight.empty = 30e3;
 aircraft.weight.totalOnLanding = 42e3;
 
 %% -| Aircraft Struct (constant "variables")|------------------------------
