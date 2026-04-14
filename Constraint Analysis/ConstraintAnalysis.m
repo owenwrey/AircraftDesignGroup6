@@ -262,7 +262,7 @@ colormap(jet)
 
 plot(102, 0.8, 'ko')
 
-plot(102, 0.64, 'ko')
+plot(105, 0.61, 'ko')
 
 xlabel("Wing Loading (lb/ft^2)")
 ylabel("Thrust-to-Weight")
