@@ -41,6 +41,7 @@ for i = 1:length(WL)
             
 
             for l = 1:length(SA)
+                aircraft = struct;
                 aircraft.constants.wingLoading = WL(i);
                 aircraft.wing.AR = AR(j);
                 aircraft.ht.AR = 0.8*aircraft.wing.AR;
@@ -50,8 +51,6 @@ for i = 1:length(WL)
                 exitFlag = false; 
                 iteration = 0;
 
-
-aircraft = struct;
 
 % Geometry
 
@@ -304,17 +303,17 @@ end % iWL
 % miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
 
 %% -| Display Results |----------------------------------------------------
-fprintf("\n Converged after %u iterations\n\n", iteration)
-fprintf("  W0/S:      %.0f psf\n", aircraft.constants.wingLoading)
-fprintf("  (T/W0)ab:  %.2f\n", aircraft.constants.thrustToWeight_TO.AB)
-fprintf("  (T/W0)mil: %.2f\n", aircraft.constants.thrustToWeight_TO.mil)
-fprintf("---------------------\n")
-fprintf("  MTOW: %.0f lb\n", aircraft.weight.total)
-fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
-fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
-fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
-fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
-fprintf('---------------------\n\n')
+% fprintf("\n Converged after %u iterations\n\n", iteration)
+% fprintf("  W0/S:      %.0f psf\n", aircraft.constants.wingLoading)
+% fprintf("  (T/W0)ab:  %.2f\n", aircraft.constants.thrustToWeight_TO.AB)
+% fprintf("  (T/W0)mil: %.2f\n", aircraft.constants.thrustToWeight_TO.mil)
+% fprintf("---------------------\n")
+% fprintf("  MTOW: %.0f lb\n", aircraft.weight.total)
+% fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
+% fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
+% fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
+% fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
+% fprintf('---------------------\n\n')
 %--------------------------------------------------------------------------
 
 clear f k timerFields data tics iterationMax;

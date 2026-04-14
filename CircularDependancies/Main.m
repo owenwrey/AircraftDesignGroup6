@@ -45,7 +45,7 @@ aircraft.engine.TSFC = .67;
 
 aircraft.constants.fuelVolume = 3500;
 aircraft.fuelSys.VI = 0;                % integral fuel volume, gal
-aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
+aircraft.fuelSys.VP = aircraft.constants.fuelVolume;  % self-sealing tanks volume, gal
 aircraft.fuelSys.Nt = 4;
 
 % Geometry
@@ -174,7 +174,7 @@ while( not(exitFlag) && iteration <= iterationMax )
     %----------------------------------------------------------------------
     
     aircraft.constants.fuelVolume = aircraft.weight.fuel/6.7;
-    aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
+    aircraft.fuelSys.VP = aircraft.constants.fuelVolume;  % self-sealing tanks volume, gal
     aircraft.constants.thrustToWeight_TO.AB = 2*aircraft.engine.thrust/aircraft.weight.total;
     aircraft.constants.thrustToWeight_TO.mil = 2*aircraft.engine.thrustMil/aircraft.weight.total;
     aircraft.constants.EWF = aircraft.weight.empty/aircraft.weight.total;
@@ -237,4 +237,4 @@ end
 
 
 % VnDiagram       % generate Vn diagram for converged aircraft
-% New             % generate Min TTC graph for converged aircraft  
+% New             % generate Min TTC graph for converged aircraft
