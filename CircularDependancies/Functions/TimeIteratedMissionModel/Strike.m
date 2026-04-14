@@ -81,7 +81,7 @@ diff = 10000; % initialize
 %% Loop
 while diff > tol
 
-    if toc(tStart) > 4
+    if toc(tStart) > 5
         error("Strike took too long")
     end
 

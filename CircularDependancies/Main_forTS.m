@@ -233,7 +233,7 @@ fprintf('---------------------\n\n')
 end
 clear f k timerFields data tics iterationMax;
 
-fprintf("Success: ")
+% fprintf("Success: \n")
 
 % VnDiagram       % generate Vn diagram for converged aircraft
 % New             % generate Min TTC graph for converged aircraft
