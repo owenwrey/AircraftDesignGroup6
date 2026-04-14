@@ -4,7 +4,7 @@ function aircraftResults = Strike(aircraft)
 % clc
 % clearvars -except aircraft Results;
 cfg = getConfig(aircraft);
-
+tStart = tic;
 displayTable = false;
 % segment names
 SegNames = {'SW','TKO','CLIMB 1','CR OBD', 'DESC 1', 'COMBAT', 'WP FIRE', 'CLIMB 2', 'CR IBD', ...
@@ -80,6 +80,10 @@ diff = 10000; % initialize
 
 %% Loop
 while diff > tol
+
+    if toc(tStart) > 4
+        error("Strike took too long")
+    end
 
 W_S = cfg.wingLoading; % takeoff wing loading (psf)
 %Thrust = cfg.thrust; %lb

@@ -2,7 +2,8 @@
 % Aircraft Design - Chakraborty
 % Group 6
 %--------------------------------------------------------------------------
-clc; clearvars; close all
+% clc; 
+clearvars; close all
 
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
@@ -111,6 +112,11 @@ aircraft.cg.tolerance = 3/12;
 aircraft.gear.tolerance = 3/12;
 % -------------------------------------------------------------------------
 
+%% test 
+aircraft.constants.wingLoading = 102;
+aircraft.wing.AR = 2.50;
+aircraft.wing.taper_ratio = 0.55;
+aircraft.wing.sweep = 25;
 
 %% Calculation Loop
 
@@ -224,6 +230,10 @@ fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
 fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
 fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
 fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
+fprintf("  AR_w: %.2f \n", aircraft.wing.AR)
+fprintf("  TR_w: %.4f \n", aircraft.wing.taper_ratio)
+fprintf(" sweep: %.2f degrees \n", aircraft.wing.sweep)
+fprintf("CD0combat: %.4f \n", aircraft.aero.cd0_strike_interp(1.2, 30000))
 fprintf('---------------------\n\n')
 %--------------------------------------------------------------------------
 
