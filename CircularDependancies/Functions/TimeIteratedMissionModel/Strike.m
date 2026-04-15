@@ -851,13 +851,19 @@ diff = abs(FuelExcess);
 
 W0_calc = FuelReq + OEW + W_crew + W_payload;
 
-W0 = W0_calc;    
+W0 = W0_calc;   
 
+if abs(imag(W0)) > 1e-6
+    W0 = real(W0);
+    diff = tol + 1;
+    continue;
 end
 
 if noEmptyWeightFlag == true
     warning('No aircraft empty weight provided, using A*W0^C')
 end
+
+end % while
 
 %% Assign results to aircraft struct
 aircraft.weight.total = W0;

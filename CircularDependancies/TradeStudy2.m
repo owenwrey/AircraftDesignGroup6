@@ -3,7 +3,7 @@ clc;
 
 displayResults = false;
 
-valuesPerInput = 4;
+valuesPerInput = 2;
 
 WL = linspace(80, 105, valuesPerInput);
 AR = linspace(2.5, 5, valuesPerInput);

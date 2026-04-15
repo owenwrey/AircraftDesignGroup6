@@ -3,7 +3,7 @@ clc;
 
 displayResults = false;
 
-valuesPerInput = 6;
+valuesPerInput = 2;
 
 WL = linspace(80, 105, valuesPerInput);
 AR = linspace(2.5, 5, valuesPerInput);
@@ -40,7 +40,7 @@ MTOWs   = reshape(MTOWsFlat,   valuesPerInput, valuesPerInput, valuesPerInput, v
 %% Plot MTOW as color over (AR, TR, SA), one figure panel per WL
 
 figure;
-tiledlayout(2,2, "TileSpacing","compact", "Padding","compact");
+tiledlayout(2,3, "TileSpacing","compact", "Padding","compact");
 
 for i = 1:length(WL)
     nexttile;
@@ -99,6 +99,7 @@ for i = 1:length(WL)
     title(sprintf("Wing Loading = %.3g lbf/sq.ft", WL(i)));
 end
 
+%% Count error types
 % Flatten
 resultsFlat = results(:);
 
