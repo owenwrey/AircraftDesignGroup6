@@ -64,7 +64,7 @@ aircraft.wing.l = 50;
 aircraft.wing.x_c = .24;
 
 aircraft.ht.VolCoeff      = 0.4;
-aircraft.ht.AR            = 4;
+aircraft.ht.AR            = 2;
 aircraft.ht.TaperRatio    = 0.4;
 aircraft.ht.leverArm_frac = 0.52;
 aircraft.ht.sweep = 30;
