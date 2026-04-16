@@ -4,7 +4,7 @@ function aircraftResults = Strike(aircraft)
 % clc
 % clearvars -except aircraft Results;
 cfg = getConfig(aircraft);
-tStart = tic;
+
 displayTable = false;
 % segment names
 SegNames = {'SW','TKO','CLIMB 1','CR OBD', 'DESC 1', 'COMBAT', 'WP FIRE', 'CLIMB 2', 'CR IBD', ...
@@ -71,7 +71,7 @@ Tbl.FF = zeros(npts_sum,1); % fuel flow (lb/h)
 Tbl.dFuel = zeros(npts_sum,1); % delta fuel (lb)
 Tbl.FuelRem = zeros(npts_sum,1); % fuel remaining (lb)
 Tbl.FuelBurn = zeros(npts_sum,1); % fuel burned (lb)
-SFC = zeros(npts_sum,1)
+
 
 W0 = cfg.W.TOguess;
 FuelReq = cfg.W.fuelReq;
@@ -81,12 +81,8 @@ diff = 10000; % initialize
 %% Loop
 while diff > tol
 
-    % if toc(tStart) > 5
-    %     error("Strike took too long")
-    % end
-
 W_S = cfg.wingLoading; % takeoff wing loading (psf)
-%Thrust = cfg.thrust; %lb
+Thrust = cfg.thrust; %lb
 
 % unit conversions
 rho_SL = 0.0023769;
@@ -129,21 +125,21 @@ Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
 Tbl.Drag(i) = 0; % drag (lbf)
 %[Tbl.Thrust(1), SFC(1)] = f119perf(0,0,false);
-Tbl.Thrust(1) = 2*f119perf.mil.fn(0,0);
+Tbl.Thrust(1) = f119perf.mil.fn(0,0);
 SFC(1) = f119perf.mil.tsfc(0,0);
 %[Tbl.Thrust(i), SFC(i)] = f119perf(0,0,false); % thrust (lbf)
-Tbl.Thrust(i) = 2.*f119perf.mil.fn(0,0).*0.6;
+Tbl.Thrust(i) = f119perf.mil.fn(0,0);
 SFC(i) = f119perf.mil.tsfc(0,0);
 Tbl.ThrustLapse(1) = 1;
 Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
-Tbl.THROT(i) = 0.6; % throttle setting
+Tbl.THROT(i) = 0; % throttle setting
 Tbl.FF(1) = SFC(1)*Tbl.Thrust(1);
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dFuel(i) = (Tbl.FF(i)*Tbl.dTime(i))/60; % delta fuel (lb)
@@ -191,7 +187,7 @@ Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
@@ -200,7 +196,7 @@ Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 Tbl.THROT(i) = 1.25; % throttle setting
 %[Tbl.Thrust(i), SFC(i)] = f119perf(0, 0, true); % thrust (lbf)
-Tbl.Thrust(i) = 2.*f119perf.max.fn(0,0);
+Tbl.Thrust(i) = f119perf.max.fn(0,0);
 SFC(i) = f119perf.max.tsfc(0,0);
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dFuel(i) = (Tbl.FF(i)*Tbl.dTime(i))/60; % delta fuel (lb)
@@ -232,14 +228,14 @@ for  i = istart:iend
 
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.8; % Mach number
+Tbl.MACH(i) = 0.85; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
-Tbl.THROT(i) = 0.5; % throttle setting
+Tbl.THROT(i) = 1; % throttle setting
 Tbl.ThrustLapse(i) = 1; % thrust lapse
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
-Tbl.Thrust(i) = 2.*f119perf.mil.fn(Tbl.Alt(i),Tbl.MACH(i)).*0.5;
+Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i),Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = ((Tbl.Thrust(i)*Tbl.KTAS(i)*kts2fps*60) - (Tbl.Drag(i)*Tbl.KTAS(i)*kts2fps*60))/Tbl.Weight(i-1) ; % rate of climb (ft/min)
@@ -248,7 +244,7 @@ Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -301,7 +297,7 @@ Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -310,9 +306,9 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 % solve for throttle setting 
 Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
-Tbl.THROT(i) = 0.4; % throttle setting
+Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false);
-Tbl.Thrust(i) = 2.*f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i))*0.4;
+Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
@@ -353,23 +349,23 @@ for  i = istart:iend
 
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.7; % Mach number
+Tbl.MACH(i) = 0.8; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
-Tbl.THROT(i) = 0.35; % throttle setting
-Tbl.ThrustLapse(i) = 1; % thrust lapse
+Tbl.THROT(i) = 1; % throttle setting
+Tbl.ThrustLapse(i) = 1; % thrust laps
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
-Tbl.Thrust(i) = 2.*f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i))*0.35;
+Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
-Tbl.dhdt(i) = -2000; % rate of climb (ft/min)
+Tbl.dhdt(i) = -3000; % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -419,14 +415,14 @@ Tbl.dDist(i) = 0;
 Tbl.Alt(i) = 0; % Altitude (ft)
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.KTAS(i) = 595; % true airspeed (kt)
+Tbl.KTAS(i) = 212; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -436,7 +432,7 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 Tbl.THROT(i) = 1.25; % throttle setting
 Tbl.ThrustLapse(i) = 1; % thrust laps
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), true); % thrust (lbf)
-Tbl.Thrust(i) = 2.*f119perf.max.fn(Tbl.Alt(i), Tbl.MACH(i)).*0.6;
+Tbl.Thrust(i) = f119perf.max.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.max.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
@@ -473,8 +469,8 @@ Tbl.dTime(i) = 0; % delta time (min)
 Tbl.Alt(i) = 0; % altitude (ft)
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.KEAS(i) = 595; % equivalent airspeed (kt)
-Tbl.KTAS(i) = 595; % true airspeed (kt)
+Tbl.KEAS(i) = 212; % equivalent airspeed (kt)
+Tbl.KTAS(i) = 212; % true airspeed (kt)
 Tbl.MACH(i) = 0; % Mach number
 Tbl.GS(i) = 0; % ground speed (kt)
 Tbl.FPA(i) = 0; % flightpath angle (deg)
@@ -485,7 +481,7 @@ Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
@@ -494,7 +490,7 @@ Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
 Tbl.THROT(i) = 0; % throttle setting
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), true); % thrust (lbf)
-Tbl.Thrust(i) = 2.*f119perf.max.fn(Tbl.Alt(i), Tbl.MACH(i)).*0.7;
+Tbl.Thrust(i) = f119perf.max.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.max.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = 0; % fuel flow (lb/h)
 Tbl.dFuel(i) = 0; % delta fuel (lb)
@@ -526,14 +522,14 @@ for  i = istart:iend
 
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.9; % Mach number
+Tbl.MACH(i) = 0.8; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
-Tbl.THROT(i) = 0.45; % throttle setting
+Tbl.THROT(i) = 1; % throttle setting
 Tbl.ThrustLapse(i) = 1; % thrust laps
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
-Tbl.Thrust(i) = 2.*f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i)).*0.5;
+Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = ((Tbl.Thrust(i)*Tbl.KTAS(i)*kts2fps*60) - (Tbl.Drag(i)*Tbl.KTAS(i)*kts2fps*60))/Tbl.Weight(i-1) ; % rate of climb (ft/min)
@@ -542,7 +538,7 @@ Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -589,14 +585,14 @@ Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.Alt(i) = cfg.cruise.altitude; % altitude (ft)
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.KTAS(i) = 530; % true airspeed (kt)
+Tbl.KTAS(i) = 648; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -605,9 +601,9 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 % solve for throttle setting 
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
 Tbl.ThrustLapse(i) = 1; % thrust laps
-Tbl.THROT(i) = 0.35 ; % throttle setting
+Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false);
-Tbl.Thrust(i) = 2.*f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i)).*0.4;
+Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
@@ -647,23 +643,23 @@ for  i = istart:iend
 
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.7; % Mach number
+Tbl.MACH(i) = 0.8; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
-Tbl.THROT(i) = 0.3; % throttle setting
+Tbl.THROT(i) = 1; % throttle setting
 Tbl.ThrustLapse(i) = 1; % thrust laps
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
-Tbl.Thrust(i) = 2.*f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i))*0.3;
+Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
-Tbl.dhdt(i) = -2000; % rate of climb (ft/min)
+Tbl.dhdt(i) = -3000; % rate of climb (ft/min)
 Tbl.Ps(i) = Tbl.dhdt(i); % specific excess pwr (ft/min)
 
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -718,7 +714,7 @@ Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 Tbl.CL(i) = (Tbl.WtFrac(i-1)*W_S)/(0.5*Tbl.rho(i)*(Tbl.KTAS(i)*kts2fps)^2); % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = Tbl.CD0(i) + Tbl.K1(i)*Tbl.CL(i) + Tbl.K2(i)*Tbl.CL(i)^2 + Tbl.CDR(i); % drag coefficient
 Tbl.L_D(i) = Tbl.CL(i)/Tbl.CD(i); % lift-to-drag ratio
@@ -727,9 +723,9 @@ Tbl.Drag(i) = Tbl.CD(i) * 0.5* Tbl.rho(i) * (Tbl.KTAS(i)*kts2fps)^2 * (W0/W_S); 
 % solve for throttle setting 
 Tbl.Thrust(i) = Tbl.Drag(i); % thrust (lbf)
 Tbl.ThrustLapse(i) = 1; % thrust laps
-Tbl.THROT(i) = 0.2; % throttle setting
+Tbl.THROT(i) = Tbl.Thrust(i)/(Thrust*Tbl.ThrustLapse(i)); % throttle setting
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false);
-Tbl.Thrust(i) = 2.*f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i))*0.2;
+Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dhdt(i) = 0 ; % rate of climb (ft/min)
@@ -782,20 +778,20 @@ Tbl.dVdt(i) = 0; % acceleration
 Tbl.CL(i) = 0; % lift coefficient
 Tbl.CD0(i) =  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar  aircraft.aero.cd0_strike(Tbl.Alt(i),Tbl.MACH(i)); % drag polar 0.025; % drag polar
 Tbl.K1(i) = 0; % drag polar
-Tbl.K2(i) = 0.129; % drag polar
+Tbl.K2(i) = 0.02; % drag polar
 Tbl.CDR(i) = 0; % drag polar
 Tbl.CD(i) = 0; % drag coefficient
 Tbl.L_D(i) = 0; % lift-to-drag ratio
 Tbl.Drag(i) = 0; % drag (lbf)
 Tbl.ThrustLapse(i) = 1; % thrust lapse
 Tbl.Ps(i) = 0; % specific excess pwr (ft/min)
-Tbl.THROT(i) = 0.3; % throttle setting
+Tbl.THROT(i) = 1; % throttle setting
 %[Tbl.Thrust(i), SFC(i)] = f119perf(Tbl.Alt(i), Tbl.MACH(i), false); % thrust (lbf)
-Tbl.Thrust(i) = 2.*f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i)).*0.3;
+Tbl.Thrust(i) = f119perf.mil.fn(Tbl.Alt(i), Tbl.MACH(i));
 SFC(i) = f119perf.mil.tsfc(Tbl.Alt(i), Tbl.MACH(i));
 Tbl.FF(i) = SFC(i)*Tbl.Thrust(i); % fuel flow (lb/h)
 Tbl.dFuel(istart) = 0;
-Tbl.dFuel(i) = (Tbl.FF(i)*Tbl.dTime(i))/60; % delta fuel (lb)F
+Tbl.dFuel(i) = (Tbl.FF(i)*Tbl.dTime(i))/60; % delta fuel (lb)
 Tbl.FuelBurn(i) = Tbl.FuelBurn(i-1) + Tbl.dFuel(i); % fuel burned (lb)
 Tbl.FuelRem(istart) = Tbl.FuelRem(istart - 1);
 Tbl.FuelRem(i) = Tbl.FuelRem(i-1) - Tbl.dFuel(i); % fuel remaining (lb)
@@ -851,19 +847,13 @@ diff = abs(FuelExcess);
 
 W0_calc = FuelReq + OEW + W_crew + W_payload;
 
-W0 = W0_calc;   
+W0 = W0_calc;    
 
-if abs(imag(W0)) > 1e-6
-    W0 = real(W0);
-    diff = tol + 1;
-    continue;
 end
 
 if noEmptyWeightFlag == true
     warning('No aircraft empty weight provided, using A*W0^C')
 end
-
-end % while
 
 %% Assign results to aircraft struct
 aircraft.weight.total = W0;

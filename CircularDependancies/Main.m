@@ -51,7 +51,7 @@ aircraft.fuelSys.Nt = 4;
 
 % Geometry
 aircraft.fuselage.length   = 48;
-aircraft.fuselage.diameter = 7;
+aircraft.fuselage.diameter = 6;
 aircraft.fuselage.cg.x = 24;
 aircraft.fuselage.cg.y = 0;
 aircraft.fuselage.cg.z = 10;
@@ -219,8 +219,6 @@ end
 % enginePerc = cell2mat(struct2cell(aircraft.engine.structures))./aircraft.weight.total
 % miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
 
-
-
 %% -| Display Results |----------------------------------------------------
 fprintf("\n Converged after %u iterations\n\n", iteration)
 fprintf("  W0/S:      %.0f psf\n", aircraft.constants.wingLoading)
@@ -236,7 +234,6 @@ fprintf("  AR_w: %.2f \n", aircraft.wing.AR)
 fprintf("  TR_w: %.4f \n", aircraft.wing.taper_ratio)
 fprintf(" sweep: %.2f degrees \n", aircraft.wing.sweep)
 fprintf("CD0combat: %.4f \n", aircraft.aero.cd0_strike_interp(1.2, 30000))
-fprintf("Fuel tank length: %.4f \n", aircraft.fuelLength)
 fprintf('---------------------\n\n')
 %--------------------------------------------------------------------------
 

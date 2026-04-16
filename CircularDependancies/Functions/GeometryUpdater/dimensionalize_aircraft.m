@@ -53,8 +53,6 @@ T2Cvt = aircraft.vt.T2C;
 Lh = aircraft.ht.leverArm_frac * Lf;
 Lv = aircraft.vt.leverArm_frac * Lf;
 
-
-
 %% Fuselage 
 aircraft.fuselage.swet = 2 * pi * (df/2) * ((df/2) * Lf);
 aircraft.fuselage.volume = pi*(df/2)^2 * Lf;
