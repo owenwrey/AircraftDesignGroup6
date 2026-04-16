@@ -4,7 +4,7 @@ close all;
 
 displayResults = false;
 
-valuesPerInput = 6;
+valuesPerInput = 2;
 
 WL = linspace(80, 105, valuesPerInput);
 AR = linspace(2.5, 5, valuesPerInput);
@@ -246,8 +246,8 @@ if any(~isnan(Mplot(:)))
     % Label contours with units
     clabel(C, h, ...
         "FontSize", 10, ...
-        "Color", "k", ...
-        "LabelFormat", "%.0f lbf");
+        "Color", "k")%, ...
+        %"LabelFormat", "%.0f lbf");
 else
     text(mean(AR), mean(SA), "No valid data", ...
         "HorizontalAlignment","center");
@@ -287,10 +287,10 @@ if any(~isnan(Mplot(:)))
     [C, h] = contour(ARgrid, SAgrid, Mplot, isoLevels, "LineWidth", 2.8);
 
     % Basic contour labels
-    clabel(C, h, "FontSize", 12, "Color", "k");
+    clabel(C, h, "FontSize", 12, "Color", "k", "LabelSpacing", 600);
 
     % Legend with units
-legend(h(1), "MTOW contours [lbf]", "Location", "bestoutside");
+    legend(h(1), "MTOW contours [lbf]", "Location", "bestoutside");
 else
     text(mean(AR), mean(SA), "No valid data", ...
         "HorizontalAlignment", "center");

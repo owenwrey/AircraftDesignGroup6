@@ -7,7 +7,7 @@ function aircraft = Main_forTS(aircraft)
 % aircraft.wing.AR
 % aircraft.wing.taper_ratio
 % aircraft.wing.sweep
-
+% fprintf('Ran!\n')
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
 %% Mission Select
