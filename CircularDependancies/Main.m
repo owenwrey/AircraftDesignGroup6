@@ -108,7 +108,7 @@ aircraft.gear.ng.height = 5;
 
 
 % Tolerances
-aircraft.weight.tolerance = 15; % GO TO getConfig to uncomment
+aircraft.weight.tolerance = 150; % GO TO getConfig to uncomment
 aircraft.cg.tolerance = 3/12;
 aircraft.gear.tolerance = 3/12;
 % -------------------------------------------------------------------------
@@ -116,7 +116,7 @@ aircraft.gear.tolerance = 3/12;
 %% test 
 aircraft.constants.wingLoading = 102;
 aircraft.wing.AR = 2.50;
-aircraft.wing.taper_ratio = 0.55;
+aircraft.wing.taper_ratio = 0.3;
 aircraft.wing.sweep = 25;
 
 %% Calculation Loop
