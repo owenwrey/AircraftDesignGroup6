@@ -85,10 +85,6 @@ aircraft.fuselagetank2.weight = (aircraft.weight.fuel - aircraft.wingtanks.weigh
 aircraft.fuselagetank2.volume = combLength*(pi*(fuelTankFactor*aircraft.fuselage.diameter/2)^2)/2;
 
 
-
-
-
-
 %% calc ordinance cg
 aircraft.ordinance.cg.x = aircraft.cg.x - aircraft.wing.chord.root/4 - ybar*tand(aircraft.wing.sweep) - aircraft.wing.MAC*(0.05) + aircraft.wing.chord.root/4;
 aircraft.ordinance.cg.y = 0;
