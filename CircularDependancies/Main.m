@@ -254,6 +254,7 @@ if true
     plot(aircraft.wing.poly)
     axis equal
     title("main wing geometry")
+    grid on
 end
 
 
