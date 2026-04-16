@@ -203,9 +203,9 @@ if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border o
     aircraft.constants.warnings.totalWeight = aircraft.weight.total;
     aircraft.constants.warnings.EWF = aircraft.constants.EWF;
 
-    % makes weight 1 trillion pounds (bad)
-    % aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
-    % aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
+   % makes weight 1 trillion pounds (bad)
+    aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
+    aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
 
     % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
 

@@ -294,7 +294,7 @@ Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.Alt(i) = cfg.cruise.altitude; % Altitude (ft)
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.MACH(i) = 0.9; % Mach number
+Tbl.MACH(i) = 1.6; % Mach number
 Tbl.KTAS(i) = Tbl.MACH(i)*a*mps2kts; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 
@@ -589,7 +589,7 @@ Tbl.dDist(i) =Tbl.Dist(i) - Tbl.Dist(i-1); % delta distance (NM)
 Tbl.Alt(i) = cfg.cruise.altitude; % altitude (ft)
 [~, a, ~, rho] = atmosisa(Tbl.Alt(i)*ft2m);
 Tbl.rho(i) = rho*0.00194032; % density in slug/ft^3
-Tbl.KTAS(i) = 530; % true airspeed (kt)
+Tbl.KTAS(i) = 942; % true airspeed (kt)
 Tbl.KEAS(i) = Tbl.KTAS(i)*sqrt(Tbl.rho(i)/rho_SL); % equivalent airspeed (kt)
 Tbl.MACH(i) = Tbl.KTAS(i)/(a*mps2kts); % Mach number
 
