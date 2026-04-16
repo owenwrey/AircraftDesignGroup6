@@ -30,13 +30,14 @@ aircraft.avionics.cg.z = aircraft.fuselage.cg.z + aircraft.fuselage.diameter/3;
 
 rt = 0; % root tip
 rl = aircraft.wing.chord.root; % root tail
-tt = -aircraft.wing.chord.tip/4 + (aircraft.wing.span/2)*tand(aircraft.wing.sweep); % tip tip
-tl = aircraft.wing.chord.tip*(3/4) + (aircraft.wing.span/2)*tand(aircraft.wing.sweep); % tip tail
+tt = -aircraft.wing.chord.tip/4 + (aircraft.wing.span/2)*tand(aircraft.wing.sweep)+aircraft.wing.chord.root/4; % tip tip
+tl = aircraft.wing.chord.tip*(3/4) + (aircraft.wing.span/2)*tand(aircraft.wing.sweep)+aircraft.wing.chord.root/4; % tip tail
 
 span = aircraft.wing.span/2;
 
 aircraft.wing.poly = polyshape([rt rl tl tt],[0 0 span/2 span/2]);
 [centX,~] = centroid(aircraft.wing.poly);
+
 
 
 taper = aircraft.wing.taper_ratio;

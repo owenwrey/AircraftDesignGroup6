@@ -3,8 +3,7 @@
 % Aircraft Design - Chakraborty
 % Group 6
 %--------------------------------------------------------------------------
-% clc; 
-clearvars; close all
+clc; clearvars; close all
 
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
@@ -247,6 +246,14 @@ clear f k timerFields data tics iterationMax;
 
 if ~true
     CGenvelope(aircraft, "Strike, With Drop")
+end
+
+%plot wing
+if true
+    figure
+    plot(aircraft.wing.poly)
+    axis equal
+    title("main wing geometry")
 end
 
 
