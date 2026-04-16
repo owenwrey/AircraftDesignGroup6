@@ -35,7 +35,7 @@ tl = aircraft.wing.chord.tip*(3/4) + (aircraft.wing.span/2)*tand(aircraft.wing.s
 
 span = aircraft.wing.span/2;
 
-aircraft.wing.poly = polyshape([rt rl tl tt],[0 0 span/2 span/2]);
+aircraft.wing.poly = polyshape([rt rl tl tt],[0 0 span span]);
 [centX,~] = centroid(aircraft.wing.poly);
 
 
