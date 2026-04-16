@@ -1,5 +1,6 @@
 clearvars;
 clc;
+close all;
 
 displayResults = false;
 

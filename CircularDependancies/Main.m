@@ -1,9 +1,9 @@
+%% 
 % Circular Dependancies Solver Main equation
 % Aircraft Design - Chakraborty
 % Group 6
 %--------------------------------------------------------------------------
-% clc; 
-clearvars; close all
+clc; clearvars; close all
 
 addpath(genpath('Functions')); % lets matlab see all the functions within Functions folder
 
@@ -51,7 +51,7 @@ aircraft.fuelSys.Nt = 4;
 
 % Geometry
 aircraft.fuselage.length   = 48;
-aircraft.fuselage.diameter = 6;
+aircraft.fuselage.diameter = 7;
 aircraft.fuselage.cg.x = 24;
 aircraft.fuselage.cg.y = 0;
 aircraft.fuselage.cg.z = 10;
@@ -107,7 +107,7 @@ aircraft.gear.ng.height = 5;
 
 
 % Tolerances
-aircraft.weight.tolerance = 15; % GO TO getConfig to uncomment
+aircraft.weight.tolerance = 150; % GO TO getConfig to uncomment
 aircraft.cg.tolerance = 3/12;
 aircraft.gear.tolerance = 3/12;
 % -------------------------------------------------------------------------
@@ -115,7 +115,7 @@ aircraft.gear.tolerance = 3/12;
 %% test 
 aircraft.constants.wingLoading = 102;
 aircraft.wing.AR = 2.50;
-aircraft.wing.taper_ratio = 0.55;
+aircraft.wing.taper_ratio = 0.3;
 aircraft.wing.sweep = 25;
 
 %% Calculation Loop
@@ -198,26 +198,28 @@ TW_polyPoints = [1.211, 0.9784, 0.8216, 0.8149, 0.7379, 1.211, 1.211];
 [inWL_TWdesignSpace, onWL_TWdesignSpace] = inpolygon(aircraft.constants.wingLoading, aircraft.constants.thrustToWeight_TO.mil,...
                                                 WL_polyPoints, TW_polyPoints); % this checks if the W/S-T/W combo is valid
 
-if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border of the W/S T/W design space...
-    % saves converged weight (+other obj funcs) in case we want to know what the bad design looked like anyway
-    aircraft.constants.warnings.totalWeight = aircraft.weight.total;
-    aircraft.constants.warnings.EWF = aircraft.constants.EWF;
-
-    % makes weight 1 trillion pounds (bad)
-    % aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
-    % aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
-
-    % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
-
-    % save a wanring in the ac struct
-    aircraft.constants.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements';
-end
+% if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border of the W/S T/W design space...
+%     % saves converged weight (+other obj funcs) in case we want to know what the bad design looked like anyway
+%     aircraft.constants.warnings.totalWeight = aircraft.weight.total;
+%     aircraft.constants.warnings.EWF = aircraft.constants.EWF;
+% 
+%    % makes weight 1 trillion pounds (bad)
+%     aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
+%     aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
+% 
+%     % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
+% 
+%     % save a wanring in the ac struct
+%     aircraft.constants.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements';
+% end
 
 % ignore this, just helps with report writing
 % cell2mat(struct2cell(aircraft.engine.structures))
 % cell2mat(struct2cell(aircraft.weight.misc))
 % enginePerc = cell2mat(struct2cell(aircraft.engine.structures))./aircraft.weight.total
 % miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
+
+
 
 %% -| Display Results |----------------------------------------------------
 fprintf("\n Converged after %u iterations\n\n", iteration)
@@ -234,6 +236,7 @@ fprintf("  AR_w: %.2f \n", aircraft.wing.AR)
 fprintf("  TR_w: %.4f \n", aircraft.wing.taper_ratio)
 fprintf(" sweep: %.2f degrees \n", aircraft.wing.sweep)
 fprintf("CD0combat: %.4f \n", aircraft.aero.cd0_strike_interp(1.2, 30000))
+fprintf("Fuel tank length: %.4f \n", aircraft.fuelLength)
 fprintf('---------------------\n\n')
 %--------------------------------------------------------------------------
 
@@ -243,6 +246,14 @@ clear f k timerFields data tics iterationMax;
 
 if ~true
     CGenvelope(aircraft, "Strike, With Drop")
+end
+
+%plot wing
+if true
+    figure
+    plot(aircraft.wing.poly)
+    axis equal
+    title("main wing geometry")
 end
 
 
