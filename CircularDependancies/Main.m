@@ -199,14 +199,14 @@ TW_polyPoints = [1.211, 0.9784, 0.8216, 0.8149, 0.7379, 1.211, 1.211];
 [inWL_TWdesignSpace, onWL_TWdesignSpace] = inpolygon(aircraft.constants.wingLoading, aircraft.constants.thrustToWeight_TO.mil,...
                                                 WL_polyPoints, TW_polyPoints); % this checks if the W/S-T/W combo is valid
 
-if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border of the W/S T/W design space...
+if ~inWL_TWdesignSpace && ~onWL_TWdesignSpace % if not inside or on the border of the W/S T/W design space...
     % saves converged weight (+other obj funcs) in case we want to know what the bad design looked like anyway
     aircraft.constants.warnings.totalWeight = aircraft.weight.total;
     aircraft.constants.warnings.EWF = aircraft.constants.EWF;
 
    % makes weight 1 trillion pounds (bad)
-    aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
-    aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
+   % aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
+   % aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
 
     % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
 
