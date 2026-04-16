@@ -71,7 +71,7 @@ Tbl.FF = zeros(npts_sum,1); % fuel flow (lb/h)
 Tbl.dFuel = zeros(npts_sum,1); % delta fuel (lb)
 Tbl.FuelRem = zeros(npts_sum,1); % fuel remaining (lb)
 Tbl.FuelBurn = zeros(npts_sum,1); % fuel burned (lb)
-
+SFC = zeros(npts_sum,1);
 
 W0 = cfg.W.TOguess;
 FuelReq = cfg.W.fuelReq;
@@ -81,9 +81,9 @@ diff = 10000; % initialize
 %% Loop
 while diff > tol
 
-    if toc(tStart) > 5
-        error("Strike took too long")
-    end
+    % if toc(tStart) > 5
+    %     error("Strike took too long")
+    % end
 
 W_S = cfg.wingLoading; % takeoff wing loading (psf)
 %Thrust = cfg.thrust; %lb
