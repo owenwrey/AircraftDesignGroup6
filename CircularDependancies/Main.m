@@ -56,25 +56,25 @@ aircraft.fuselage.cg.x = 24;
 aircraft.fuselage.cg.y = 0;
 aircraft.fuselage.cg.z = 10;
 
-aircraft.wing.AR          = 4;
-aircraft.wing.taper_ratio = 0.25;
-aircraft.wing.sweep = 30;
+aircraft.wing.AR          = 3.25;
+aircraft.wing.taper_ratio = 0.3;
+aircraft.wing.sweep = 25;
 aircraft.wing.T2C = .055;   % thickness to chord
 aircraft.wing.l = 50;
 aircraft.wing.x_c = .24;
 
-aircraft.ht.VolCoeff      = 0.40;
+aircraft.ht.VolCoeff      = 0.4;
 aircraft.ht.AR            = 4;
 aircraft.ht.TaperRatio    = 0.4;
-aircraft.ht.leverArm_frac = 0.35;
+aircraft.ht.leverArm_frac = 0.52;
 aircraft.ht.sweep = 30;
 aircraft.ht.T2C = .05;
 aircraft.ht.x_c = .24;
 
-aircraft.vt.VolCoeff      = 0.04;
+aircraft.vt.VolCoeff      = 0.09;
 aircraft.vt.AR            = 1.8;
 aircraft.vt.TaperRatio    = 0.30;
-aircraft.vt.leverArm_frac = 0.30;
+aircraft.vt.leverArm_frac = 0.475;
 aircraft.vt.twinTail      = true;
 aircraft.vt.sweep = 35;
 aircraft.vt.T2C = .05;
@@ -114,7 +114,7 @@ aircraft.gear.tolerance = 3/12;
 
 %% test 
 aircraft.constants.wingLoading = 102;
-aircraft.wing.AR = 2.50;
+aircraft.wing.AR = 3.25;
 aircraft.wing.taper_ratio = 0.3;
 aircraft.wing.sweep = 25;
 
