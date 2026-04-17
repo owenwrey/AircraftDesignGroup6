@@ -7,10 +7,6 @@
 
 f119perf = f119perfGEN;
 
-% TLapse = griddedInterpolant([0, 10000, 20000, 30000, 40000, 50000], ...
-                            % [1, 0.80, 0.60, 0.40, 0.20, 0.15], ...
-                            % 'linear','nearest');
-
 rho_SL = 0.0023769;
 kts2fps = 1/0.59248;
 ft2m = 0.305;
@@ -19,7 +15,6 @@ W0 = aircraft.weight.total;
 W = W0;
 W_S = aircraft.constants.wingLoading;              
 S = aircraft.wing.Area;
-% fullThrust = aircraft.engine.thrustMil*2;
 targAlt = 40000;
 targSpeed = 400;
 
@@ -27,9 +22,6 @@ CD0_sub = 0.02;
 CD0_sup = 0.06;         
 K2 = 0.05;
 CDR = 0;
-
-% SFC_climb = 0.75/3600;  % lb/lb/s
-% THROT = 1;
 
 step = .5;               
 
@@ -157,6 +149,21 @@ xlabel('KTAS')
 ylabel('Altitude (ft)')
 title('Climb Trajectory')
 grid on
+hold on
+xlim([150,700])
+% Energy bands
+He_hist = 8000;
+He_target = (targSpeed*kts2fps)^2/(2*32.2) + targAlt;
+He_bands = linspace(He_hist(1),He_target,5);
+V_span = linspace(150,700,500);
+V_span_fps = V_span*kts2fps;
+for k = 1:length(He_bands)
+    Alt_band = He_bands(k) - V_span_fps.^2/(2*g);
+    valid = Alt_band >= 0 & Alt_band <= targAlt;
+    plot(V_span(valid),Alt_band(valid),'k','linestyle','--')
+end
+hold off
+
 
 figure(3)
 plot(dat(:,1), dat(:,3),'b','LineWidth',2)
