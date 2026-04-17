@@ -258,5 +258,5 @@ if true
 end
 
 
-% VnDiagram       % generate Vn diagram for converged aircraft
-% New             % generate Min TTC graph for converged aircraft
+VnDiagram       % generate Vn diagram for converged aircraft
+New             % generate Min TTC graph for converged aircraft
