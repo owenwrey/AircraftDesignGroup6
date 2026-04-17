@@ -3,7 +3,7 @@ clc;
 
 displayResults = false;
 
-valuesPerInput = 2;
+valuesPerInput = 6;
 
 WL = linspace(80, 105, valuesPerInput);
 AR = linspace(2.5, 5, valuesPerInput);
@@ -123,3 +123,184 @@ uniqueMsgs = uniqueMsgs(order);
 for n = 1:length(uniqueMsgs)
     fprintf("%5d  :  %s\n", counts(n), uniqueMsgs(n));
 end
+
+%% MTOW vs TR at WL = 105, colored by AR and SA
+
+[~, iWL] = min(abs(WL - 105));
+M = squeeze(MTOWs(iWL,:,:,:)); % [AR, TR, SA]
+
+figure;
+tiledlayout(1,2, "TileSpacing","compact", "Padding","compact");
+
+% Two Plots that show that TR doesn't change much
+% -------- Plot 1: colored by AR --------
+nexttile;
+axis square;
+hold on; 
+grid on; 
+box on;
+
+cmapAR = nebula(length(AR));
+
+for j = 1:length(AR)
+    xVals = [];
+    yVals = [];
+
+    for k = 1:length(TR)
+        for l = 1:length(SA)
+            val = M(j,k,l);
+
+            if ~isfinite(val)
+                continue
+            end
+
+            xVals(end+1) = TR(k);
+            yVals(end+1) = val;
+        end
+    end
+
+    scatter(xVals, yVals, 80, ...
+        'MarkerFaceColor', cmapAR(j,:), ...
+        'MarkerEdgeColor','none',...
+        'DisplayName', sprintf("AR = %.2f", AR(j)));
+end
+
+xlim([min(TR) - 0.05*(max(TR)-min(TR)), max(TR) + 0.05*(max(TR)-min(TR))])
+
+xlabel("Wing Taper Ratio", Interpreter="latex");
+ylabel("MTOW [lbf]", Interpreter="latex");
+title(sprintf("MTOW vs Taper Ratio (Colored by AR, W/S = %.3g lb/ft^2)", WL(iWL)));
+
+legend("Location","northoutside","Orientation","horizontal");
+
+
+% -------- Plot 2: colored by SA --------
+nexttile;
+axis square
+hold on; 
+grid on; 
+box on;
+
+cmapSA = parula(length(SA));  % different scheme
+
+for l = 1:length(SA)
+    xVals = [];
+    yVals = [];
+
+    for j = 1:length(AR)
+        for k = 1:length(TR)
+            val = M(j,k,l);
+
+            if ~isfinite(val)
+                continue
+            end
+
+            xVals(end+1) = TR(k);
+            yVals(end+1) = val;
+        end
+    end
+
+    scatter(xVals, yVals, 80, ...
+        'MarkerFaceColor', cmapSA(l,:), ...
+        'MarkerEdgeColor','none',...
+        'DisplayName', sprintf("SA = %.1f°", SA(l)));
+end
+
+xlim([min(TR) - 0.05*(max(TR)-min(TR)), max(TR) + 0.05*(max(TR)-min(TR))])
+
+xlabel("Wing Taper Ratio", Interpreter="latex");
+ylabel("MTOW [lbf]", Interpreter="latex");
+title(sprintf("MTOW vs Taper Ratio (Colored by Sweep Angle, W/S = %.3g lb/ft^2)", WL(iWL)));
+
+legend("Location","northoutside","Orientation","horizontal");
+
+%% MTOW vs WL at fixed TR, colored by AR and SA
+
+[~, iTR] = min(abs(TR - 0.34));
+M = squeeze(MTOWs(:,:,iTR,:)); % [WL, AR, SA]
+
+figure;
+tiledlayout(1,2, "TileSpacing","compact", "Padding","compact");
+
+% Two Plots that show how WL changes MTOW
+% -------- Plot 1: colored by AR --------
+nexttile;
+axis square;
+hold on;
+grid on;
+box on;
+
+cmapAR = nebula(length(AR));
+
+for j = 1:length(AR)
+    xVals = [];
+    yVals = [];
+
+    for i = 1:length(WL)
+        for l = 1:length(SA)
+            val = M(i,j,l);
+
+            if ~isfinite(val)
+                continue
+            end
+
+            xVals(end+1) = WL(i);
+            yVals(end+1) = val;
+        end
+    end
+
+    scatter(xVals, yVals, 80, ...
+        'MarkerFaceColor', cmapAR(j,:), ...
+        'MarkerEdgeColor', 'none', ...
+        'DisplayName', sprintf("AR = %.2f", AR(j)));
+end
+
+xlim([min(WL) - 0.05*(max(WL)-min(WL)), max(WL) + 0.05*(max(WL)-min(WL))])
+
+xlabel("Wing Loading, W/S [lb/ft^2]", Interpreter="latex");
+ylabel("MTOW [lbf]", Interpreter="latex");
+title(sprintf("MTOW vs Wing Loading (Colored by AR, TR = %.3g)", TR(iTR)));
+
+legend("Location","northoutside","Orientation","horizontal");
+
+
+% -------- Plot 2: colored by SA --------
+nexttile;
+axis square;
+hold on;
+grid on;
+box on;
+
+cmapSA = parula(length(SA));
+
+for l = 1:length(SA)
+    xVals = [];
+    yVals = [];
+
+    for i = 1:length(WL)
+        for j = 1:length(AR)
+            val = M(i,j,l);
+
+            if ~isfinite(val)
+                continue
+            end
+
+            xVals(end+1) = WL(i);
+            yVals(end+1) = val;
+        end
+    end
+
+    scatter(xVals, yVals, 80, ...
+        'MarkerFaceColor', cmapSA(l,:), ...
+        'MarkerEdgeColor', 'none', ...
+        'DisplayName', sprintf("SA = %.1f°", SA(l)));
+end
+
+xlim([min(WL) - 0.05*(max(WL)-min(WL)), max(WL) + 0.05*(max(WL)-min(WL))])
+
+xlabel("Wing Loading, W/S [lb/ft^2]", Interpreter="latex");
+ylabel("MTOW [lbf]", Interpreter="latex");
+title(sprintf("MTOW vs Wing Loading (Colored by Sweep Angle, TR = %.3g)", TR(iTR)));
+
+legend("Location","northoutside","Orientation","horizontal");
+
