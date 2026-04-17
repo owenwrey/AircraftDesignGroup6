@@ -23,19 +23,6 @@ aircraft.avionics.cg.x = 8;
 aircraft.avionics.cg.y = 0;
 aircraft.avionics.cg.z = aircraft.fuselage.cg.z + aircraft.fuselage.diameter/3;
 
-%% calculate fuel tanks cg
-
-combLength = aircraft.fuselage.length - 15.192./2 + 1 - 8;
-
-aircraft.fuel1.cg.x = aircraft.cg.x-combLength/4;
-aircraft.fuel1.cg.y = 0;
-aircraft.fuel1.cg.z = aircraft.fuselage.cg.z;
-aircraft.fuel1.weight = aircraft.weight.fuel/2;
-
-aircraft.fuel2.cg.x = aircraft.cg.x+combLength/4;
-aircraft.fuel2.cg.y = 0;
-aircraft.fuel2.cg.z = aircraft.fuselage.cg.z;
-aircraft.fuel2.weight = aircraft.weight.fuel/2;
 
 %% calc wing cg
 
@@ -43,13 +30,14 @@ aircraft.fuel2.weight = aircraft.weight.fuel/2;
 
 rt = 0; % root tip
 rl = aircraft.wing.chord.root; % root tail
-tt = -aircraft.wing.chord.tip/4 + (aircraft.wing.span/2)*tand(aircraft.wing.sweep); % tip tip
-tl = aircraft.wing.chord.tip*(3/4) + (aircraft.wing.span/2)*tand(aircraft.wing.sweep); % tip tail
+tt = -aircraft.wing.chord.tip/4 + (aircraft.wing.span/2)*tand(aircraft.wing.sweep)+aircraft.wing.chord.root/4; % tip tip
+tl = aircraft.wing.chord.tip*(3/4) + (aircraft.wing.span/2)*tand(aircraft.wing.sweep)+aircraft.wing.chord.root/4; % tip tail
 
 span = aircraft.wing.span/2;
 
-aircraft.wing.poly = polyshape([rt rl tl tt],[0 0 span/2 span/2]);
+aircraft.wing.poly = polyshape([rt rl tl tt],[0 0 span span]);
 [centX,~] = centroid(aircraft.wing.poly);
+
 
 
 taper = aircraft.wing.taper_ratio;
@@ -62,6 +50,40 @@ aircraft.wing.cg.y = 0;
 aircraft.wing.cg.z = aircraft.fuselage.cg.z;
 
 temp = aircraft.cg.x + aircraft.wing.MAC;
+
+%% calculate fuel tanks cg
+
+
+fuelTankFactor = 0.90;
+
+aircraft.wingtanks.cg.x = aircraft.wing.cg.x;
+aircraft.wingtanks.cg.y = aircraft.wing.cg.y;
+aircraft.wingtanks.cg.z = aircraft.wing.cg.z;
+
+foilArea = 0.0383174559; % unit area with respect to chord.
+tankVolCoef = 0.7;
+avgChord = aircraft.wing.chord.root.*aircraft.wing.chord.tip./2;
+aircraft.wingtanks.volume = aircraft.wing.span.*avgChord.*foilArea.*tankVolCoef;
+densityJP5 = 52.7516; % lbs/ft^3'
+aircraft.wingtanks.weight = aircraft.wingtanks.volume.*densityJP5;
+
+reqWeightFuel = (aircraft.weight.fuel - aircraft.wingtanks.weight);
+reqVfuel = reqWeightFuel./densityJP5;
+combLength = reqVfuel./(pi*(fuelTankFactor*aircraft.fuselage.diameter/2)^2);
+
+aircraft.fuelLength = combLength;
+
+aircraft.fuselagetank1.cg.x = aircraft.cg.x-combLength/4; % front
+aircraft.fuselagetank1.cg.y = 0;
+aircraft.fuselagetank1.cg.z = aircraft.fuselage.cg.z;
+aircraft.fuselagetank1.weight = (aircraft.weight.fuel - aircraft.wingtanks.weight)/2;
+aircraft.fuselagetank1.volume = combLength*(pi*(fuelTankFactor*aircraft.fuselage.diameter/2)^2)/2;
+
+aircraft.fuselagetank2.cg.x = aircraft.cg.x+combLength/4; % back
+aircraft.fuselagetank2.cg.y = 0;
+aircraft.fuselagetank2.cg.z = aircraft.fuselage.cg.z;
+aircraft.fuselagetank2.weight = (aircraft.weight.fuel - aircraft.wingtanks.weight)/2;
+aircraft.fuselagetank2.volume = combLength*(pi*(fuelTankFactor*aircraft.fuselage.diameter/2)^2)/2;
 
 
 %% calc ordinance cg
@@ -141,7 +163,7 @@ aircraft.gear.ng.cg.z = aircraft.gear.mg.height/2 + 1;
 
 %% calculate Center of Gravity
 % place fields that shouldnt be iterated over here.
-blacklist = ["flightcond","cg","constants","aero","enginesystems","weight","fuelSys","gear","TimeStepTable","inertia"];
+blacklist = ["fuelLength","totalfuelvolume","flightcond","cg","constants","aero","enginesystems","weight","fuelSys","gear","TimeStepTable","inertia"];
 
 % initialize variables
 xsum = 0;

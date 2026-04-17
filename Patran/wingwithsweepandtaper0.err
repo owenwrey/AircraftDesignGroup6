@@ -1,0 +1,9 @@
+/COM,ANSYS RELEASE 2025 R1           BUILD 25.1      UP20241202       15:59:37
+
+ *** ERROR ***                           CP =       0.219   TIME= 15:59:38
+ Data file I:\Senior Design 2\wingwithsweepandtaper.db has incorrect     
+ format, is missing READ/WRITE permission, or is empty for RESUME.       
+
+ *** WARNING ***                         CP =       0.219   TIME= 15:59:38
+ WHILE PROCESSING FILE BASED INPUT (/INPUT OR MACRO) AN ERROR HAS        
+ OCCURRED.  SHOULD INPUT PROCESSING BE SUSPENDED?                        

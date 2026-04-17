@@ -71,7 +71,7 @@ Tbl.FF = zeros(npts_sum,1); % fuel flow (lb/h)
 Tbl.dFuel = zeros(npts_sum,1); % delta fuel (lb)
 Tbl.FuelRem = zeros(npts_sum,1); % fuel remaining (lb)
 Tbl.FuelBurn = zeros(npts_sum,1); % fuel burned (lb)
-SFC = zeros(npts_sum,1);
+SFC = zeros(npts_sum,1)
 
 W0 = cfg.W.TOguess;
 FuelReq = cfg.W.fuelReq;

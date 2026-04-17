@@ -4,9 +4,12 @@
 % notes: no AB, going 30 kft & 400 kts
 
 %% Inputs
-TLapse = griddedInterpolant([0, 10000, 20000, 30000, 40000, 50000], ...
-                            [1, 0.80, 0.60, 0.40, 0.20, 0.15], ...
-                            'linear','nearest');
+
+f119perf = f119perfGEN;
+
+% TLapse = griddedInterpolant([0, 10000, 20000, 30000, 40000, 50000], ...
+                            % [1, 0.80, 0.60, 0.40, 0.20, 0.15], ...
+                            % 'linear','nearest');
 
 rho_SL = 0.0023769;
 kts2fps = 1/0.59248;
@@ -16,27 +19,27 @@ W0 = aircraft.weight.total;
 W = W0;
 W_S = aircraft.constants.wingLoading;              
 S = aircraft.wing.Area;
-fullThrust = aircraft.engine.thrustMil*2;
-targAlt = 30000;
+% fullThrust = aircraft.engine.thrustMil*2;
+targAlt = 40000;
 targSpeed = 400;
 
-CD0_sub = 0.02;
-CD0_sup = 0.06;
+CD0_sub = 0.02;         
+CD0_sup = 0.06;         
 K2 = 0.05;
 CDR = 0;
 
-SFC_climb = 0.75/3600;  % lb/lb/s
-THROT = 1;
+% SFC_climb = 0.75/3600;  % lb/lb/s
+% THROT = 1;
 
 step = .5;               
 
 %% Storage
-dat = zeros(1000,5); % [time, V(kts), h(ft), W(lb), Mach]
+dat = zeros(5000,5); % [time, V(kts), h(ft), W(lb), Mach]
 dat(1,:) = [0, 150, 0, W0, 0];
 
 i = 1;
 
-while dat(i,3) ~= targAlt || dat(i,2) ~= targSpeed
+while dat(i,3) < targAlt || dat(i,2) < targSpeed
     
     t = dat(i,1);
     V = dat(i,2);
@@ -48,7 +51,7 @@ while dat(i,3) ~= targAlt || dat(i,2) ~= targSpeed
     rho = rho*0.00194032;
     a_fps = a * 3.28084;
     
-    thrust = fullThrust * TLapse(h) * THROT;
+    % thrust = fullThrust * TLapse(h) * THROT;
     
     % Dynamic speed search
     V_range = linspace(max(100, V-100), V+300, 120);
@@ -68,6 +71,8 @@ while dat(i,3) ~= targAlt || dat(i,2) ~= targSpeed
         
         V_fps = V_try * kts2fps;
         M = V_fps / a_fps;
+
+        thrust = f119perf.max.fn(h,M)*2;
         
         q = 0.5 * rho * V_fps^2;
         CL = W / (q*S);
@@ -84,20 +89,7 @@ while dat(i,3) ~= targAlt || dat(i,2) ~= targSpeed
         
         Ps = (thrust - D)*V_fps / W;
         
-
-        
         % --- Scoring function ---
-
-        alt_error = targAlt - h;
-        speed_error = targSpeed - V;
-        
-        if abs(alt_error) < 2000 && abs(speed_error) < 150
-            terminal_mode = 1;
-        else
-            terminal_mode = 0;
-        end
-
-
 
         speed_error = V_try - targSpeed;
         speed_penalty = speed_error^2;
@@ -105,20 +97,13 @@ while dat(i,3) ~= targAlt || dat(i,2) ~= targSpeed
         blend = max(0, min(1, alt_error / 2000)); % 2000 ft transition band
 
         % Final score
-        score = blend*Ps - (1-blend)*0.1*speed_penalty;
+        score = blend*Ps - (1-blend)*0.01*speed_penalty;
         
-
         if score > best_score
             best_score = score;
             V_best = V_try;
             Ps_best = Ps;
         end
-
-
-
-
-
-
     end
     
     %% --- State update ---
@@ -140,12 +125,14 @@ while dat(i,3) ~= targAlt || dat(i,2) ~= targSpeed
     V_new = V_current + dV*step;
     h_new = max(0, h + dh*step);
     
-    % Fuel burn
-    W_new = W - SFC_climb * thrust * step;
-    
     % Mach
     M_new = V_new / a_fps;
     
+    % Fuel burn
+    SFC_climb = f119perf.max.tsfc(h_new,M_new)/3600; 
+    thrust = f119perf.max.fn(h,M)*2; 
+    W_new = W - SFC_climb * thrust * step;
+        
     % Store
     dat(i+1,1) = t + step;
     dat(i+1,2) = V_new / kts2fps;
@@ -154,20 +141,24 @@ while dat(i,3) ~= targAlt || dat(i,2) ~= targSpeed
     dat(i+1,5) = M_new;
     
     i = i + 1;
+    if i>10e3
+        fprintf('shits fucked\n')
+        break
+    end
 end
 
 dat = dat(1:i,:); % trim
 
 %% Plots
 
-figure(1)
+figure(2)
 plot(dat(:,2), dat(:,3),'b','LineWidth',2)
 xlabel('KTAS')
 ylabel('Altitude (ft)')
 title('Climb Trajectory')
 grid on
 
-figure(2)
+figure(3)
 plot(dat(:,1), dat(:,3),'b','LineWidth',2)
 xlabel('Time (s)')
 ylabel('Altitude (ft)')
@@ -181,4 +172,4 @@ alt = dat(:,3);
 Results = table(time, speed, alt);
 % disp(Results)
 
-fprintf('Total time to climb is %.0f seconds',time(end))
+fprintf('Total time to climb is %.0f minutes \n',(time(end)/60))

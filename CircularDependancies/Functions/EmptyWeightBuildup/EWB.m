@@ -133,7 +133,7 @@ N_en = 2;               % number of engines
 N_c = 1;                % number of crew
 N_s = 2;                % number of flight control systems
 N_ci = 1;               % number of crew equivalents
-N_u = 9;                % # hydraulic functions (gear, ailerons, flaps, ht, vt, airbrake, brakes, canopy, folding wings)
+N_u = 6;                % # hydraulic functions (gear, ailerons, flaps, ht, vt, airbrake)
 N_gen = N_en;           % number of generators
 
 W_en = aircraft.engine.weight;

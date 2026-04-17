@@ -1,5 +1,5 @@
 % Inlet Sizer
-% supersonic inlet, 2 shock design. pg 190, fig 10.8
+% supersonic inlet, 2 shock design. pg 290, fig 10.8
 % inlet will be variable geometry, have a suck-in door
 
 % Engine front face area: 1075.62 in^2
@@ -9,7 +9,7 @@
 
 clear;clc;
 
-A_engine = 1075.62;     % engine face area, in^2
+A_engine = 1075.62/144; % engine face area, ft^2
 
 M_inf = .8;             % design mach
 M_engine = .5;          % mach at engine face
@@ -22,3 +22,7 @@ ratio_inlet = 1/M_inlet*((1+.2*M_inlet^2)/1.2)^3;
 inlet_engine = ratio_inlet/ratio_engine;
 
 A_inlet = inlet_engine*A_engine;
+
+size = sqrt(A_inlet);
+
+fprintf("   The inlet area is %.2f ft^2 \n", A_inlet)

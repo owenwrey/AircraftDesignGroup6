@@ -1,3 +1,4 @@
+%% 
 % Circular Dependancies Solver Main equation
 % Aircraft Design - Chakraborty
 % Group 6
@@ -27,9 +28,9 @@ aircraft.cg.z = 10;
 % Landing Gear
 
 % Time-Step Mission
-aircraft.weight.total = 60e3;
-aircraft.weight.fuel = 20e3;
-aircraft.weight.empty = 40e3;
+aircraft.weight.total = 80e3;
+aircraft.weight.fuel = 30e3;
+aircraft.weight.empty = 30e3;
 aircraft.weight.totalOnLanding = 42e3;
 
 %% -| Aircraft Struct (constant "variables")|------------------------------
@@ -45,35 +46,35 @@ aircraft.engine.TSFC = .67;
 
 aircraft.constants.fuelVolume = 3500;
 aircraft.fuelSys.VI = 0;                % integral fuel volume, gal
-aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
+aircraft.fuelSys.VP = aircraft.constants.fuelVolume;  % self-sealing tanks volume, gal
 aircraft.fuelSys.Nt = 4;
 
 % Geometry
 aircraft.fuselage.length   = 48;
-aircraft.fuselage.diameter = 6;
+aircraft.fuselage.diameter = 7;
 aircraft.fuselage.cg.x = 24;
 aircraft.fuselage.cg.y = 0;
 aircraft.fuselage.cg.z = 10;
 
-aircraft.wing.AR          = 4;
-aircraft.wing.taper_ratio = 0.25;
-aircraft.wing.sweep = 30;
+aircraft.wing.AR          = 3.25;
+aircraft.wing.taper_ratio = 0.3;
+aircraft.wing.sweep = 25;
 aircraft.wing.T2C = .055;   % thickness to chord
 aircraft.wing.l = 50;
 aircraft.wing.x_c = .24;
 
-aircraft.ht.VolCoeff      = 0.40;
-aircraft.ht.AR            = 4;
+aircraft.ht.VolCoeff      = 0.4;
+aircraft.ht.AR            = 2;
 aircraft.ht.TaperRatio    = 0.4;
-aircraft.ht.leverArm_frac = 0.35;
+aircraft.ht.leverArm_frac = 0.52;
 aircraft.ht.sweep = 30;
 aircraft.ht.T2C = .05;
 aircraft.ht.x_c = .24;
 
-aircraft.vt.VolCoeff      = 0.04;
+aircraft.vt.VolCoeff      = 0.09;
 aircraft.vt.AR            = 1.8;
 aircraft.vt.TaperRatio    = 0.30;
-aircraft.vt.leverArm_frac = 0.30;
+aircraft.vt.leverArm_frac = 0.475;
 aircraft.vt.twinTail      = true;
 aircraft.vt.sweep = 35;
 aircraft.vt.T2C = .05;
@@ -106,11 +107,16 @@ aircraft.gear.ng.height = 5;
 
 
 % Tolerances
-aircraft.weight.tolerance = 15; % GO TO getConfig to uncomment
+aircraft.weight.tolerance = 150; % GO TO getConfig to uncomment
 aircraft.cg.tolerance = 3/12;
 aircraft.gear.tolerance = 3/12;
 % -------------------------------------------------------------------------
 
+%% test 
+aircraft.constants.wingLoading = 102;
+aircraft.wing.AR = 3.25;
+aircraft.wing.taper_ratio = 0.3;
+aircraft.wing.sweep = 25;
 
 %% Calculation Loop
 
@@ -174,7 +180,7 @@ while( not(exitFlag) && iteration <= iterationMax )
     %----------------------------------------------------------------------
     
     aircraft.constants.fuelVolume = aircraft.weight.fuel/6.7;
-    aircraft.fuelSys.VP = aircraft.constants.fuelVolume/2;  % self-sealing tanks volume, gal
+    aircraft.fuelSys.VP = aircraft.constants.fuelVolume;  % self-sealing tanks volume, gal
     aircraft.constants.thrustToWeight_TO.AB = 2*aircraft.engine.thrust/aircraft.weight.total;
     aircraft.constants.thrustToWeight_TO.mil = 2*aircraft.engine.thrustMil/aircraft.weight.total;
     aircraft.constants.EWF = aircraft.weight.empty/aircraft.weight.total;
@@ -192,26 +198,28 @@ TW_polyPoints = [1.211, 0.9784, 0.8216, 0.8149, 0.7379, 1.211, 1.211];
 [inWL_TWdesignSpace, onWL_TWdesignSpace] = inpolygon(aircraft.constants.wingLoading, aircraft.constants.thrustToWeight_TO.mil,...
                                                 WL_polyPoints, TW_polyPoints); % this checks if the W/S-T/W combo is valid
 
-if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border of the W/S T/W design space...
-    % saves converged weight (+other obj funcs) in case we want to know what the bad design looked like anyway
-    aircraft.constants.warnings.totalWeight = aircraft.weight.total;
-    aircraft.constants.warnings.EWF = aircraft.constants.EWF;
-
-    % makes weight 1 trillion pounds (bad)
-    % aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
-    % aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
-
-    % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
-
-    % save a wanring in the ac struct
-    aircraft.constants.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements';
-end
+% if ~inWL_TWdesignSpace || ~onWL_TWdesignSpace % if not inside or on the border of the W/S T/W design space...
+%     % saves converged weight (+other obj funcs) in case we want to know what the bad design looked like anyway
+%     aircraft.constants.warnings.totalWeight = aircraft.weight.total;
+%     aircraft.constants.warnings.EWF = aircraft.constants.EWF;
+% 
+%    % makes weight 1 trillion pounds (bad)
+%     aircraft.weight.total = 10e12; % makes weight 1 trillion pounds (bad)
+%     aircraft.constants.EWF = 1; % makes aircraft all empty weight (bad)
+% 
+%     % SET ANY OTHER OBJECTIVE FUNCTION HERE, SET TO SOMETHING REALLY BAD
+% 
+%     % save a wanring in the ac struct
+%     aircraft.constants.warnings.WL_TW = 'Wing Loading-Thrust to Weight combo does not meet point performance requirements';
+% end
 
 % ignore this, just helps with report writing
 % cell2mat(struct2cell(aircraft.engine.structures))
 % cell2mat(struct2cell(aircraft.weight.misc))
 % enginePerc = cell2mat(struct2cell(aircraft.engine.structures))./aircraft.weight.total
 % miscPerc = cell2mat(struct2cell(aircraft.weight.misc))./aircraft.weight.total
+
+
 
 %% -| Display Results |----------------------------------------------------
 fprintf("\n Converged after %u iterations\n\n", iteration)
@@ -224,6 +232,11 @@ fprintf("  EOW:  %.0f lb\n", aircraft.weight.empty)
 fprintf("  CG_x: %.3f ft\n", aircraft.cg.x)
 fprintf("  CG_y: %.3f ft\n", aircraft.cg.y)
 fprintf("  CG_z: %.3f ft\n", aircraft.cg.z)
+fprintf("  AR_w: %.2f \n", aircraft.wing.AR)
+fprintf("  TR_w: %.4f \n", aircraft.wing.taper_ratio)
+fprintf(" sweep: %.2f degrees \n", aircraft.wing.sweep)
+fprintf("CD0combat: %.4f \n", aircraft.aero.cd0_strike_interp(1.2, 30000))
+fprintf("Fuel tank length: %.4f \n", aircraft.fuelLength)
 fprintf('---------------------\n\n')
 %--------------------------------------------------------------------------
 
@@ -235,6 +248,15 @@ if ~true
     CGenvelope(aircraft, "Strike, With Drop")
 end
 
+%plot wing
+if true
+    figure
+    plot(aircraft.wing.poly)
+    axis equal
+    title("main wing geometry")
+    grid on
+end
 
-% VnDiagram       % generate Vn diagram for converged aircraft
-% New             % generate Min TTC graph for converged aircraft  
+
+VnDiagram       % generate Vn diagram for converged aircraft
+New             % generate Min TTC graph for converged aircraft
