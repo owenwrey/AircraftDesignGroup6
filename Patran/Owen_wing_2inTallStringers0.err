@@ -1,0 +1,10 @@
+/COM,ANSYS RELEASE 2025 R1           BUILD 25.1      UP20241202       21:30:44
+
+ *** ERROR ***                           CP =       0.297   TIME= 21:30:45
+ Data file I:\Senior Design 2\Owen_wing_2inTallStringers.db has          
+ incorrect format, is missing READ/WRITE permission, or is empty for     
+ RESUME.                                                                 
+
+ *** WARNING ***                         CP =       0.297   TIME= 21:30:45
+ WHILE PROCESSING FILE BASED INPUT (/INPUT OR MACRO) AN ERROR HAS        
+ OCCURRED.  SHOULD INPUT PROCESSING BE SUSPENDED?                        

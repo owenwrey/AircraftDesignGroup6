@@ -1,0 +1,75 @@
+********************************************************************************
+*                            Point Location Report                             *
+********************************************************************************
+MSC.Patran 2025.1 
+File: I:\Senior Design 2\owenswingwithloads.db
+Date: 16-Apr-26
+Time: 18:36:46
+
+Point Locations
+   Point ID   Coord 1 Value   Coord 2 Value   Coord 3 Value          Reference CID
+          8        0.000005        9.687373      -65.999138   (Global) Rectangular
+         12        0.000008       10.693595      -32.999626   (Global) Rectangular
+         16        0.000011       10.237940       -0.000242   (Global) Rectangular
+         20        0.000014        8.576059       32.999905   (Global) Rectangular
+          9        0.000006       -4.953249      -65.999802   (Global) Rectangular
+         24        0.000017        6.095899       66.002205   (Global) Rectangular
+         11        0.000007       -5.128072      -49.499943   (Global) Rectangular
+         15        0.000010       -4.897879      -16.500210   (Global) Rectangular
+         19        0.000013       -3.766750       16.499973   (Global) Rectangular
+         23        0.000016       -2.191951       49.499207   (Global) Rectangular
+         25        0.000017       -1.361275       66.006599   (Global) Rectangular
+ 
+ 
+ 
+********************************************************************************
+*                            Point Location Report                             *
+********************************************************************************
+MSC.Patran 2025.1 
+File: I:\Senior Design 2\owenswingwithloads.db
+Date: 16-Apr-26
+Time: 18:38:27
+
+Point Locations
+   Point ID   Coord 1 Value   Coord 2 Value   Coord 3 Value          Reference CID
+          8        0.000005        9.687373      -65.999138   (Global) Rectangular
+         12        0.000008       10.693595      -32.999626   (Global) Rectangular
+         16        0.000011       10.237940       -0.000242   (Global) Rectangular
+         20        0.000014        8.576059       32.999905   (Global) Rectangular
+         24        0.000017        6.095899       66.002205   (Global) Rectangular
+          9        0.000006       -4.953249      -65.999802   (Global) Rectangular
+         11        0.000007       -5.128072      -49.499943   (Global) Rectangular
+         15        0.000010       -4.897879      -16.500210   (Global) Rectangular
+         19        0.000013       -3.766750       16.499973   (Global) Rectangular
+         23        0.000016       -2.191951       49.499207   (Global) Rectangular
+         25        0.000017       -1.361275       66.006599   (Global) Rectangular
+ 
+ 
+ 
+********************************************************************************
+*                            Point Location Report                             *
+********************************************************************************
+MSC.Patran 2025.1 
+File: I:\Senior Design 2\owenswingwithloads.db
+Date: 16-Apr-26
+Time: 18:40:54
+
+Point Locations
+   Point ID   Coord 1 Value   Coord 2 Value   Coord 3 Value          Reference CID
+          8        0.000005        9.687373      -65.999138   (Global) Rectangular
+          9        0.000006       -4.953249      -65.999802   (Global) Rectangular
+         12        0.000008       10.693595      -32.999626   (Global) Rectangular
+         11        0.000007       -5.128072      -49.499943   (Global) Rectangular
+         16        0.000011       10.237940       -0.000242   (Global) Rectangular
+         15        0.000010       -4.897879      -16.500210   (Global) Rectangular
+         20        0.000014        8.576059       32.999905   (Global) Rectangular
+         19        0.000013       -3.766750       16.499973   (Global) Rectangular
+         24        0.000017        6.095899       66.002205   (Global) Rectangular
+         23        0.000016       -2.191951       49.499207   (Global) Rectangular
+         25        0.000017       -1.361275       66.006599   (Global) Rectangular
+ 
+ 
+ 
+Point ID       11     Coord 2 Value = -5.1280718 
+Point ID       25     Coord 1 Value = 1.7369792E-05
+Point ID       25     Coord 2 Value = -1.3612754 
