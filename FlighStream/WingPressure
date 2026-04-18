@@ -1,0 +1,63 @@
+clear
+close all
+clc
+
+%% Load FlightStream pressure data
+data = readmatrix('FSresults.csv');
+
+% Global aircraft coordinates from your pressure file
+X = data(:,1);
+Y = data(:,2);
+Z = data(:,3);
+P_abs = data(:,4);
+
+%% Convert to gauge pressure
+P_atm = 14.6959;
+P_gauge = P_abs - P_atm;
+
+%% --- MAIN WING FILTER ---
+% You will likely need to tweak these bounds after plotting.
+% These are just a starting point.
+
+wingMask = ...
+    abs(Y) <= 24.5 & ...      % within wing span
+    X >= 5 & X <= 55 & ...    % roughly where wing sits in aircraft x-direction
+    Z >= -2 & Z <= 3;         % roughly near wing vertical location
+
+Xw = X(wingMask);
+Yw = Y(wingMask);
+Zw = Z(wingMask);
+Pw = P_gauge(wingMask);
+
+%% Split upper and lower wing surfaces by vertical coordinate
+upperIdx = Zw >= 0;
+lowerIdx = Zw < 0;
+
+%% Patran-ready output: [X, Y, Pressure]
+UpperPressureField = [Xw(upperIdx), Yw(upperIdx), Pw(upperIdx)];
+LowerPressureField = [Xw(lowerIdx), Yw(lowerIdx), Pw(lowerIdx)];
+
+%% Write CSVs
+writematrix(UpperPressureField, 'UpperPressureField.csv', 'Delimiter', 'comma')
+writematrix(LowerPressureField, 'LowerPressureField.csv', 'Delimiter', 'comma')
+
+%% Plot to verify
+figure
+subplot(1,2,1)
+scatter(Xw(upperIdx), Yw(upperIdx), 15, Pw(upperIdx), 'filled')
+colorbar; colormap jet
+title('Upper Surface Gauge Pressure (psi)')
+xlabel('X'); ylabel('Y')
+
+subplot(1,2,2)
+scatter(Xw(lowerIdx), Yw(lowerIdx), 15, Pw(lowerIdx), 'filled')
+colorbar; colormap jet
+title('Lower Surface Gauge Pressure (psi)')
+xlabel('X'); ylabel('Y')
+
+%% Summary
+disp('=== Output Summary ===')
+disp(['Total wing points:    ' num2str(length(Pw))])
+disp(['Upper surface points: ' num2str(sum(upperIdx))])
+disp(['Lower surface points: ' num2str(sum(lowerIdx))])
+disp('Files written: UpperPressureField.csv, LowerPressureField.csv')
