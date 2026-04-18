@@ -16,8 +16,8 @@ n_lim_n = aircraft.constants.negLimitLoad;      % negative limit load
 M = aircraft.constants.maxMach;                 % max Mach number
 
 % aero characteristics 
-CL_max = 2;             % CL_max
-CL_min = -.6;           % negative CL_max
+CL_max = 2;                 % CL_max
+CL_min = -1.6;              % negative CL_max
 CL_alpha = (1--.4)/deg2rad(8--3);       % from NACA 64-206 airfoil tools
 
 beta = 1 - (aircraft.weight.fuel/aircraft.weight.total)/2;  % mid mission weight fraction
@@ -41,7 +41,7 @@ VD = 1.25*VH;           % design dive speed, KEAS
 % Vs_pos = sqrt(2*beta*WL/(rho_sl*CL_max));       % positive stall speed
 Vs_pos = 145;
 
-cl_theory = beta*WL/(.5*rho_sl*145^2)
+cl_theory = beta*WL/(.5*rho_sl*145^2);
 
 Vs_pos_line = [Vs_pos;Vs_pos];
 V = linspace(Vs_pos,VD,100)';                   % create span of V values
@@ -85,6 +85,7 @@ xpts = [Vs_pos;Vs_neg;VA;VH;VD];
 labels = {'V_s^+', 'V_s^-', 'VA', 'VH', 'VD'};
 
 %% Plotting
+figure(1)
 plot(V,n_maxaero,'b', 'LineWidth',2)        % positive load factor
 ylim([n_lim_n-1 n_lim_p+1])
 ax = gca;

@@ -9,7 +9,7 @@
 
 clear;clc;
 
-A_engine = 1075.62;     % engine face area, in^2
+A_engine = 1075.62/144; % engine face area, ft^2
 
 M_inf = .8;             % design mach
 M_engine = .5;          % mach at engine face
@@ -22,7 +22,6 @@ ratio_inlet = 1/M_inlet*((1+.2*M_inlet^2)/1.2)^3;
 inlet_engine = ratio_inlet/ratio_engine;
 
 A_inlet = inlet_engine*A_engine;
-A_inlet = A_inlet/144;
 
 size = sqrt(A_inlet);
 
