@@ -250,13 +250,13 @@ if ~true
 end
 
 %plot wing
-if true
-    figure
-    plot(aircraft.wing.poly)
-    axis equal
-    title("main wing geometry")
-    grid on
-end
+% if true
+%     figure
+%     plot(aircraft.wing.poly)
+%     axis equal
+%     title("main wing geometry")
+%     grid on
+% end
 
 
 VnDiagram       % generate Vn diagram for converged aircraft

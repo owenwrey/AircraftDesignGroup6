@@ -179,4 +179,4 @@ alt = dat(:,3);
 Results = table(time, speed, alt);
 % disp(Results)
 
-fprintf('Total time to climb is %.0f minutes \n',(time(end)/60))
+fprintf('Total time to climb is %.3f minutes \n',(time(end)/60))
