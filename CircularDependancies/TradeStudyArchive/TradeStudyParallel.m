@@ -141,6 +141,7 @@ grid on;
 box on;
 
 cmapAR = nebula(length(AR));
+cmapAR = winter(length(AR));
 
 for j = 1:length(AR)
     xVals = [];
@@ -182,6 +183,7 @@ grid on;
 box on;
 
 cmapSA = parula(length(SA));  % different scheme
+cmapSA = autumn(length(SA));  % different scheme
 
 for l = 1:length(SA)
     xVals = [];
@@ -202,8 +204,9 @@ for l = 1:length(SA)
 
     scatter(xVals, yVals, 80, ...
         'MarkerFaceColor', cmapSA(l,:), ...
-        'MarkerEdgeColor','none',...
-        'DisplayName', sprintf("SA = %.1f°", SA(l)));
+        'MarkerEdgeColor','none', ...
+        'DisplayName', sprintf('$SA = %.1f^{\\circ}$', SA(l)));
+    
 end
 
 xlim([min(TR) - 0.05*(max(TR)-min(TR)), max(TR) + 0.05*(max(TR)-min(TR))])
@@ -213,6 +216,7 @@ ylabel("MTOW [lbf]", Interpreter="latex");
 title(sprintf("MTOW vs Taper Ratio (Colored by Sweep Angle, W/S = %.3g lb/ft^2)", WL(iWL)));
 
 legend("Location","northoutside","Orientation","horizontal");
+legend('Interpreter','latex');
 
 %% MTOW vs WL at fixed TR, colored by AR and SA
 

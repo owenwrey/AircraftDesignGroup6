@@ -1,4 +1,3 @@
-% function aircraft = ClimbPerformance(aircraft)
 %% Script Settings
 printStatsAtEachAltitude = false; % if ==1 your command window gets cluttered
 
@@ -92,9 +91,10 @@ tbl.KTAS = tbl.V_TAS*fpsToKnots;
 tbl.KEAS = tbl.V_EAS*fpsToKnots;
 tbl.q = .5.*rho.*tbl.V_TAS.^2;
 tbl.CL = W./tbl.q./Sref;
-% tbl.CD = CD0 + K1.*tbl.CL + K2.*tbl.CL.^2 + CDR;
-% tbl.CD0 = aircraft.aero.cd0_strike(tbl.alt(i), tbl.Mach)
-tbl.CD = getCD(tbl.CL, tbl.Mach); % <-- change the name of this function to our drag polar function
+tbl.CD0 = aircraft.aero.cd0_strike(tbl.alt(i), tbl.Mach)
+tbl.K2 = getK2(tbl.Mach);
+tbl.CD = CD0 + K1.*tbl.CL + 0.05.*tbl.CL.^2 + CDR;
+% tbl.CD = getCD(tbl.CL, tbl.Mach); % <-- change the name of this function to our drag polar function
 tbl.L2D = tbl.CL./tbl.CD;
 tbl.CL12_CD = tbl.CL.^(1/2)./tbl.CD;
 tbl.Drag = Sref.*tbl.q.*tbl.CD;
@@ -373,27 +373,25 @@ end
 
 end % end atmosEnglish
 
-function CD = getCD(CL, M)
+function K2 = getK2(M)
 
-CD0_sub = 0.02;
+% CD0_sub = 0.02;
 K2_sub = 0.025;
 
-CD0_super = 0.022;
+% CD0_super = 0.022;
 K2_super = 0.025;
 
-CDR = zeros(size(M));
+% CDR = zeros(size(M));
 
 machCurve = [0        0.85    0.95                               1.05       2             ];
 %CD0curve = [0.02     0.02    0.03                               0.045      0.04          ];
-CD0curve  = [CD0_sub  CD0_sub 1.125*(CD0_super-CD0_sub)+CD0_sub  CD0_super  0.95*CD0_super];
+% CD0curve  = [CD0_sub  CD0_sub 1.125*(CD0_super-CD0_sub)+CD0_sub  CD0_super  0.95*CD0_super];
 K2curve   = [K2_sub   K2_sub  1.125*(K2_super-K2_sub)+K2_sub     K2_super   K2_super      ];
 
-CD0 = interp1(machCurve, CD0curve, M, "linear", "extrap");
+% CD0 = interp1(machCurve, CD0curve, M, "linear", "extrap");
 K2 = interp1(machCurve, K2curve, M, "linear", "extrap");
 
-CD = CD0 + K2 .* (CL.^2) + CDR;
+% CD = CD0 + K2 .* (CL.^2) + CDR;
 
 end % end getCD
 
-
-% end % function

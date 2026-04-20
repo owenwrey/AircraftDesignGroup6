@@ -184,6 +184,7 @@ while( not(exitFlag) && iteration <= iterationMax )
     aircraft.constants.thrustToWeight_TO.AB = 2*aircraft.engine.thrust/aircraft.weight.total;
     aircraft.constants.thrustToWeight_TO.mil = 2*aircraft.engine.thrustMil/aircraft.weight.total;
     aircraft.constants.EWF = aircraft.weight.empty/aircraft.weight.total;
+    aircraft.weight.midMission = (aircraft.weight.total + aircraft.weight.totalOnLanding)/2;
 
 end
 
