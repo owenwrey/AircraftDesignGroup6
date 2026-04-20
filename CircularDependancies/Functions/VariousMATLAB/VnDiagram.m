@@ -96,7 +96,7 @@ xline(0, 'k', 'LineWidth',1)
 yline(0, 'k', 'LineWidth',1)
 xlabel('Airspeed (KEAS)')
 ylabel('Load Factor')
-title('Load Factor v. Airspeed')
+% title('Load Factor v. Airspeed')
 plot(V_neg,n_minaero,'b', 'LineWidth',2)                % negative load factor
 plot(Vs_pos_line,[0;n_maxaero(1)],'b', 'LineWidth',2)   % positive stall line
 plot(Vs_neg_line,[0;n_minaero(1)],'b', 'LineWidth',2)   % negtaive stall line
