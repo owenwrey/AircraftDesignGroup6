@@ -1,8 +1,6 @@
 function CGenvelope(aircraft, Title)
 %CGENVELOPE calculates and plots cg envelope for ordinance drop mission
 
-figure
-
 drop = true;
 time = aircraft.TimeStepTable.Time;
 dfuel = (aircraft.TimeStepTable.dFuel);
@@ -79,7 +77,7 @@ CGxloc(j) = xsum./weightsum;
 
 end
 
-figure(10)
+figure()
 
 forwardLimit = aircraft.cg.x-aircraft.wing.MAC*(0.5);
 
