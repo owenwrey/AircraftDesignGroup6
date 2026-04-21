@@ -1,12 +1,12 @@
 function CGenvelope(aircraft, Title)
 %CGENVELOPE calculates and plots cg envelope for ordinance drop mission
 
-drop = true;
+drop = false;
 time = aircraft.TimeStepTable.Time;
 dfuel = (aircraft.TimeStepTable.dFuel);
 weight = aircraft.TimeStepTable.Weight;
 
- % bodge fix
+aircraft.ordinance.weight = 1372; % bodge fix
 
 
 blacklist = ["fuelLength","totalfuelvolume","flightcond","cg","constants","aero","enginesystems","weight","fuelSys","gear","TimeStepTable","inertia"];

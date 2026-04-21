@@ -54,7 +54,7 @@ temp = aircraft.cg.x + aircraft.wing.MAC;
 %% calculate fuel tanks cg
 
 
-fuelTankFactor = 0.90;
+fuelTankFactor = 0.85;
 
 aircraft.wingtanks.cg.x = aircraft.wing.cg.x;
 aircraft.wingtanks.cg.y = aircraft.wing.cg.y;
