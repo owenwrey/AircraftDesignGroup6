@@ -1,29 +1,30 @@
 function CGenvelope(aircraft, Title)
 %CGENVELOPE calculates and plots cg envelope for ordinance drop mission
 
-figure
-
-drop = true;
+drop = false;
 time = aircraft.TimeStepTable.Time;
-dfuel = aircraft.TimeStepTable.dFuel;
+dfuel = (aircraft.TimeStepTable.dFuel);
 weight = aircraft.TimeStepTable.Weight;
 
-halfFuel = aircraft.weight.fuel/2;
+aircraft.ordinance.weight = 1372; % bodge fix
 
 
-blacklist = ["flightcond","cg","constants","aero","enginesystems","weight","fuelSys","gear","TimeStepTable"];
+blacklist = ["fuelLength","totalfuelvolume","flightcond","cg","constants","aero","enginesystems","weight","fuelSys","gear","TimeStepTable","inertia"];
 
 CGxloc = zeros(1,length(time));
 
+sumVolume = aircraft.fuselagetank1.volume + aircraft.fuselagetank2.volume + aircraft.wingtanks.volume;
+
+FTfact = aircraft.fuselagetank1.volume./sumVolume; % fuel tank factor
+WTfact = aircraft.wingtanks.volume./sumVolume; % wing tank factor
+
 for j = 1 : length(time)
 
-    aircraft.fuel1.weight = aircraft.fuel1.weight - dfuel(j)/2;
-    aircraft.fuel2.weight = aircraft.fuel2.weight - dfuel(j)/2;
+    aircraft.fuselagetank1.weight = aircraft.fuselagetank1.weight - dfuel(j)*FTfact;
+    aircraft.fuselagetank2.weight = aircraft.fuselagetank2.weight - dfuel(j)*FTfact;
+    aircraft.wingtanks.weight = aircraft.wingtanks.weight - dfuel(j)*WTfact;
 
-    % if aircraft.fuel1.weight <= 0
-    %     aircraft.fuel2.weight = aircraft.fuel1.weight + aircraft.fuel2.weight;
-    %     aircraft.fuel1.weight = 0;
-    % end
+   
 
     if drop == true && j == 42
 
@@ -76,7 +77,9 @@ CGxloc(j) = xsum./weightsum;
 
 end
 
-forwardLimit = aircraft.cg.x-aircraft.wing.MAC*(0.05);
+figure()
+
+forwardLimit = aircraft.cg.x-aircraft.wing.MAC*(0.5);
 
 statMarg = 0.15;
 aftLimit = aircraft.cg.x + aircraft.wing.MAC*statMarg;

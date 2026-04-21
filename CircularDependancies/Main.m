@@ -245,19 +245,19 @@ clear f k timerFields data tics iterationMax;
 
 % plot cg envelope
 
-if ~true
-    CGenvelope(aircraft, "Strike, With Drop")
+if true
+    CGenvelope(aircraft, "Combat, No Drop")
 end
 
 %plot wing
-if true
-    figure
-    plot(aircraft.wing.poly)
-    axis equal
-    title("main wing geometry")
-    grid on
-end
+% if true
+%     figure
+%     plot(aircraft.wing.poly)
+%     axis equal
+%     title("main wing geometry")
+%     grid on
+% end
 
 
-VnDiagram       % generate Vn diagram for converged aircraft
-New             % generate Min TTC graph for converged aircraft
+% VnDiagram       % generate Vn diagram for converged aircraft
+% New             % generate Min TTC graph for converged aircraft

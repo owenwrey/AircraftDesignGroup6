@@ -147,7 +147,7 @@ figure(2)
 plot(dat(:,2), dat(:,3),'b','LineWidth',2)
 xlabel('KTAS')
 ylabel('Altitude (ft)')
-title('Climb Trajectory')
+% title('Climb Trajectory')
 grid on
 hold on
 xlim([150,700])
@@ -169,7 +169,7 @@ figure(3)
 plot(dat(:,1), dat(:,3),'b','LineWidth',2)
 xlabel('Time (s)')
 ylabel('Altitude (ft)')
-title('Altitude vs Time')
+% title('Altitude vs Time')
 grid on
 
 time = dat(:,1);
@@ -179,4 +179,4 @@ alt = dat(:,3);
 Results = table(time, speed, alt);
 % disp(Results)
 
-fprintf('Total time to climb is %.0f minutes \n',(time(end)/60))
+fprintf('Total time to climb is %.3f minutes \n',(time(end)/60))
