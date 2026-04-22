@@ -17,6 +17,7 @@ W_S = aircraft.constants.wingLoading;
 S = aircraft.wing.Area;
 targAlt = 40000;
 targSpeed = 400;
+g = 32.2;
 
 CD0_sub = 0.02;         
 CD0_sup = 0.06;         
@@ -140,6 +141,10 @@ while dat(i,3) < targAlt || dat(i,2) < targSpeed
 end
 
 dat = dat(1:i,:); % trim
+
+for j = 2:length(dat(:,1))
+    dat(j,6) = (dat(j,3)-dat(j-1,3))./step;
+end
 
 %% Plots
 
