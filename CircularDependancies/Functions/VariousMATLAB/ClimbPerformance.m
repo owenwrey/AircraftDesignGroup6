@@ -7,7 +7,7 @@ serviceCeilingClimbRate = 500; % [ft/min] (not [fps] here)
 % you don't need to change these unless you're not reaching the abs ceiling
 altRange = 65000; % max altitude tested, if ceiling is below this the script stops
 altStep = 250; % [ft]
-machRangeMax = 4.0; % this is the max speed plotted
+machRangeMax = 3.0; % this is the max speed plotted
 machStep = 0.0025;
 
 
@@ -31,13 +31,17 @@ W = beta*W0;
 % W = W0;
 
 % Max_Thrust = 2*aircraft.engine.thrust;
-Max_Thrust = 70000; % Max Thrust SLS [lb_f]
+Max_Thrust = 73000; % Max Thrust SLS [lb_f]
+
+% f119perf.max.fn = griddedInterpolant(ALTq',Mnq',Thrustq');
+% f119perf.max.tsfc = griddedInterpolant(ALTq',Mnq',TSFCq');
+engPerf = f119perfGEN;
 
 % Drag Polar
 % CD0 = 0.02;
 % K1 = 0;
 % K2 = 0.129;
-% CDR = 0;
+CDR = 0;
 CLmax = 1.2;
 
 n = 1;
@@ -91,14 +95,24 @@ tbl.KTAS = tbl.V_TAS*fpsToKnots;
 tbl.KEAS = tbl.V_EAS*fpsToKnots;
 tbl.q = .5.*rho.*tbl.V_TAS.^2;
 tbl.CL = W./tbl.q./Sref;
-tbl.CD0 = aircraft.aero.cd0_strike(tbl.alt(i), tbl.Mach)
+tbl.CD0 = aircraft.aero.cd0_strike_interp(altitude(i) .* ones(size(tbl.Mach)), tbl.Mach); % assign CD0s from all the Machs
+% ff
+for j = 2:length(tbl.CD0)
+    if tbl.CD0(j) > 0.06
+        % tbl.CD0(j) = tbl.CD0(j-1) - 0.00001;
+        tbl.CD0(j) = 0.060;
+    end
+end
+
 tbl.K2 = getK2(tbl.Mach);
-tbl.CD = CD0 + K1.*tbl.CL + 0.05.*tbl.CL.^2 + CDR;
+tbl.K2 = 0.0*ones(length(linMach),1);
+tbl.CD = tbl.CD0 + tbl.K2.*tbl.CL.^2 + CDR;
 % tbl.CD = getCD(tbl.CL, tbl.Mach); % <-- change the name of this function to our drag polar function
 tbl.L2D = tbl.CL./tbl.CD;
 tbl.CL12_CD = tbl.CL.^(1/2)./tbl.CD;
 tbl.Drag = Sref.*tbl.q.*tbl.CD;
 tbl.Thrust = (1.11.*(sigma)-0.11).* Max_Thrust .* ones(length(tbl.Mach),1);
+% tbl.Thrust = engPerf.max.fn(altitude(i).* ones(size(tbl.Mach)), tbl.Mach);
 % If you want to use the more complex TLapse comment the line above this
 % and uncomment the line below
 % tbl.Thrust = TLapse(altitude(i), tbl.Mach, throtRatio, 'LBPR').* Max_Thrust .* ones(length(tbl.Mach),1);
